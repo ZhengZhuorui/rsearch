@@ -10,6 +10,8 @@ if (FAISS)
     ADD_DEFINITIONS(-DWITH_FAISS)
 endif()
 
+option(GTEST "option for gtest" on)
+
 option(CUDA "option for cuda" off)
 if (CUDA)
     ADD_DEFINITIONS(-DWITH_CUDA)
@@ -41,36 +43,37 @@ if (CUDA)
     include(FindCUDA)
 endif()
 
-
-file(GLOB_RECURSE SRC src/*.cpp src/*.cu)
-
-if (CUDA)
-    cuda_add_library(rsearch SHARED ${SRC})
-    cuda_add_library(rsearch STATIC ${SRC})
-    
-else()
-    add_library(rsearch SHARED ${SRC})
-    add_library(rsearchStatic STATIC ${SRC})
+# ---------- Add gtest ----------
+if (GTEST)
+set(GTEST_DIR "${CMAKE_SOURCE_DIR}/thirdparty/gtest-1.8.1")
+set(GTEST_INCLUDE "${FAISS_DIR}/include")
+set(GTEST_LIB "${FAISS_DIR}/lib/libfaiss.so")
+set(GTEST_MAIN_LIBS "${GTEST_DIR}/lib/libgtest_main.a")
+include_directories(${GTEST_INCLUDE})
 endif()
 
-target_link_libraries(rsearch ${LINK_LIBS})
-target_link_libraries(rsearchStatic ${LINK_LIBS})
 
-#set_target_properties(Rapid1vN PROPERTIES VERSION ${RAPID1vN_VERSION_STRING} SOVERSION ${RAPID1vN_VERSION_MAJOR}.${RAPID1vN_VERSION_MINOR})
+#file(GLOB_RECURSE SRC src/*.cpp src/*.cu)
+
+
+#target_link_libraries(rsearch ${LINK_LIBS})
+#target_link_libraries(rsearchStatic ${LINK_LIBS})
 
 add_executable(demo test/demo.cpp)
-target_link_libraries(demo rsearch)
 
+add_executable(benchmark_rapid_int8 test/benchmark/benchmark_rapid_int8)
+
+file(GLOB_RECURSE UNIT_TEST_SRC test/unit_test/*.c*)
+add_executable(unit_test ${UNIT_TEST_SRC})
+target_link_libraries(unit_test Rapid1vN ${GTEST_LIBS} ${GTEST_MAIN_LIBS})
 
 #file(GLOB_RECURSE UNIT_TEST_SRC test/unit_test/*.c*)
 #cuda_add_executable(unit_test ${UNIT_TEST_SRC})
-#target_link_libraries(unit_test Rapid1vN ${GTEST_LIBS} ${GTEST_MAIN_LIBS})
+
 
 set(HEADERS include/rapid1vn.h include/rapid1vn_gallery.h include/rapid1vn_types.h)
 set(UTILS_HEADER utils/feature_factory.h )
 set(TEST_SRC test/test.cpp )
 
 install(FILES ${HEADERS} DESTINATION "include")
-install(FILES ${TEST_SRC} DESTINATION "test")
-install(TARGETS rsearch DESTINATION "lib")
-install(TARGETS rsearchStatic DESTINATION "lib")
+

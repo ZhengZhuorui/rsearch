@@ -11,7 +11,8 @@ int dimension = 512;
 int topk = 128;
 float data[5120000], sims[10000];
 rsearch::uint64_t uids[10000];
-void create_data(){
+template<typename T>
+void create_data(T* data, int n){
     ofstream fout;
     fout.open("/home/zzr/data/consine_data.exp", ofstream::binary);
     //float a = sqrt(1 / dimension);
@@ -21,7 +22,7 @@ void create_data(){
             data[i * dimension + j] = 1.0 * (rand() % MO) / MO;
         }
     }
-    r_bytes2file<float>(fout, data, n, dimension);
+    r_bytes2file<T>(fout, data, n, dimension);
 }
 int main(){
     srand(time(NULL));

@@ -43,7 +43,7 @@ probe<T, dist_type>* create_probe(int dimension, int topk, MethodType method_typ
             r = new cpu_base_probe<T, dist_type, rapid_matrix_mul>(dimension, topk);
             break;
         case PQIVF:
-            //r = new cpu_base_probe<T, dist_type, rapid_matrix_mul, 32, 102400>(dimension, topk);
+            r = new pqivf_probe<T, dist_type, rapid_matrix_mul>(dimension, topk);
             break;
     }
 

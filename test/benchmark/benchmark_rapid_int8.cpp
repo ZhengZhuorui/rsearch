@@ -21,13 +21,13 @@ int main(){
     struct timezone zone;
     struct timeval time1;
     struct timeval time2;
-    rsearch::int8_t *a = (rsearch::int8_t*)malloc(n * dimension);
-    rsearch::int8_t *b = (rsearch::int8_t*)malloc(m * dimension);
+    int8_t *a = (int8_t*)malloc(n * dimension);
+    int8_t *b = (int8_t*)malloc(m * dimension);
     int *offset = (int*)malloc(m);
     memset(offset, 0, m * sizeof(int));
     get_data(a, n, dimension);
     get_data(b, m, dimension);
-    rsearch::matrix_mul<rsearch::int8_t>* mm = new rsearch::rapid_matrix_mul<rsearch::int8_t>;
+    rsearch::matrix_mul<int8_t>* mm = new rsearch::rapid_matrix_mul<int8_t>;
     mm->set(dimension, 128, n, m);
     long OPS = long(n) * long(m) * long(dimension) * 2;
     long BBytes = long(m) * long(dimension) * sizeof(int8_t); 

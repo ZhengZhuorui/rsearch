@@ -1,6 +1,7 @@
 #pragma once
 #include <bits/stdc++.h>
 #include <sys/sysinfo.h>
+#include <cxxabi.h>
 #include "rsearch_type.h"
 namespace rsearch{
 
@@ -182,5 +183,49 @@ inline float float_7bits(const float* data, int8_t* td, int64_t n, float k){
     }
     return 0;
 }
+
+inline bool file_exist(const char *file_name)
+{
+    std::ifstream infile(file_name);
+    return infile.good();
+};
+
+template<typename T = float>
+int init_random(T* data, int n, int dimension){
+    const int MO = 65535;
+    for (int i = 0; i < n; ++i){
+        for (int j = 0; j < dimension; ++j){
+            data[i * dimension + j] = 1.0 * (rand() % MO) / MO;
+        }
+    }
+}
+
+template<>
+int init_random<int8_t>(int8_t* data, int n, int dimension){
+    const int MO = 65535;
+    for (int i = 0; i < n; ++i){
+        for (int j = 0; j < dimension; ++j){
+            data[i * dimension + j] = 1.0 * (rand() % MO) / MO * 453.0;
+        }
+    }
+}
+
+template<typename T>
+void get_random_data(T* data, int n, int dimension){
+    ofstream fout;
+    int status;
+    char *typename = abi::__cxa_demangle(typename(T).name(), NULL,  NULL, &status);
+    char fname[200];
+    sprint(fname, "/home/zzr/data/.rsearch.%s.%d.%d.bin", typename, dimension, n);
+    
+    if (file_exist(fname)){
+        r_file2bytes<T>(f, data, N*Dimension);
+    } else {
+        fout.open(fname, ofstream::binary);
+        init_random(data, Dimension, N);
+        r_bytes2file<T>(fout, data, n, dimension);
+    }
+}
+
 
 }

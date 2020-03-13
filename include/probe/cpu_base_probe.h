@@ -1,7 +1,7 @@
 #pragma once
 #include "probe/rsearch_probe.h"
 #include "matrix/matrix_mul.h"
-#include "utils/avx_asm.h"
+#include "utils/avx2_asm.h"
 namespace rsearch{
 template<typename T,
         DistanceType dist_type,

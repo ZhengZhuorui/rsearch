@@ -150,7 +150,7 @@ inline void r_bytes2file(ofstream &fout, T* x, int &n, int &dimension){
 }
 
 
-inline void regular(float* data, int n, int dimension){
+inline void norm(float* data, int n, int dimension){
     for (int i = 0 ; i < n ; ++i){
         float len = sqrt(dot_prod<float>(data + 1LL * i * dimension, data + 1LL * i * dimension, dimension));
         for (int j = 0; j < dimension; ++j) data[1LL * i * dimension + j] /= len;

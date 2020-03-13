@@ -28,9 +28,9 @@ typedef enum DistanceType{
 typedef enum MethodType{
     DUMMY = 0,
     X86_RAPID = 1, 
-    X86_MULTI_THREAD = 2,
+    X86_PQIVF = 2,
     X86_MULTI_PLATFORM = 3,
-    X86_FAISS_FLAT = 4,
+    //X86_FAISS_FLAT = 4,
 
     
 } MethodType;

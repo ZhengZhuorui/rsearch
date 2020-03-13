@@ -1,7 +1,7 @@
 #include "rsearch.h"
 #include "probe/cpu_base_probe.h"
 #include "gallery/cpu_base_gallery.h"
-#include "gallery/cpu_rapid_gallery.h"
+#include "gallery/cpu_base_gallery.h"
 #include "utils/utils.h"
 #include <bits/stdc++.h>
 using namespace std;
@@ -11,19 +11,7 @@ int dimension = 512;
 int topk = 128;
 float data[5120000], sims[10000];
 rsearch::uint64_t uids[10000];
-template<typename T>
-void create_data(T* data, int n){
-    ofstream fout;
-    fout.open("/home/zzr/data/consine_data.exp", ofstream::binary);
-    //float a = sqrt(1 / dimension);
-    const int MO = 65535;
-    for (int i = 0; i < n; ++i){
-        for (int j = 0; j < dimension; ++j){
-            data[i * dimension + j] = 1.0 * (rand() % MO) / MO;
-        }
-    }
-    r_bytes2file<T>(fout, data, n, dimension);
-}
+
 int main(){
     srand(time(NULL));
     
@@ -36,7 +24,7 @@ int main(){
     }
     printf("read file\n");
     r_file2bytes<float>(fin, data, n, dimension);
-    regular(data, n, dimension);
+    norm(data, n, dimension);
     printf("target 1, n=%d, dimension=%d\n", n, dimension);
     for (int i = 0; i < dimension; ++i)
         printf("%.4f ", data[1000 *dimension + i]);

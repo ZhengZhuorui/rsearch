@@ -1,7 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
-namespace rsearch
-{
+namespace rsearch{
 class ThreadPool{
 public:
     ThreadPool();

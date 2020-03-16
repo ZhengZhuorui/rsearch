@@ -113,7 +113,7 @@ void dot_4x2(const int8_t *a, const int8_t *b, const int * offset_ptr, int *c, i
 
 
 template<int K>
-void dot_4x2(const int8_t *a, const int8_t *b, const int * offset_ptr, int *c){
+void dot_1x1(const int8_t *a, const int8_t *b, const int * offset_ptr, int *c){
     __m256i acc;
     __m256i aval, bval;
     __m256i ymm;
@@ -149,7 +149,7 @@ void dot_4x2(const int8_t *a, const int8_t *b, const int * offset_ptr, int *c){
 
 
 template<int K>
-void dot_4x2(const int8_t *a, const int8_t *b, const int * offset_ptr, int *c){
+void dot_4x1(const int8_t *a, const int8_t *b, const int * offset_ptr, int *c){
     __m256i acc[4];
     __m256i aval[4], bval;
     __m256i ymm[4];
@@ -245,7 +245,7 @@ void dot_1x1(const float *a, const float *b, const float *offset_ptr, float *dst
 }
 
 template<int K>
-void dotp_nt_4x1(const float *a, const float *b, const float *offset_ptr, float *dst, const int M){
+void dot_4x1(const float *a, const float *b, const float *offset_ptr, float *dst, const int M){
     __m256 acc[4];
     __m256 aval[4], bval;
     for(int i=0; i<4; i++)
@@ -292,7 +292,7 @@ void dotp_nt_4x1(const float *a, const float *b, const float *offset_ptr, float 
 }
 
 template<int K>
-void dotp_nt_4x2(const float *a, const float *b, const float *offset_ptr, float *dst, const int M, const int ldc){
+void dot_4x2(const float *a, const float *b, const float *offset_ptr, float *dst, const int M, const int ldc){
     __m256 acc[8];
     __m256 aval[4], bval[2];
     for(int i=0; i<8; i++)

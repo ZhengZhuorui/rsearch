@@ -1,11 +1,13 @@
 #pragma once
 #include "probe/rsearch_probe.h"
 #include "gallery/rsearch_gallery.h"
+#include "matrix/rapid_matrix_mul.h"
+#include "probe/pqivf_probe.h"
 #include <bits/stdc++.h>
 
 namespace rsearch{
 using std::vector;
-using std::unordered_map;
+using std::map;
 struct pqivf_traits{
     int cq_num;
     int select_cq;
@@ -14,9 +16,11 @@ struct pqivf_traits{
     float k;
 };
 
+template<typename T, DistanceType dist_type> class pqivf_probe;
+
 template<typename T,
         DistanceType dist_type>
-class pqivf_gallery : public gallery<T>{
+class pqivf_gallery : public gallery<T, dist_type>{
 public:
     using Tout = typemap_t<T>;
 
@@ -59,14 +63,13 @@ private:
 
     vector<vector<uint8_t> > data;
     vector<Tout> block_num;
-    unordered_map<pair<int, int>, idx_t> index;
+    map<pair<int, int>, idx_t> index;
     vector<vector<idx_t> > ids;
 
     uint32_t dimension;
     uint32_t num;
     idx_t max_id;
     bool have_train_;
-    float k;
     int topk;
 
     int cq_num;
@@ -85,7 +88,7 @@ private:
 
 template<typename T,
         DistanceType dist_type>
-pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& traits) : gallery<T>(){
+pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& traits) : gallery<T, dist_type>(){
     this->dimension = dimension;
     this->num = 0;
     this->max_id = 0;
@@ -103,7 +106,7 @@ pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& t
     this->cq_mm = new rapid_matrix_mul<int8_t>();
     this->max_batch = 32;
     this->max_block = 512000;
-    this->ix = (int8_t*)malloc(thia->max_batch * this->pq_dimension);
+    this->ix = (int8_t*)malloc(this->max_batch * this->pq_dimension);
 }
 
 template<typename T,
@@ -180,6 +183,8 @@ int pqivf_gallery<T, dist_type>::add_one(const T* const x, const int id, const i
     this->ids[cq_id].push_back(id);
     this->index[id].push_back(std::make_pair(cq_id, this->block_num[cq_id]));
     this->block_num[cq_id]++;
+    this->num++;
+    return 0;
 }
 
 
@@ -237,6 +242,7 @@ int pqivf_gallery<T, dist_type>::remove_by_uids(const idx_t* const uids, const i
         this->index[this->ids[p.first][p.second]] = p;
         this->index.erase(uids[i]);
     }
+    this->num -= n;
     this->mtx.unlock();
     return 0;
 }
@@ -261,6 +267,7 @@ int pqivf_gallery<T, dist_type>::train(const float* data, const int n, const int
     k_means(data, n * this->code_len, this->pq_dimension, this->pq_float);
     this->have_train_ = true;
     this->init();
+    return 0;
 }
 
 template<typename T,
@@ -276,6 +283,7 @@ int pqivf_gallery<T, dist_type>::write_train_data(std::ofstream& fout){
     r_write(fout, &traits, 1);
     r_write(fout, this->cq_y.data(), this->cq_num * this->dimension);
     r_write(fout, this->pq_y.data(), this->pq_num * this->pq_dimension);
+    return 0;
 }
 
 
@@ -284,18 +292,19 @@ template<typename T,
 int pqivf_gallery<T, dist_type>::read_train_data(std::ifstream& fin){
     struct pqivf_traits traits;
     int d, dt;
-    r_read(fin, d, 1);
-    r_read(fin, dt, 1);
-    r_read(fin, traits, 1);
+    r_read(fin, &d, 1);
+    r_read(fin, &dt, 1);
+    r_read(fin, &traits, 1);
     if (d != this->dimension || dt != this->dist_type || traits.cq_num != this->cq_num || traits.select_cq != this->select_cq || 
         traits.pq_dimension != this->pq_dimension || traits.pq_num != this->pq_dimension)
     return TRAINDATA_ERROR;
     this->cq_y.reserve(this->cq_num * this->dimension);
     this->pq_y.reserve(this->pq_num * this->pq_dimension);
-    r_read(fout, this->cq_y.data(), this->cq_num * this->dimension);
-    r_read(fout, this->pq_y.data(), this->pq_num * this->pq_dimension);
+    r_read(fin, this->cq_y.data(), this->cq_num * this->dimension);
+    r_read(fin, this->pq_y.data(), this->pq_num * this->pq_dimension);
     this->have_train_ = true;
     this->init();
+    return 0;
 }
 
 }

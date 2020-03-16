@@ -2,7 +2,7 @@
 #include "rsearch_type.h"
 #include <bits/stdc++.h>
 #include "utils/utils.h"
-#include "rapid_matrix_mul.h"
+#include "matrix/rapid_matrix_mul.h"
 namespace rsearch{
 using std::pair;
 template<typename T,

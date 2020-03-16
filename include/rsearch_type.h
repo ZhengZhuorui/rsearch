@@ -17,8 +17,8 @@ using uint64_t = unsigned long long;
 using uint32_t = unsigned int;
 using int64_t = long long;
 using int32_t = int;
-using int8_t = signed char;
-using uint8_t = unsigned char;
+//using int8_t = signed char;
+//using uint8_t = unsigned char;
 using idx_t = int32_t;
 typedef enum DistanceType{
     COSINE = 0,

@@ -1,8 +1,10 @@
 #pragma once
 #include "probe/rsearch_probe.h"
+#include "gallery/cpu_base_gallery.h"
 #include "matrix/matrix_mul.h"
 #include "utils/avx2_asm.h"
 namespace rsearch{
+
 template<typename T,
         DistanceType dist_type,
         typename matrix_type>
@@ -14,7 +16,6 @@ public:
     virtual int create_gallery(gallery<T, dist_type> ** ga_ptr) override;
     virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx) override;
     virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx);
-    virtual int set_mm(matrix_mul<T>* mm) override;
 private:
     matrix_mul<T>* mm;
     int32_t max_batch, max_block, topk, dimension;
@@ -25,7 +26,7 @@ template<typename T,
         DistanceType dist_type,
         typename matrix_type>
 cpu_base_probe<T, dist_type, matrix_type>::cpu_base_probe(int dimension, int topk) : base_probe<T, dist_type, matrix_type>(){
-    this->mm = new matrix_type<T>;
+    this->mm = new matrix_type;
     this->dimension = dimension;
     this->topk = topk;
     this->max_batch = 32;
@@ -38,7 +39,7 @@ template<typename T,
         DistanceType dist_type,
         typename matrix_type>
 cpu_base_probe<T, dist_type, matrix_type>::~cpu_base_probe(){
-
+    delete this->mm;
 }
 
 template<typename T,
@@ -46,9 +47,9 @@ template<typename T,
         typename matrix_type>
 int cpu_base_probe<T, dist_type, matrix_type>::create_gallery(gallery<T, dist_type> ** ga_ptr){
     cpu_base_gallery<T, dist_type> * ga = new cpu_base_gallery<T, dist_type>(this->dimension, this->dist_type);
-    int ret = ga->init();
+    //int ret = ga->init();
     (*ga_ptr) = (gallery<T, dist_type>*)ga;
-    return ret;
+    return 0;
 }
 
 
@@ -56,7 +57,7 @@ template<typename T,
         DistanceType dist_type,
         typename matrix_type>
 int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx){
-    cpu_base_gallery<T>* c_ga = (cpu_base_gallery<T, dist_type>*) ga;
+    cpu_base_gallery<T, dist_type>* c_ga = (cpu_base_gallery<T, dist_type>*) ga;
     int num = c_ga->num;
     pair<Tout, idx_t>* res;
     vector<vector<pair<Tout, idx_t> > >ans(this->max_batch);
@@ -114,6 +115,7 @@ int cpu_base_probe<T, dist_type, matrix_type>::query_with_uids(const T* const x,
     else {
         /* TODO */
     }
+    return 0;
 }
 
 }

@@ -73,5 +73,6 @@ int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* con
     (*res) = this->res;
     return 0;
 }
+}
 
 #endif

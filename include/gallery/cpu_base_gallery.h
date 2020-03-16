@@ -2,6 +2,8 @@
 #include "probe/rsearch_probe.h"
 #include "probe/cpu_base_probe.h"
 #include <bits/stdc++.h>
+#include "matrix/base_matrix_mul.h"
+#include "matrix/rapid_matrix_mul.h"
 
 namespace rsearch{
 using std::vector;
@@ -40,7 +42,8 @@ private:
     idx_t max_id;
     
     std::mutex mtx;
-    friend cpu_base_probe<T, dist_type>;
+    friend cpu_base_probe<T, dist_type, base_matrix_mul<T> >;
+    friend cpu_base_probe<T, dist_type, rapid_matrix_mul<T> >;
 };
 
 template<typename T,

@@ -6,5 +6,5 @@ template<typename T,
 class pipe{
     pipe(){}
     ~pipe(){}
-    virtual int add()
+    virtual int add(){}
 }

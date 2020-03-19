@@ -48,9 +48,9 @@ int rapid_matrix_mul<T>::set(int32_t dimension, int32_t topk, int32_t max_batch,
 }
 template<typename T>
 int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* const offset, int batch, int block, pair<Tout, idx_t> **res){
-    int iA = 0, iB = 0;
-    if (is_same_type<T, float>() == true){
-        if (this->dimension == 512)
+    //if (is_same_type<T, float>() == true)
+    {
+        /*if (this->dimension == 512)
         {
             for (; iB + 3 < block; iB += 4){
                 iA = 0;
@@ -61,7 +61,8 @@ int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* con
             }
             for (; iB < block; ++iB)
             for (iA = 0; iA < batch; ++iA) dot_1x1<512>(B + iB * this->dimension, A + iA * this->dimension, offset + iB, this->value + iA * this->max_block + iB);
-        }
+        }*/
+        r_dot_prod<T>(A, B, offset, batch, block, this->dimension, this->value, this->max_block);
     }
 
     for (int i = 0 ; i < batch; ++i){

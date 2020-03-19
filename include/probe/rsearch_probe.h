@@ -50,6 +50,9 @@ probe<T, dist_type>* create_probe(int dimension, int topk, MethodType method_typ
         case X86_PQIVF:
             r = new pqivf_probe<T, dist_type>(dimension, topk);
             break;
+        default:
+            r = NULL;
+            break;
     }
 
     return r;

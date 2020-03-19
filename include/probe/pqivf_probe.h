@@ -21,7 +21,8 @@ public:
     virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx) override;
     virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx) override;
 private:
-    matrix_mul<T>* cq_mm, pq_mm;
+    matrix_mul<T>* cq_mm;
+    //matrix_mul<T>* pq_mm;
     int32_t max_batch, max_block, topk, dimension;
 
     int cq_num;
@@ -32,6 +33,8 @@ private:
     int res_cache_size;
 
     pair<Tout, idx_t>* res;
+    Tout* code_book;
+    int32_t* prefix;
     uint32_t nprocs;
 };
 template<typename T,
@@ -42,93 +45,103 @@ pqivf_probe<T, dist_type>::pqivf_probe(int dimension, int topk):probe<T, dist_ty
     this->max_block = 102400;
     this->cq_num = 4096;
     this->select_cq = 2048;
-    this->res_cache_size = 1024000;
+    this->res_cache_size = 10240;
     this->cq_mm = new rapid_matrix_mul<T>;
-    this->pq_mm = new rapid_matrix_mul<T>;
+    //this->pq_mm = new rapid_matrix_mul<T>;
     this->cq_mm->set(this->dimension, this->select_cq, max_batch, max_block);
-    this->pq_mm->set(this->pq_dimension, topk, max_batch * this->code_len, this->pq_num);
+    //this->pq_mm->set(this->pq_dimension, topk, max_batch * this->code_len, this->pq_num);
     this->code_len = this->dimension / this->pq_dimension;
-    this->res = (pair<Tout, idx_t>*)malloc(this->max_batch * this->max_block * sizeof(pair<Tout, idx_t>));
+    this->res = (pair<Tout, idx_t>*)malloc(this->res_cache_size * sizeof(pair<Tout, idx_t>));
+    memset(this->res, 0, this->res_cache_size * sizeof(pair<Tout, idx_t>));
+    this->code_book = (Tout*)malloc(this->max_batch * this->pq_num * this->code_len * sizeof(Tout));
+    this->prefix = (int32_t*)malloc((this->cq_num + 5) * sizeof(int32_t));
 }
 
 template<typename T,
         DistanceType dist_type>
 pqivf_probe<T, dist_type>::~pqivf_probe(){
     delete this->cq_mm;
-    delete this->pq_mm;
+    //delete this->pq_mm;
+    free(this->res);
+    free(this->prefix);
+    free(this->code_book);
 }
 template<typename T,
         DistanceType dist_type>
 int pqivf_probe<T, dist_type>::create_gallery(gallery<T, dist_type> ** ga_ptr){
-    struct pqivf_traits traits(4096,2048,32,256);
+    struct pqivf_traits traits = {4096,2048,32,256};
     pqivf_gallery<T, dist_type> * ga = new pqivf_gallery<T, dist_type>(this->dimension, traits);
     (*ga_ptr) = (gallery<T, dist_type>*)ga;
     return 0;
 }
 
 template<typename T>
-inline void get_value(int8_t* data, pair<T, idx_t>* code_book, int code_len, int qid, int block, pair<T, idx_t>* res){
-    for (int i = 0; i < block; ++i){
-        int v = 0;
-        for (int j = 0; j < code_len; ++j)
-            v += code_book[j];
-        res[i].first = v;
-        res[i].second = qid + i;
-    }
-}
+inline void get_res(uint8_t* data, T* code_book, int code_len, int ldc, int st, int qid, int block, pair<T, idx_t>* res){
+    for (int i = st, _i = 0; i < st + block; ++i, _i += code_len)
+        for (int j = 0, _j = 0; j < code_len; ++j, _j += ldc)
+            res[i].first += code_book[_j + data[_i + j]];
 
+    for (int i = st, _i = qid; i < st + block; ++i, ++_i) 
+        res[i].second = _i;
+}
 
 template<typename T,
         DistanceType dist_type>
 int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx){
 
     pqivf_gallery<T, dist_type>* c_ga = (pqivf_gallery<T, dist_type>*)ga;
-    vector<vector<pair<Tout, idx_t> > > ans(this->max_batch);
+    vector<pair<Tout, idx_t> > ans;
     if (c_ga->num < this->topk){
-        ans.reserve(n);
-        for (int i = 0; i < n; ++i){
-            for (int j = 0; j < this->cq_num; ++j)
-                for (int k = 0; k < c_ga->data[j].size(); ++k)
-                    ans[i].push_back(std::make_pair(vec_dis<T, dist_type>(x + 1LL * i * this->dimension, c_ga->data[j].data() + 1LL * k * this->dimension, this->dimension), k));
-            sort(ans[i].begin(), ans[i].end(), pair_greator<T, idx_t>());
-            for (int j = 0; j < c_ga->num; ++j){
-                sims[i * this->topk + j] = ans[i][j].first;
-                idx[i * this->topk + j] = c_ga->ids[ans[i][j].second];
-            }
-            for (int j = c_ga->num; j < this->topk; ++j){
-                sims[i * this->topk + j] = 0;
-                idx[i * this->topk + j] = -1;
-            }
+        for (int i = 0; i < n; ++i)
+        for (int j = 0; j < this->topk; ++j){
+            sims[i * this->topk + j] = 0;
+            idx[i * this->topk + j] = -1;
         }
-        return 0;
+        return NO_SUPPORT_NUM_LT_K;
     }
 
     pair<Tout, idx_t>* cq_res;
-    pair<Tout, idx_t>* pq_res;
+    //pair<Tout, idx_t>* pq_res;
+    this->prefix[0] = 0;
+    for (int i = 0; i < n; ++i)
+        this->prefix[i] = this->prefix[i - 1] + c_ga->block_num[i - 1];
     for (int i = 0; i < n; i += this->max_batch){
-        this->cq_mm.mul(x, this->cq.data(), this->cq_offset.data(), this->max_batch, this->cq_num, &cq_res);
+        int pn = std::min(this->max_batch, n-i);
+        this->cq_mm->mul(x, c_ga->cq.data(), c_ga->cq_offset.data(), this->max_batch, this->cq_num, &cq_res);
+        
+        r_dot_prod<T>(x, c_ga->pq.data(), c_ga->pq_offset.data(), pn * this->code_len, this->pq_num, this->pq_dimension, this->code_book, this->pq_num);
 
-        //get code_book
-        this->pq_mm.mul(x, this->pq.data(), this->pq_offset.data(), this->max_batch * this->code_len, this->pq_num, &pq_res);
+        for (int j = 0; j < pn; ++j){
+            int cnt = 0;
+            for (int _j = 0; _j < this->select_cq; ++_j){
+                int cq_id = cq_res[cq_id].second;
+                uint8_t* data= c_ga->data[cq_id].data();
+                int num = c_ga->block_num[cq_id];
+                for (int vec_id = 0; vec_id < num; vec_id += this->res_cache_size){
+                    int qn = std::min(this->max_block, num - vec_id);
+                    if (cnt + qn >= this->res_cache_size){
+                        std::nth_element(this->res, this->res + this->topk + 1, this->res + cnt + 1, pair_greator<Tout, int>());
+                        for (int k = 0; k < this->topk; ++k)
+                        ans.push_back(res[k]);
+                        memset(this->res, 0, sizeof(pair<Tout, int>) * cnt);
+                        cnt = 0;
+                    }
 
-        for (int j = 0; j < std::min(this->max_batch, n-i); ++j){
-            for (int cq_id = 0; cq_id < this->select_cq; ++cq_id){
-                uint8_t* data= c_ga->data[cq_res[cq_id].second].data();
-                int num = c_ga->block_num[cq_res[cq_id].second];
-                for (int vec_id = 0; vec_id < num; vec_id += this->max_block){
-                    get_value<Tout>(data + vec_id * this->dimension, pq_res, this->code_len, i + j,
-                     std::min(num - vec_id, this->max_block), &this->res[(i + j) * this->max_block + vec_id]);
+                    get_res<Tout>(data + vec_id * this->dimension, &this->code_book[j * this->code_len * this->pq_num],
+                                  this->code_len, this->pq_num, cnt, this->prefix[cq_id], qn, &this->res[(i + j) * this->max_block + vec_id]);
 
-                    nth_element(res[(i + j) * this->max_block], res[(i + j + 1) * this->max_block], pair_greator<Tout, int>());
-                    for (int k = 0; k < this->topk; ++k)
-                        ans[j].push_back(res[k]);
+                    cnt += qn;
+                    
                 }
             }
-            nth_element(ans[j].data(), ans[j].data() + this->topk + 1, pair_greator<Tout, int>());
-            for (int k =0 ; k < this->topk; ++k){
-                sims[j * this->topk + k] = ans[j][k].first;
-                idx[j * this->topk + k] = ans[j][k].second;
+            std::nth_element(ans.data(), ans.data() + this->topk + 1, ans.data() + ans.size() + 1, pair_greator<Tout, int>());
+            std::sort(ans.data(), ans.data() + this->topk + 1, pair_greator<Tout, int>());
+            for (int k =0; k < this->topk; ++k){
+                sims[(i + j) * this->topk + k] = ans[k].first;
+                int v = std::lower_bound(this->prefix, this->prefix + this->cq_num + 1, ans[k].second) - this->prefix;
+                idx[(i + j) * this->topk + k] = c_ga->ids[v][ans[k].second - this->prefix[v]];
             }
+            ans.clear();
         }
     }
     return 0;
@@ -138,7 +151,7 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_probe<T, dist_type>::query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx){
     /* TODO */
-    return 0;
+    return NO_SUPPORT;
 }
 
 }

@@ -9,14 +9,17 @@ enum Errorno{
     INDEX_EXISTS = -1,
     INDEX_NO_FIND = -2,
     TRAINDATA_ERROR = -3,
-    NOT_TRAIN = -4,
+    NO_TRAIN = -4,
+    NO_SUPPORT_NUM_LT_K = -5,
+    NO_SUPPORT = -6,
+
 };
 
 
-using uint64_t = unsigned long long;
-using uint32_t = unsigned int;
-using int64_t = long long;
-using int32_t = int;
+//using uint64_t = unsigned long long;
+//using uint32_t = unsigned int;
+//using int64_t = long long;
+//using int32_t = int;
 //using int8_t = signed char;
 //using uint8_t = unsigned char;
 using idx_t = int32_t;

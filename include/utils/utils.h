@@ -65,27 +65,66 @@ inline typemap_t<T> get_offset(const T* d, int dimension){
         return 0;
     }
 }
+
+inline void norm(float* data, int n, int dimension){
+    for (int i = 0 ; i < n ; ++i){
+        float len = sqrt(dot_prod<float>(data + 1LL * i * dimension, data + 1LL * i * dimension, dimension));
+        for (int j = 0; j < dimension; ++j) data[1LL * i * dimension + j] /= len;
+    }
+}
+
+inline float float_7bits(float* data, int8_t* td, int64_t n){
+    float max_v, min_v;
+    for (int64_t i = 0; i < n; ++i){
+        max_v = std::max(max_v, data[i]);
+        min_v = std::min(min_v, data[i]);
+    }
+    
+    for (int64_t i = 0; i < n; ++i){
+        max_v = std::max(max_v, data[i]);
+        min_v = std::min(min_v, data[i]);
+    }
+    float k = 140 / (max_v - min_v);
+    //float b = 70 - k * max_v;
+    for (int64_t i = 0 ;i < n; ++i){
+        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
+    }
+    return k;
+}
+
+inline float float_7bits(const float* data, int8_t* td, int64_t n, float k){
+    for (int64_t i = 0 ;i < n; ++i){
+        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
+    }
+    return 0;
+}
+
+
 /*
 template<typename T1,
         typename T2,
         DistanceType dist_type>
-inline float get_code_v1(const T1* x, const T1* pq, int n, int pq_num, int pq_dimension, int dimension, T2* code){
+inline void get_code_v1(const T1* x, const T1* pq, const typemap_t<T1>* pq_offset, int n, int pq_num, int pq_dimension, int dimension, T2* code){
     using Tout = typemap_t<T1>;
-    for (int i = 0; i < n; ++i)
+    Tout d, min_dis;
+    r_dot_prod<T1>(x, pq, pq_offset, n * code_len, pq_num, pq_dimension, , pq_num);
+    for (int i = 0; i < n; ++i){
+        
+    }
     for (int j = 0, _j=0; j < dimension; j += pq_dimension, ++_j){
-        int min_idx = 0;
-        Tout min_dis = vector_dis<dist_type>(x + j, pq + j, pq_dimension);
-        for (int k = 1; k < n; ++k)
-            Tout dis = vec_dis<dist_type>(x + 1LL * i * dimension + j, y + 1LL * k * dimension + j, pq_dimension);
-            if (dis < min_dis){
-                min_dis = dis;
+        min_idx = 0;
+        min_dis = vec_dis<T1, dist_type>(x + j, pq + j, pq_dimension);
+        for (int k = 1; k < pq_num; ++k){
+            d = vec_dis<T1, dist_type>(x + 1LL * i * dimension + j, pq + 1LL * k * pq_dimension, pq_dimension);
+            if (d < min_dis){
+                min_dis = d;
                 min_idx = k;
             }
             code[i][_j] = min_idx;
+        }
     }
+}*/
 
-}
-*/
 
 // ==================== pair compare ==================== 
 template<typename T1, typename T2>
@@ -149,45 +188,14 @@ inline void r_bytes2file(ofstream &fout, T* x, int &n, int &dimension){
     r_write<T>(fout, x, n * dimension);
 }
 
-
-inline void norm(float* data, int n, int dimension){
-    for (int i = 0 ; i < n ; ++i){
-        float len = sqrt(dot_prod<float>(data + 1LL * i * dimension, data + 1LL * i * dimension, dimension));
-        for (int j = 0; j < dimension; ++j) data[1LL * i * dimension + j] /= len;
-    }
-}
-
-inline float float_7bits(float* data, int8_t* td, int64_t n){
-    float max_v, min_v;
-    for (int64_t i = 0; i < n; ++i){
-        max_v = std::max(max_v, data[i]);
-        min_v = std::min(min_v, data[i]);
-    }
-    
-    for (int64_t i = 0; i < n; ++i){
-        max_v = std::max(max_v, data[i]);
-        min_v = std::min(min_v, data[i]);
-    }
-    float k = 140 / (max_v - min_v);
-    //float b = 70 - k * max_v;
-    for (int64_t i = 0 ;i < n; ++i){
-        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
-    }
-    return k;
-}
-
-inline float float_7bits(const float* data, int8_t* td, int64_t n, float k){
-    for (int64_t i = 0 ;i < n; ++i){
-        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
-    }
-    return 0;
-}
-
 inline bool file_exist(const char *file_name)
 {
     std::ifstream infile(file_name);
     return infile.good();
 };
+
+
+// ==================== Create data ==================== 
 
 template<typename T = float>
 int init_random(T* data, int n, int dimension){

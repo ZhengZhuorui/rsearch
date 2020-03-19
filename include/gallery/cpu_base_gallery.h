@@ -37,8 +37,8 @@ private:
     vector<idx_t> ids;
     vector<T> offset;
 
-    uint32_t dimension;
-    uint32_t num;
+    int dimension;
+    int num;
     idx_t max_id;
     
     std::mutex mtx;
@@ -88,7 +88,7 @@ int cpu_base_gallery<T, dist_type>::add(const T* const x, const int n){
         this->max_id++;
     }
     for (int i = 0 ; i < n ; ++i){
-        this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension, this->data.data() + 1LL * (this->num + i) * this->dimension, this->dimension);
+        this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension,  this->dimension);
     }    
     this->num += n;
     this->mtx.unlock();
@@ -114,7 +114,7 @@ int cpu_base_gallery<T, dist_type>::add_with_uids(const T* const x, const idx_t 
     memcpy(this->data.data() + 1LL * this->num * this->dimension, x, 1LL * sizeof(T) * n * this->dimension);
     this->offset.reserve(this->num + n);
     for (int i = 0 ; i < n ; ++i){
-        this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension, this->data.data() + 1LL * (this->num + i) * this->dimension, this->dimension);
+        this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension, this->dimension);
     }  
     this->num += n;
     this->mtx.unlock();
@@ -131,7 +131,7 @@ int cpu_base_gallery<T, dist_type>::change_by_uids(const T* const x, const idx_t
     }
     for (int i = 0; i < n; ++i){
         memcpy(this->data.data() + 1LL * this->index[uids[i]] * this->dimension, x + 1LL * i * dimension, sizeof(T) * this->dimension);
-        this->offset[this->index[uids[i]]] = get_offset<T>(this->data.data() + 1LL * this->index[uids[i]] * this->dimension, this->data.data() + 1LL * this->index[uids[i]] * this->dimension, this->dimension);
+        this->offset[this->index[uids[i]]] = get_offset<T, dist_type>(this->data.data() + 1LL * this->index[uids[i]] * this->dimension, this->dimension);
     }
     this->mtx.unlock();
     return 0;

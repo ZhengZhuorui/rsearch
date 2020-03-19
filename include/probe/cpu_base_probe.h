@@ -32,7 +32,6 @@ cpu_base_probe<T, dist_type, matrix_type>::cpu_base_probe(int dimension, int top
     this->max_batch = 32;
     this->max_block = 102400;
     this->mm->set(this->dimension, this->topk, this->max_batch, this->max_block);
-    this->dist_type = dist_type;
 }
 
 template<typename T,
@@ -46,7 +45,7 @@ template<typename T,
         DistanceType dist_type,
         typename matrix_type>
 int cpu_base_probe<T, dist_type, matrix_type>::create_gallery(gallery<T, dist_type> ** ga_ptr){
-    cpu_base_gallery<T, dist_type> * ga = new cpu_base_gallery<T, dist_type>(this->dimension, this->dist_type);
+    cpu_base_gallery<T, dist_type> * ga = new cpu_base_gallery<T, dist_type>(this->dimension);
     //int ret = ga->init();
     (*ga_ptr) = (gallery<T, dist_type>*)ga;
     return 0;
@@ -91,7 +90,8 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
         }
 
         for (int k = 0; k < std::min(this->max_batch, n - i); ++k){
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size(), pair_greator<Tout, idx_t>());
+            std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size(),
+                             pair_greator<Tout, idx_t>());
             if (dist_type == COSINE)
                 std::sort(ans[k].begin(), ans[k].end(), pair_greator<Tout, idx_t>());
             else 
@@ -109,13 +109,10 @@ template<typename T,
         DistanceType dist_type,
         typename matrix_type>
 int cpu_base_probe<T, dist_type, matrix_type>::query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx){
-    if (n < 8){
-        /* TODO */
-    }
-    else {
-        /* TODO */
-    }
-    return 0;
+    
+    /* TODO */
+    
+    return NO_SUPPORT;
 }
 
 }

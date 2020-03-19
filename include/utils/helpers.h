@@ -1,7 +1,8 @@
 #pragma once
+#include "rsearch_type.h"
 #include <cxxabi.h>
 #include <bits/stdc++.h>
-#include "rsearch_type.h"
+
 namespace rsearch{
 inline std::string GetDeviceName(MethodType dev) {
 

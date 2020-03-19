@@ -1,5 +1,5 @@
 #pragma once
-#include "rsearch_type.h"
+#include "rsearch_def.h"
 #include "utils/utils.h"
 namespace rsearch{
 template<typename T,

@@ -1,20 +1,8 @@
 #pragma once
-#include "matrix/matrix_mul.h"
-#include "rsearch_type.h"
+#include "rsearch_def.h"
 #include <bits/stdc++.h>
 #include "utils/utils.h"
-#ifdef  __SSE__
 #include "utils/avx2_asm.h"
-
-#include <typeinfo>
-#include <stdio.h>
-#include <stdint.h>
-#include <mmintrin.h>
-#include <xmmintrin.h>
-#include <pmmintrin.h>
-#include <emmintrin.h>
-#include <smmintrin.h>
-#include <immintrin.h>
 namespace rsearch{
 
 using std::vector;
@@ -75,5 +63,3 @@ int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* con
     return 0;
 }
 }
-
-#endif

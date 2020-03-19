@@ -1,10 +1,5 @@
 #pragma once
-#include "rsearch_type.h"
-#include "gallery/rsearch_gallery.h"
-#include "probe/cpu_base_probe.h"
-#include "probe/pqivf_probe.h"
-#include "matrix/base_matrix_mul.h"
-#include "matrix/rapid_matrix_mul.h"
+#include "rsearch_def.h"
 
 namespace rsearch{
 
@@ -32,9 +27,6 @@ public:
     virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx) = 0;
     virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx);
 };
-
-template<typename T, DistanceType dist_type> class pqivf_probe;
-template<typename T, DistanceType dist_type, typename matrix_type> class cpu_base_probe;
 
 template<typename T, 
         DistanceType dist_type>

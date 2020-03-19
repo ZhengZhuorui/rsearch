@@ -19,8 +19,7 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
         return -1;
     }
     std::vector<T> x;
-    x.resize(N * Dimension);
-    get_random_data<T>(x.data(), N, Dimension);
+    get_random_data<T, dist_type>(x, N, Dimension);
     ret = ga->add(x, N);
     const int batch = 128;
     using Tout = rsearch::typemap_t<T>;

@@ -1,6 +1,5 @@
 #pragma once
-#include "matrix/matrix_mul.h"
-#include "rsearch_type.h"
+#include "rsearch_def.h"
 #include <bits/stdc++.h>
 #include "utils/utils.h"
 namespace rsearch{

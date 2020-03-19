@@ -1,4 +1,16 @@
 #pragma once
+
+#ifdef __SSE__
+#include <typeinfo>
+#include <stdio.h>
+#include <stdint.h>
+#include <mmintrin.h>
+#include <xmmintrin.h>
+#include <pmmintrin.h>
+#include <emmintrin.h>
+#include <smmintrin.h>
+#include <immintrin.h>
+
 #include "rsearch_type.h"
 namespace rsearch{
 // ============== int8 =============== 
@@ -741,3 +753,4 @@ inline void r_dot_prod(const T *A, const T *B, const typemap_t<T> *offset, const
 }
 
 }
+#endif

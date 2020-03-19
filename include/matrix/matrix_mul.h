@@ -1,5 +1,5 @@
 #pragma once
-#include "rsearch_type.h"
+#include "rsearch_def.h"
 namespace rsearch{
 using std::vector;
 using std::pair;

@@ -1,15 +1,11 @@
 #pragma once
-#include "rsearch_type.h"
-#include "gallery/pqivf_gallery.h"
-#include "matrix/rapid_matrix_mul.h"
-#include "probe/rsearch_probe.h"
+#include "rsearch_def.h"
 #include "utils/utils.h"
 
 namespace rsearch{
 using std::pair;
 using std::vector;
 using std::make_pair;
-template<typename T, DistanceType dist_type> class probe;
 template<typename T,
         DistanceType dist_type>
 class pqivf_probe : public probe<T, dist_type>{

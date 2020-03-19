@@ -1,9 +1,6 @@
 #pragma once
-#include "probe/rsearch_probe.h"
-#include "probe/cpu_base_probe.h"
+#include "rsearch_def.h"
 #include <bits/stdc++.h>
-#include "matrix/base_matrix_mul.h"
-#include "matrix/rapid_matrix_mul.h"
 
 namespace rsearch{
 using std::vector;

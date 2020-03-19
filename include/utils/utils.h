@@ -1,8 +1,8 @@
 #pragma once
+#include "rsearch_type.h"
 #include <bits/stdc++.h>
 #include <sys/sysinfo.h>
 #include <cxxabi.h>
-#include "rsearch_type.h"
 namespace rsearch{
 using std::pair;
 using std::vector;
@@ -220,7 +220,7 @@ int init_random<int8_t>(int8_t* data, int n, int dimension){
 }
 
 template<typename T>
-void get_random_data(T* data, int n, int dimension){
+void __get_random_data(T* data, int n, int dimension){
     ofstream fout;
     int status;
     char *type_name = abi::__cxa_demangle(typeid(T).name(), NULL,  NULL, &status);
@@ -236,6 +236,20 @@ void get_random_data(T* data, int n, int dimension){
         r_bytes2file<T>(fout, data, n, dimension);
     }
 }
-
+template<typename T,
+        DistanceType dist_type>
+inline void get_random_data(vector<T>& data, int n, int dimension){
+    data.reserve(n * dimension);
+    std::vector<float> data_float;
+    data_float.reserve(n * dimension);
+    __get_random_data(data_float.data(), n, dimension);
+    if (dist_type == COSINE)
+        norm(data_float.data(), n, dimension);
+    if (is_same_type<T, float>() == true)
+        memcpy(data.data(), data_float.data(), 1LL * n * dimension * sizeof(float));
+    else
+        float_7bits(data_float.data(), (int8_t*)data.data(), 1LL * n * dimension, 453.0);
+    
+}
 
 }

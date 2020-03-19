@@ -1,7 +1,5 @@
 #pragma once
-#include "probe/rsearch_probe.h"
-#include "gallery/cpu_base_gallery.h"
-#include "matrix/matrix_mul.h"
+#include "rsearch_def.h"
 #include "utils/avx2_asm.h"
 namespace rsearch{
 

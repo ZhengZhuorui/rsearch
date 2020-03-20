@@ -122,7 +122,7 @@ void topKIndex(const T *key, T *key_out, int* index_out, const int key_len, cons
 
 
 template<typename T>
-int cpu_select_kv(const T * key, T *key_out, int * index_out, int topk, int size, int batch_size, bool DESCEND){
+int cpu_select_kv(const T * key, T *key_out, int * index_out, int topk, int size, int batch_size, int ldc, bool DESCEND){
     if(!key || !key_out || !index_out)
         return -1;
     if(size < 1 || topk < 1 || batch_size < 1)
@@ -131,15 +131,15 @@ int cpu_select_kv(const T * key, T *key_out, int * index_out, int topk, int size
         topk = size;
     if (DESCEND == true){
         for(int i=0; i < batch_size; ++i)
-            topKIndex<T, true>(key + i * size, key_out + i * topk, index_out + i * topk, size, topk);
+            topKIndex<T, true>(key + i * ldc, key_out + i * topk, index_out + i * topk, size, topk);
     }
     else{
         for(int i=0; i < batch_size; ++i)
-            topKIndex<T, false>(key + i * size, key_out + i * topk, index_out + i * topk, size, topk);
+            topKIndex<T, false>(key + i * ldc, key_out + i * topk, index_out + i * topk, size, topk);
     }
     return 0;
 }
-template int cpu_select_kv<int>(const int * key, int *key_out, int * index_out, int topk, int size, int batch_size, bool DESCEND);
-template int cpu_select_kv<float>(const float * key, float *key_out, int * index_out, int topk, int size, int batch_size, bool DESCEND);
+template int cpu_select_kv<int>(const int * key, int *key_out, int * index_out, int topk, int size, int batch_size, int ldc, bool DESCEND);
+template int cpu_select_kv<float>(const float * key, float *key_out, int * index_out, int topk, int size, int batch_size, int ldc, bool DESCEND);
 
 }

@@ -66,6 +66,7 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
     vector<vector<pair<Tout, idx_t> > >ans(this->max_batch);
     T* data= (T*)c_ga->data.data();
     Tout* offset = (Tout*)c_ga->offset.data();
+    std::cout<< "[cpu_base_probe] begin, num = " <<num<< std::endl;
     if (num < this->topk){
         ans.reserve(n);
         for (int i = 0; i < n; ++i){
@@ -88,19 +89,16 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
             int block_size = std::min(this->max_block, num - j);
             this->mm->mul(&x[i * this->dimension], &data[j * this->dimension], &offset[j], 
                         std::min(this->max_batch, n - i),  block_size, &res);
+            std::cout << "[cpu_base_probe] res[0]=" << res[0].first << "," << res[0].second << std::endl;
             for (int k = 0; k < std::min(this->max_batch, n - i); ++k)
                 for (int l = 0; l < this->topk; ++l)
                     ans[k].push_back(std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + j));
-            
         }
 
         for (int k = 0; k < std::min(this->max_batch, n - i); ++k){
             std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size(),
                              pair_greator<Tout, idx_t>());
-            if (dist_type == COSINE)
-                std::sort(ans[k].begin(), ans[k].end(), pair_greator<Tout, idx_t>());
-            else 
-                std::sort(ans[k].begin(), ans[k].end());
+            std::sort(ans[k].begin(), ans[k].end(), pair_greator<Tout, idx_t>());
             for (int j = 0 ; j < this->topk ; ++j){
                 sims[(i + k) * this->topk + j] = ans[k][j].first;
                 idx[(i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];

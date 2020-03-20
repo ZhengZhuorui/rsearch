@@ -9,11 +9,13 @@ void __get_random_data(float* data, int n, int dimension){
     sprintf(fname, "/home/zzr/data/.rsearch.%s.%d.%d.bin", type_name, dimension, n);
     
     if (file_exist(fname)){
+        //printf("[__get_random_data] target 1, file = %s\n", fname);
         ifstream fin(fname, ifstream::binary);
         r_file2bytes<float>(fin, data, n, dimension);
     } else {
+        //printf("[__get_random_data] target 2, file = %s\n", fname);
         fout.open(fname, ofstream::binary);
-        init_random(data, dimension, n);
+        init_random(data, n, dimension);
         r_bytes2file<float>(fout, data, n, dimension);
     }
 }

@@ -26,7 +26,7 @@ int main(){
     printf("target 2\n");
     p->create_gallery(&ga);
     ga->add(data.data(), n);
-    ga->init();
+    //ga->init();
     printf("target 3\n");
     p->query(data.data() + 1000 * dimension, 10, ga, sims, uids);
     for (int i = 0; i < 10; ++i){

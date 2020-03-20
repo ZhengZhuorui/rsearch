@@ -69,6 +69,7 @@ inline typemap_t<T> get_offset(const T* d, int dimension){
 inline void norm(float* data, int n, int dimension){
     for (int i = 0 ; i < n ; ++i){
         float len = sqrt(dot_prod<float>(data + 1LL * i * dimension, data + 1LL * i * dimension, dimension));
+        //if (i == 1000) std::cout << "[norm] len = %d" << len << std::endl;
         for (int j = 0; j < dimension; ++j) data[1LL * i * dimension + j] /= len;
     }
 }

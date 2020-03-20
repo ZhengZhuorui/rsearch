@@ -9,8 +9,11 @@ namespace rsearch{
 template<typename T,
         DistanceType dist_type>
 class pipe{
+public:
     pipe(){}
     ~pipe(){}
-    virtual int add(){}
+    virtual int add(probe<T, dist_type>* ){}
+private:
+    
 }
 */

@@ -73,7 +73,7 @@ inline void norm(float* data, int n, int dimension){
     }
 }
 
-inline float float_7bits(float* data, int8_t* td, int64_t n){
+inline float __float_7bits(float* data, int8_t* td, int64_t n){
     float max_v, min_v;
     for (int64_t i = 0; i < n; ++i){
         max_v = std::max(max_v, data[i]);
@@ -92,7 +92,7 @@ inline float float_7bits(float* data, int8_t* td, int64_t n){
     return k;
 }
 
-inline float float_7bits(const float* data, int8_t* td, int64_t n, float k){
+inline float float_7bits(const float* data, int8_t* td, int64_t n, float k = 463.0){
     for (int64_t i = 0 ;i < n; ++i){
         td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
     }
@@ -197,8 +197,7 @@ inline bool file_exist(const char *file_name)
 
 // ==================== Create data ==================== 
 
-template<typename T = float>
-int init_random(T* data, int n, int dimension){
+inline int init_random(float* data, int n, int dimension){
     const int MO = 65535;
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < dimension; ++j){
@@ -208,48 +207,10 @@ int init_random(T* data, int n, int dimension){
     return 0;
 }
 
-template<>
-int init_random<int8_t>(int8_t* data, int n, int dimension){
-    const int MO = 65535;
-    for (int i = 0; i < n; ++i){
-        for (int j = 0; j < dimension; ++j){
-            data[i * dimension + j] = 1.0 * (rand() % MO) / MO * 453.0;
-        }
-    }
-    return 0;
-}
+void __get_random_data(float* data, int n, int dimension);
 
-template<typename T>
-void __get_random_data(T* data, int n, int dimension){
-    ofstream fout;
-    int status;
-    char *type_name = abi::__cxa_demangle(typeid(T).name(), NULL,  NULL, &status);
-    char fname[200];
-    sprintf(fname, "/home/zzr/data/.rsearch.%s.%d.%d.bin", type_name, dimension, n);
-    
-    if (file_exist(fname)){
-        ifstream fin(fname, ifstream::binary);
-        r_file2bytes<T>(fin, data, n, dimension);
-    } else {
-        fout.open(fname, ofstream::binary);
-        init_random(data, dimension, n);
-        r_bytes2file<T>(fout, data, n, dimension);
-    }
-}
 template<typename T,
         DistanceType dist_type>
-inline void get_random_data(vector<T>& data, int n, int dimension){
-    data.reserve(n * dimension);
-    std::vector<float> data_float;
-    data_float.reserve(n * dimension);
-    __get_random_data(data_float.data(), n, dimension);
-    if (dist_type == COSINE)
-        norm(data_float.data(), n, dimension);
-    if (is_same_type<T, float>() == true)
-        memcpy(data.data(), data_float.data(), 1LL * n * dimension * sizeof(float));
-    else
-        float_7bits(data_float.data(), (int8_t*)data.data(), 1LL * n * dimension, 453.0);
-    
-}
+void get_random_data(vector<T>& data, int n, int dimension);
 
 }

@@ -1,7 +1,7 @@
-#include "rsearch_type.h"
+#include "rsearch_def.h"
+#include "probe/rsearch_probe.h"
+#include "gallery/rsearch_gallery.h"
 #include "utils/utils.h"
-#include "probe/cpu_base_probe.h"
-#include "gallery/cpu_base_gallery.h"
 
 #include <bits/stdc++.h>
 using namespace std;

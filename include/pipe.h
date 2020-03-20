@@ -1,4 +1,9 @@
 #pragma once
+
+/*
+    TODO
+*/
+/*
 #include "rsearch_type.h"
 namespace rsearch{
 template<typename T,
@@ -8,3 +13,4 @@ class pipe{
     ~pipe(){}
     virtual int add(){}
 }
+*/

@@ -44,28 +44,32 @@ if (CUDA)
 endif()
 
 # ---------- Add gtest ----------
-if (GTEST)
 set(GTEST_DIR "${CMAKE_SOURCE_DIR}/thirdparty/gtest-1.8.1")
-set(GTEST_INCLUDE "${GTEST_DIR}/include")
-set(GTEST_LIB "${GTEST_DIR}/lib/libgtest.a")
+set(GTEST_INCLUDE_DIR "${GTEST_DIR}/include")
+set(GTEST_LIBS "${GTEST_DIR}/lib/libgtest.a")
 set(GTEST_MAIN_LIBS "${GTEST_DIR}/lib/libgtest_main.a")
-include_directories(${GTEST_INCLUDE})
-endif()
+include_directories(${GTEST_INCLUDE_DIR})
 
+# ---------- Main ----------
 
-#file(GLOB_RECURSE SRC src/*.cpp src/*.cu)
+file(GLOB_RECURSE SRC src/*.cpp src/*.cu)
+message(${SRC})
 
+add_library(rsearch SHARED ${SRC})
+add_library(rsearchStatic STATIC ${SRC})
 
-#target_link_libraries(rsearch ${LINK_LIBS})
-#target_link_libraries(rsearchStatic ${LINK_LIBS})
+target_link_libraries(rsearch ${LINK_LIBS})
+target_link_libraries(rsearchStatic ${LINK_LIBS})
 
 add_executable(demo test/demo.cpp)
+target_link_libraries(demo rsearch)
 
 add_executable(benchmark_rapid_int8 test/benchmark/benchmark_rapid_int8)
+target_link_libraries(benchmark_rapid_int8 rsearch)
 
 file(GLOB_RECURSE UNIT_TEST_SRC test/unit_test/*.c*)
 add_executable(unit_test ${UNIT_TEST_SRC})
-target_link_libraries(unit_test ${GTEST_LIBS} ${GTEST_MAIN_LIBS})
+target_link_libraries(unit_test rsearch ${GTEST_LIBS} ${GTEST_MAIN_LIBS} )
 
 #file(GLOB_RECURSE UNIT_TEST_SRC test/unit_test/*.c*)
 #cuda_add_executable(unit_test ${UNIT_TEST_SRC})

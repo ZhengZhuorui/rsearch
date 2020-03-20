@@ -18,4 +18,7 @@ template<typename T> class matrix_mul;
 template<typename T> class base_matrix_mul;
 template<typename T> class rapid_matrix_mul;
 
+//function
+template<typename T, DistanceType dist_type> probe<T, dist_type>* create_probe(int dimension, int topk, MethodType method_type);
+
 }

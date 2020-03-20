@@ -1,5 +1,7 @@
 #pragma once
 #include "rsearch_def.h"
+#include "probe/cpu_base_probe.h"
+#include "probe/pqivf_probe.h"
 
 namespace rsearch{
 
@@ -30,25 +32,7 @@ public:
 
 template<typename T, 
         DistanceType dist_type>
-probe<T, dist_type>* create_probe(int dimension, int topk, MethodType method_type){
-    probe<T, dist_type> * r;
-    switch(method_type){
-        case DUMMY:
-            r = new cpu_base_probe<T, dist_type, base_matrix_mul<T> >(dimension, topk);
-            break;
-        case X86_RAPID:
-            r = new cpu_base_probe<T, dist_type, rapid_matrix_mul<T> >(dimension, topk);
-            break;
-        case X86_PQIVF:
-            r = new pqivf_probe<T, dist_type>(dimension, topk);
-            break;
-        default:
-            r = NULL;
-            break;
-    }
-
-    return r;
-}
+probe<T, dist_type>* create_probe(int dimension, int topk, MethodType method_type);
 
 }
 

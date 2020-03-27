@@ -60,7 +60,7 @@ template int cpu_base_probe<float, EUCLIDEAN, rapid_matrix_mul<float> >::create_
 template<typename T,
         DistanceType dist_type,
         typename matrix_type>
-int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx){
+int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, idx_t *idx){
     cpu_base_gallery<T, dist_type>* c_ga = (cpu_base_gallery<T, dist_type>*) ga;
     int num = c_ga->num;
     pair<Tout, idx_t>* res;
@@ -88,9 +88,9 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
     }
     for (int i = 0 ; i < n ; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
-        memcpy(this->x_tmp.data(), x, pn * this->dimension * sizeof(T));
+        memcpy(this->x_tmp.data(), x + 1LL * i * this->dimension, pn * this->dimension * sizeof(T));
         if (is_same_type<T, int8_t>() == true){
-            for (int i = 0; i < pn * this->dimension; ++i)
+            for (int k = 0; k < pn * this->dimension; ++k)
                 this->x_tmp[i] += 64;
         }
 
@@ -98,8 +98,7 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
             int block_size = std::min(this->max_block, num - j);
             this->mm->mul(this->x_tmp.data(), data + 1LL * j * this->dimension, offset + j, 
                         std::min(this->max_batch, n - i),  block_size, &res);
-            std::cout << "[cpu_base_probe] res[0]=" << res[0].first << "," << res[0].second << std::endl;
-
+            
             for (int k = 0; k < std::min(this->max_batch, n - i); ++k)
                 for (int l = 0; l < this->topk; ++l)
                     ans[k].push_back(std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + j));
@@ -121,32 +120,32 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
     //std::cout << std::endl;
     return 0;
 }
-template int cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::query(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, COSINE, base_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, COSINE> * ga, float *sims, uint32_t *idx);
-template int cpu_base_probe<int8_t, EUCLIDEAN, base_matrix_mul<int8_t>>::query(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, EUCLIDEAN, base_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, float *sims, uint32_t *idx);
+template int cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::query(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, int *sims, idx_t *idx);
+template int cpu_base_probe<float, COSINE, base_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, COSINE> * ga, float *sims, idx_t *idx);
+template int cpu_base_probe<int8_t, EUCLIDEAN, base_matrix_mul<int8_t>>::query(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, int *sims, idx_t *idx);
+template int cpu_base_probe<float, EUCLIDEAN, base_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, float *sims, idx_t *idx);
 
-template int cpu_base_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::query(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, COSINE, rapid_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, COSINE> * ga, float *sims, uint32_t *idx);
-template int cpu_base_probe<int8_t, EUCLIDEAN, rapid_matrix_mul<int8_t>>::query(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, EUCLIDEAN, rapid_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, float *sims, uint32_t *idx);
+template int cpu_base_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::query(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, int *sims, idx_t *idx);
+template int cpu_base_probe<float, COSINE, rapid_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, COSINE> * ga, float *sims, idx_t *idx);
+template int cpu_base_probe<int8_t, EUCLIDEAN, rapid_matrix_mul<int8_t>>::query(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, int *sims, idx_t *idx);
+template int cpu_base_probe<float, EUCLIDEAN, rapid_matrix_mul<float> >::query(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, float *sims, idx_t *idx);
 
 template<typename T,
         DistanceType dist_type,
         typename matrix_type>
-int cpu_base_probe<T, dist_type, matrix_type>::query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx){
+int cpu_base_probe<T, dist_type, matrix_type>::query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx){
     
     /* TODO */
     
     return NO_SUPPORT;
 }
-template int cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, uint32_t *uids, const int m, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, COSINE, base_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, COSINE> * ga, uint32_t *uids, const int m, float *sims, uint32_t *idx);
-template int cpu_base_probe<int8_t, EUCLIDEAN, base_matrix_mul<int8_t>>::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, uint32_t *uids, const int m, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, EUCLIDEAN, base_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, uint32_t *uids, const int m, float *sims, uint32_t *idx);
+template int cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, idx_t *uids, const int m, int *sims, idx_t *idx);
+template int cpu_base_probe<float, COSINE, base_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, COSINE> * ga, idx_t *uids, const int m, float *sims, idx_t *idx);
+template int cpu_base_probe<int8_t, EUCLIDEAN, base_matrix_mul<int8_t>>::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, idx_t *uids, const int m, int *sims, idx_t *idx);
+template int cpu_base_probe<float, EUCLIDEAN, base_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, idx_t *uids, const int m, float *sims, idx_t *idx);
 
-template int cpu_base_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, uint32_t *uids, const int m, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, COSINE, rapid_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, COSINE> * ga, uint32_t *uids, const int m, float *sims, uint32_t *idx);
-template int cpu_base_probe<int8_t, EUCLIDEAN, rapid_matrix_mul<int8_t>>::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, uint32_t *uids, const int m, int *sims, uint32_t *idx);
-template int cpu_base_probe<float, EUCLIDEAN, rapid_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, uint32_t *uids, const int m, float *sims, uint32_t *idx);
+template int cpu_base_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, idx_t *uids, const int m, int *sims, idx_t *idx);
+template int cpu_base_probe<float, COSINE, rapid_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, COSINE> * ga, idx_t *uids, const int m, float *sims, idx_t *idx);
+template int cpu_base_probe<int8_t, EUCLIDEAN, rapid_matrix_mul<int8_t>>::query_with_uids(const int8_t * const x, const int n, gallery<int8_t, EUCLIDEAN> * ga, idx_t *uids, const int m, int *sims, idx_t *idx);
+template int cpu_base_probe<float, EUCLIDEAN, rapid_matrix_mul<float> >::query_with_uids(const float * const x, const int n, gallery<float, EUCLIDEAN> * ga, idx_t *uids, const int m, float *sims, idx_t *idx);
 }

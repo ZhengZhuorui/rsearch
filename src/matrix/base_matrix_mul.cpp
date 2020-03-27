@@ -17,8 +17,8 @@ template int base_matrix_mul<float>::set(int32_t dimension, int32_t topk, int32_
 
 template<typename T>
 int base_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* const offset, int batch, int block, pair<Tout, idx_t> **res){
-    //if (batch > this->max_batch || block > this->max_block)
-    //    return SIZE_TOO_BIG;
+    if (batch > this->max_batch || block > this->max_block)
+        return SIZE_TOO_BIG;
     //std::cout << "[mul] target 0" << std::endl;    
     for (int i = 0 ; i < batch; ++i){
         for (int j = 0 ; j < block; ++j){

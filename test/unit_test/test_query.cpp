@@ -18,47 +18,53 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
     target_name = rsearch::GetMethodName(mt);
     type_name = rsearch::GetTypeName<T>();
 
-    file_name = "rsearch_gallery." + rsearch::GetGalleryName(mt) + "." + std::to_string(N) + "." + std::to_string(Dimension) + "." + \
+    file_name = "/home/zzr/data/rsearch_gallery." + rsearch::GetGalleryName(mt) + "." + std::to_string(N) + "." + std::to_string(Dimension) + "." + \
                 type_name + ".bin";
-    std::cout << file_name << std::endl;
     rsearch::probe<T, dist_type>* probe = rsearch::create_probe<T, dist_type>(Dimension, K, mt);
     std::cout << "[test_query] target 1\n" << std::endl; 
     rsearch::gallery<T, dist_type>* ga;
     int ret = probe->create_gallery(&ga);
-    std::cout << "[test_query] target 2\n" << std::endl; 
+    std::cout << "[test_query] target 2" << std::endl; 
     if (ret != 0){
         printf("Create probe failed.\n");
         return -1;
     }
     std::vector<T> x;
+    const int batch = 128;
+    rsearch::idx_t top_uids[K * batch];//, real_uids[K * batch];
+    int target = 1123;
+    //for (int i = 0; i < batch; ++i)
+    //    real_uids[i] = target + i;
+
+    std::vector<T> query_vec(batch * Dimension);
     if (ga->init() != 0){
         printf("Gallery init failed.\n");
         return -1;
     }
-    std::cout << "[test_query] target 3\n" << std::endl; 
+    std::cout << "[test_query] target 3" << std::endl; 
+    rsearch::get_random_data<T, dist_type>(x, N, Dimension);
+    memcpy(query_vec.data(), x.data() + target * Dimension, batch * Dimension * sizeof(T));
     if (rsearch::file_exist(file_name.c_str()) == false){
-        std::cout << file_name << std::endl;
-        rsearch::get_random_data<T, dist_type>(x, N, Dimension);
+        std::cout << "[test_query] target 3.1" << file_name << std::endl;
         ret = ga->add(x.data(), N);
         ga->store_data(file_name);
     }
     else{
-        ga->load_data(file_name);
+        if (ga->load_data(file_name) != 0){
+            printf("Load data failed.\n");
+            return -1;
+        }
     }
-    std::cout << "[test_query] target 4\n" << std::endl; 
-    const int batch = 128;
+    std::cout << "[test_query] target 4 "<< std::endl; 
     using Tout = rsearch::typemap_t<T>;
     Tout sims[K * batch];
-    uint32_t top_uids[K * batch];//, real_uids[K * batch];
-    int target = 1123;
-    //for (int i = 0; i < batch; ++i)
-    //    real_uids[i] = target + i;
+
     const int nIter = 1;
     gettimeofday(&time1, &zone);
     for (int i = 0; i < nIter; ++i)
-        ret = probe->query(&x[target * Dimension], batch, ga, &sims[0], &top_uids[0]);
+        ret = probe->query(query_vec.data(), batch, ga, &sims[0], &top_uids[0]);
     gettimeofday(&time2, &zone);
-    std::cout << "[test_query] target 5\n" << std::endl; 
+    std::cout << "[test_query] target 5" << std::endl; 
     if (ret != 0){
         printf("Query Faieled\n");
         return -1;
@@ -69,12 +75,17 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
 
     printf("[%s] <%s> Batch [%3d] Query On %8d Gallery, cost:%4fms, QPS: %.2f\n", target_name.c_str(), type_name.c_str(), batch, N, delta/nIter, QPS);
     int flag = 0;
+    int correct = 0;
     for (int i = 0; i < batch; ++i){
         if (top_uids[i * K] != target + i){
             std::cout << "Expect uid: " << target + i << ", real uid: "  << top_uids[i * K] << ", real sims:" << sims[i * K]<< std::endl;
+            for (int j = 0; j < K; ++j)
+                if (top_uids[i * K + j] == target + i) ++correct;
+            std::cout << std::endl;
             flag = -1;
         }
     }
+    std::cout << "correct : " << 1.0 * correct / batch << std::endl;
     delete probe;
     delete ga;
     return flag;
@@ -82,12 +93,14 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
 
 TEST_F(UnitTest, QueryPerfTest) {
     
-    EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::DUMMY)) );
-    EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::DUMMY)) );
+    //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::DUMMY)) );
+    //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::DUMMY)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::EUCLIDEAN>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(30000, 128, 512, rsearch::X86_RAPID)) );
-    EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
-    EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
+    //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
+    //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
+    EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_RAPID)) );
+    //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_PQIVF)) );
 }

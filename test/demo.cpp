@@ -12,7 +12,7 @@ int dimension = 512;
 int topk = 128;
 float sims[10000];
 vector<T> data;
-uint32_t uids[10000];
+rsearch::idx_t uids[10000];
 
 int main(){ 
     rsearch::get_random_data<float, rsearch::EUCLIDEAN>(data, n, dimension);

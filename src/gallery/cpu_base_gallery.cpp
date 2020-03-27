@@ -186,21 +186,22 @@ int cpu_base_gallery<T, dist_type>::load_data(std::string file_name){
     if (type != CPU_BASE_GALLERY || d != this->dimension)
         return LOAD_DATA_ERROR;
     r_read(fin, &n, 1);
+    //std::cout << "[load data]" << n << std::endl; 
     vector<idx_t> ids_tmp(n);
     r_read(fin, ids_tmp.data(), n);
     for (int i = 0; i < n; ++i){
-        if (this->index.find(ids_tmp[i]) == this->index.end())
+        if (this->index.find(ids_tmp[i]) != this->index.end())
             return INDEX_EXISTS;
     }
     this->ids.resize(this->num + n);
     memcpy(this->ids.data() + this->num, ids_tmp.data(), n * sizeof(idx_t));
     for (int i = 0; i < n; ++i){
-        this->index[this->ids[i]] = this->num + i;
+        this->index[ids_tmp[i]] = this->num + i;
     }
     this->data.resize(1LL * (this->num + n) * this->dimension);
-    r_read(fin, this->data.data() + 1LL * this->num * this->dimension, n * dimension);
+    r_read(fin, this->data.data() + 1LL * this->num * this->dimension, 1LL * n * dimension);
     this->offset.resize(this->num + n);
-    r_read(fin, this->offset.data() + 1LL * this->num, n);
+    r_read(fin, this->offset.data() + this->num, n);
     this->num += n;
     this->mtx.unlock();
     return 0;
@@ -220,8 +221,9 @@ int cpu_base_gallery<T, dist_type>::store_data(std::string file_name){
     r_write(fout, &this->dimension, 1);
     r_write(fout, &this->num, 1);
     r_write(fout, this->ids.data(), this->num);
-    r_write(fout, this->data.data(), this->num * this->dimension);
+    r_write(fout, this->data.data(), 1LL * this->num * this->dimension);
     r_write(fout, this->offset.data(), this->num);
+    //std::cout << "[store data] " << this->num << " " << this->data[0] << " " << this->offset[0] << std::endl;
     this->mtx.unlock();
     return 0;
 }

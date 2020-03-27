@@ -13,8 +13,8 @@ public:
     virtual ~probe(){}
     using Tout = typemap_t<T>;
     virtual int create_gallery(gallery<T, dist_type> ** ga_ptr) = 0;
-    virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx) = 0;
-    virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx);
+    virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, idx_t *idx) = 0;
+    virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx);
 };
 
 template<typename T,
@@ -26,8 +26,8 @@ public:
     virtual ~base_probe(){}
     using Tout = typemap_t<T>;
     virtual int create_gallery(gallery<T, dist_type> ** ga_ptr) = 0;
-    virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, uint32_t *idx) = 0;
-    virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, uint32_t *uids, const int m, Tout *sims, uint32_t *idx);
+    virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, idx_t *idx) = 0;
+    virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx);
 };
 
 template<typename T, 

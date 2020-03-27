@@ -47,6 +47,24 @@ inline std::string GetGalleryName(MethodType dev){
 
     return std::string(target_name)    ;
 }
+template<DistanceType dist_type>
+inline std::string GetDistancetypeName(){
+    char target_name[300];
+    switch (dist_type)
+    {
+    case COSINE:
+        sprintf(target_name, "COSINE");
+        break;
+    case EUCLIDEAN:
+        sprintf(target_name, "EUCLIDEAN");
+        break;
+    default:
+        sprintf(target_name, "UN_KNOWN");
+        break;
+    }
+
+    return std::string(target_name)    ;
+}
 
 template<typename T> 
 inline std::string GetTypeName() {

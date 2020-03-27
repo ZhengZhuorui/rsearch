@@ -159,12 +159,12 @@ inline void get_code_v1(const T1* x, const T1* pq, const typemap_t<T1>* pq_offse
 
 // ==================== I/O ==================== 
 template<typename T>
-inline void r_read(ifstream &fin, T* x, int n){
+inline void r_read(ifstream &fin, T* x, int64_t n){
     fin.read((char*)x, n * sizeof(T));
 }
 
 template<typename T>
-inline void r_write(ofstream &fout, T* x, int n){
+inline void r_write(ofstream &fout, T* x, int64_t n){
     fout.write((char*)x, n * sizeof(T));
 }
 
@@ -172,7 +172,7 @@ template<typename T>
 inline void r_file2bytes(ifstream &fin, T* x, int& n, int& dimension){
     r_read<int32_t>(fin, &n, 1);
     r_read<int32_t>(fin, &dimension, 1);
-    r_read<T>(fin, x, n * dimension);   
+    r_read<T>(fin, x, 1LL * n * dimension);   
 }
 
 template<typename T>
@@ -180,7 +180,7 @@ inline void r_file2bytes(ifstream &fin, vector<T>& x, int& n, int& dimension){
     r_read<int32_t>(fin, &n, 1);
     r_read<int32_t>(fin, &dimension, 1);
     x.resize(1LL * n * dimension);
-    r_read<T>(fin, x.data(), n * dimension);   
+    r_read<T>(fin, x.data(), 1LL * n * dimension);   
 }
 
 template<typename T>
@@ -196,6 +196,10 @@ inline bool file_exist(const char *file_name)
     return infile.good();
 };
 
+inline bool file_exist(std::string file_name){
+    std::ifstream infile(file_name);
+    return infile.good();
+}
 
 // ==================== Create data ==================== 
 

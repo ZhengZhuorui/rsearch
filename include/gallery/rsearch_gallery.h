@@ -25,6 +25,10 @@ public:
     virtual int query_by_uids(const idx_t* const uid, const int n, T * x) = 0;
 
     virtual int reset() = 0;
+
+    virtual int store_data(std::string file_name) = 0;
+
+    virtual int load_data(std::string file_name) = 0;
     
 };
 

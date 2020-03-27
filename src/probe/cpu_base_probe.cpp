@@ -9,6 +9,7 @@ cpu_base_probe<T, dist_type, matrix_type>::cpu_base_probe(int dimension, int top
     this->topk = topk;
     this->max_batch = 32;
     this->max_block = 102400;
+    this->x_tmp.resize(this->max_batch * this->dimension);
     this->mm->set(this->dimension, this->topk, this->max_batch, this->max_block);
 }
 template cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::cpu_base_probe(int, int);
@@ -66,9 +67,10 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
     vector<vector<pair<Tout, idx_t> > >ans(this->max_batch);
     T* data= (T*)c_ga->data.data();
     Tout* offset = (Tout*)c_ga->offset.data();
-    std::cout<< "[cpu_base_probe] begin, num = " <<num<< std::endl;
+
     if (num < this->topk){
-        ans.reserve(n);
+        //std::cout<< "num < topk" <<num<< std::endl;
+        ans.resize(n);
         for (int i = 0; i < n; ++i){
             for (int j = 0; j < num; ++j)
                 ans[i].push_back(std::make_pair(vec_dis<T, dist_type>(x + 1LL * i * this->dimension, data + 1LL * j * this->dimension, this->dimension), j));
@@ -85,27 +87,38 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
         return 0;
     }
     for (int i = 0 ; i < n ; i += this->max_batch){
+        int pn = std::min(this->max_batch, n - i);
+        memcpy(this->x_tmp.data(), x, pn * this->dimension * sizeof(T));
+        if (is_same_type<T, int8_t>() == true){
+            for (int i = 0; i < pn * this->dimension; ++i)
+                this->x_tmp[i] += 64;
+        }
+
         for (int j = 0; j < num ; j += this->max_block){
             int block_size = std::min(this->max_block, num - j);
-            this->mm->mul(&x[i * this->dimension], &data[j * this->dimension], &offset[j], 
+            this->mm->mul(this->x_tmp.data(), data + 1LL * j * this->dimension, offset + j, 
                         std::min(this->max_batch, n - i),  block_size, &res);
             std::cout << "[cpu_base_probe] res[0]=" << res[0].first << "," << res[0].second << std::endl;
+
             for (int k = 0; k < std::min(this->max_batch, n - i); ++k)
                 for (int l = 0; l < this->topk; ++l)
                     ans[k].push_back(std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + j));
         }
 
-        for (int k = 0; k < std::min(this->max_batch, n - i); ++k){
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size(),
+        for (int k = 0; k < pn; ++k){
+            //std::cout << c_ga->offset[ans[k][0].second] << " ";
+            std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size() + 1,
                              pair_greator<Tout, idx_t>());
-            std::sort(ans[k].begin(), ans[k].end(), pair_greator<Tout, idx_t>());
+            std::sort(ans[k].data(), ans[k].data() + this->topk + 1, pair_greator<Tout, idx_t>());
             for (int j = 0 ; j < this->topk ; ++j){
                 sims[(i + k) * this->topk + j] = ans[k][j].first;
+                //sims[(i + k) * this->topk + j] = vec_dis<T, dist_type>(x + 1LL * i * this->dimension, data + 1LL * c_ga->ids[ans[k][j].second] * dimension, dimension);
                 idx[(i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
             }
             ans[k].clear();
         }
     }
+    //std::cout << std::endl;
     return 0;
 }
 template int cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::query(const int8_t * const x, const int n, gallery<int8_t, COSINE> * ga, int *sims, uint32_t *idx);

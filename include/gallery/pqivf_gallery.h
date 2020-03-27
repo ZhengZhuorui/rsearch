@@ -11,7 +11,7 @@ struct pqivf_traits{
     int select_cq;
     int pq_dimension;
     int pq_num;
-    float k;
+    //float k;
 };
 
 template<typename T,
@@ -38,13 +38,19 @@ public:
 
     virtual int query_by_uids(const idx_t* const uid, const int n, T * x) override;
 
+    virtual int store_data(std::string file_name) override;
+
+    virtual int load_data(std::string file_name) override;
+
+
     virtual int train(const float* const x, int n, int dimension);
 
     virtual bool have_train(){return this->have_train_;}
-    
-    virtual int write_train_data(ofstream& fout);
 
-    virtual int read_train_data(ifstream& fin);
+    virtual int store_train_data(std::string file_name);
+
+    virtual int load_train_data(std::string file_name);
+    
 
 private:
 
@@ -72,7 +78,7 @@ private:
     int pq_dimension;
     int pq_num;
     int code_len;
-    float k;
+    //float k;
     int max_batch, max_block;
     //int8_t* ix;
     std::mutex mtx;

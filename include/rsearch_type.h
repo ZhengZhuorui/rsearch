@@ -12,7 +12,8 @@ enum Errorno{
     NO_TRAIN = -4,
     NO_SUPPORT_NUM_LT_K = -5,
     NO_SUPPORT = -6,
-
+    SIZE_TOO_BIG = -7,
+    LOAD_DATA_ERROR = -8,
 };
 
 
@@ -37,6 +38,11 @@ typedef enum MethodType{
 
     
 } MethodType;
+
+typedef enum GalleryType{
+    CPU_BASE_GALLERY = 0,
+    PQIVF_GALLERY = 1,
+} GalleryType;
 
 template<typename T>
 struct TMap{};

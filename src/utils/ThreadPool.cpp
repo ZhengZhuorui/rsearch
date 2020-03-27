@@ -9,7 +9,7 @@ ThreadPool::~ThreadPool(){
 }
 void ThreadPool::start(){
     this->is_started = true;
-    this->m_threads.reserve(this->nprocs);
+    this->m_threads.resize(this->nprocs);
     for (int i = 0; i < this->nprocs; ++i){
         this->m_threads.push_back(new std::thread(std::bind(&ThreadPool::thread_loop, this)));
     }

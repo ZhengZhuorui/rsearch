@@ -15,12 +15,12 @@ int m = 8192;
 int dimension = 512;
 int nIter = 100;
 void get_data(vector<int8_t>&data, int n, int dimension){
-    data.reserve(n * dimension);
+    data.resize(n * dimension);
     memset(data.data(), 0, n * dimension * sizeof(int8_t));
     for (int i = 0; i < n; ++i) data[i * dimension] = i % 63;
 }
 void get_data(vector<float>&data, int n, int dimension){
-    data.reserve(n * dimension);
+    data.resize(n * dimension);
     memset(data.data(), 0, n * dimension * sizeof(float));
     for (int i = 0; i < n; ++i) data[i * dimension] = (i % 126) * 1.0 / 126;
 }
@@ -52,21 +52,21 @@ void test_perf(){
     //Tout *offset_ptr = offset.data(), res_ptr = res_vec.data();
     gettimeofday(&time1, &zone);
     for (int i = 0; i < nIter; ++i)
-        mm->mul(a.data(), b.data(), offset.data(), n, m, &res);
-        //rsearch::r_dot_prod<T>(a.data(), b.data(), offset.data(), n, m, dimension, res_vec.data(), m);
+        //mm->mul(a.data(), b.data(), offset.data(), n, m, &res);
+        rsearch::r_dot_prod<T>(a.data(), b.data(), offset.data(), n, m, dimension, res_vec.data(), m);
         
     gettimeofday(&time2, &zone);
     float delta = (time2.tv_sec - time1.tv_sec) * 1000.0 + (time2.tv_usec - time1.tv_usec) / 1000.0;
     //float gbytes = Bytes / 1024.0 / 1024.0 / 1024.0 / (delta/nIter) * 1000;
     float gbytes = Bytes / 1000.0 / 1000.0 / 1000.0 / (delta / nIter) * 1000;
     printf("BENCHMARK [%s]: %.4fms, calc : %.2fB\n", type_name.c_str(), delta, gbytes);
-    /*Tout ans = 0;
+    Tout ans = 0;
     for (int k = 0; k < dimension; ++k)
         ans += a[k] * b[k];
     
-    if (res_vec[0] != ans){
-        std::cout << "Error! expect: "<< ans << "result %d " << std::endl;
-    }*/
+    //if (res_vec[0] != ans){
+    //    std::cout << "Error! expect: "<< ans << "result" << res_vec[0] << std::endl;
+    //}
 }
 
 int main(){

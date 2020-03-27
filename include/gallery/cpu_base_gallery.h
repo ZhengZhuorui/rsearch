@@ -29,11 +29,15 @@ public:
 
     virtual int reset() override;
 
+    virtual int store_data(std::string file_name) override;
+
+    virtual int load_data(std::string file_name) override;
+
 private:
     vector<T> data;
     unordered_map<idx_t, idx_t> index;
     vector<idx_t> ids;
-    vector<T> offset;
+    vector<Tout> offset;
 
     int dimension;
     int num;

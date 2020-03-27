@@ -6,7 +6,7 @@ void __get_random_data(float* data, int n, int dimension){
     int status;
     char *type_name = abi::__cxa_demangle(typeid(float).name(), NULL,  NULL, &status);
     char fname[200];
-    sprintf(fname, "/home/zzr/data/.rsearch.%s.%d.%d.bin", type_name, dimension, n);
+    sprintf(fname, "/home/zzr/data/rsearch.%s.%d.%d.bin", type_name, dimension, n);
     
     if (file_exist(fname)){
         //printf("[__get_random_data] target 1, file = %s\n", fname);
@@ -23,16 +23,18 @@ void __get_random_data(float* data, int n, int dimension){
 template<typename T,
         DistanceType dist_type>
 void get_random_data(vector<T>& data, int n, int dimension){
-    data.reserve(n * dimension);
+    data.resize(n * dimension);
     std::vector<float> data_float;
-    data_float.reserve(n * dimension);
+    data_float.resize(n * dimension);
     __get_random_data(data_float.data(), n, dimension);
-    if (dist_type == COSINE)
-        norm(data_float.data(), n, dimension);
+    norm(data_float.data(), n, dimension);
     if (is_same_type<T, float>() == true)
         memcpy(data.data(), data_float.data(), 1LL * n * dimension * sizeof(float));
-    else
+    else{
         float_7bits(data_float.data(), (int8_t*)data.data(), 1LL * n * dimension);
+        //for (int i = 0; i < dimension; ++i)
+            //std::cout << (int)data[i] << " " << std::endl;
+    }
 }
 template void get_random_data<float, COSINE>(vector<float>& data, int n, int dimension);
 template void get_random_data<int8_t, COSINE>(vector<int8_t>& data, int n, int dimension);

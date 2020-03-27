@@ -9,5 +9,5 @@ namespace rsearch{
 using std::pair;
 template<typename T,
         DistanceType dist_type>
-int k_means(const T* data, const int n, const int cluster_center, const int dimension, std::vector<typemap_t<T> >& res);
+int k_means(const T* data, const int n, const int cluster_center, const int dimension, std::vector<T>& res);
 }

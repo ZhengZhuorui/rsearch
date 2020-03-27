@@ -21,6 +21,7 @@ public:
 private:
     matrix_mul<T>* mm;
     int32_t max_batch, max_block, topk, dimension;
+    std::vector<T> x_tmp;
 };
 
 }

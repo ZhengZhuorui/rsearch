@@ -4,7 +4,8 @@
 #include <bits/stdc++.h>
 
 namespace rsearch{
-inline std::string GetDeviceName(MethodType dev) {
+
+inline std::string GetMethodName(MethodType dev) {
 
     char target_name[300];
     switch (dev)
@@ -19,7 +20,28 @@ inline std::string GetDeviceName(MethodType dev) {
         sprintf(target_name, "X86_PQIVF");
         break;
     default:
-        sprintf(target_name, "X86_PQIVF");
+        sprintf(target_name, "UN_KNOWN");
+        break;
+    }
+
+    return std::string(target_name)    ;
+}
+
+inline std::string GetGalleryName(MethodType dev){
+    char target_name[300];
+    switch (dev)
+    {
+    case DUMMY:
+        sprintf(target_name, "CPU_BASE_GALLEY");
+        break;
+    case X86_RAPID:
+        sprintf(target_name, "CPU_BASE_GALLEY");
+        break;
+    case X86_PQIVF:
+        sprintf(target_name, "PQIVF_GALLERY");
+        break;
+    default:
+        sprintf(target_name, "UN_KNOWN");
         break;
     }
 
@@ -34,4 +56,5 @@ inline std::string GetTypeName() {
     free(type_name);
     return ret;
 }
+
 }

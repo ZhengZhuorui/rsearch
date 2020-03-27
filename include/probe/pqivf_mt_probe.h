@@ -4,6 +4,7 @@
 #include "matrix/rapid_matrix_mul.h"
 #include "gallery/pqivf_gallery.h"
 #include "utils/utils.h"
+#include "utils/ThreadPool.h"
 
 namespace rsearch{
 using std::pair;
@@ -11,9 +12,9 @@ using std::vector;
 using std::make_pair;
 template<typename T,
         DistanceType dist_type>
-class pqivf_probe : public probe<T, dist_type>{
+class pqivf_mt_probe : public probe<T, dist_type>{
 public:
-    pqivf_probe(int dimension, int topk);
+    pqivf_mt_probe(int dimension, int topk);
     ~pqivf_probe();
     using Tout = typemap_t<T>;
     virtual int create_gallery(gallery<T, dist_type> ** ga_ptr) override;
@@ -35,8 +36,7 @@ private:
     Tout* code_book;
     int32_t* prefix;
     uint32_t nprocs;
-
-    vector<T> x_tmp;
+    ThreadPool *thread_pool;
 };
 
 }

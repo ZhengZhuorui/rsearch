@@ -6,10 +6,10 @@ int rapid_matrix_mul<T>::set(int32_t dimension, int32_t topk, int32_t max_batch,
     this->max_block = max_block;
     this->dimension = dimension;
     this->topk = topk;
-    this->value = (Tout*)malloc(max_batch * max_block * sizeof(Tout));
-    this->topk_value = (Tout*)malloc(max_batch * topk * sizeof(Tout));
-    this->topk_index = (idx_t*)malloc(max_batch * topk * sizeof(idx_t));
-    this->res = (pair<Tout, idx_t>*)malloc(max_batch * topk * sizeof(pair<Tout, idx_t>));
+    this->value = (Tout*)malloc(1LL * max_batch * max_block * sizeof(Tout));
+    this->topk_value = (Tout*)malloc(1LL * max_batch * topk * sizeof(Tout));
+    this->topk_index = (idx_t*)malloc(1LL * max_batch * topk * sizeof(idx_t));
+    this->res = (pair<Tout, idx_t>*)malloc(1LL * max_batch * topk * sizeof(pair<Tout, idx_t>));
     return 0;
 }
 template int rapid_matrix_mul<int8_t>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block);
@@ -17,6 +17,8 @@ template int rapid_matrix_mul<float>::set(int32_t dimension, int32_t topk, int32
 
 template<typename T>
 int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* const offset, int batch, int block, pair<Tout, idx_t> **res){
+    //if (batch > this->max_batch || block > this->max_block)
+    //    return SIZE_TOO_BIG;
     {
         r_dot_prod<T>(A, B, offset, batch, block, this->dimension, this->value, this->max_block);
     }

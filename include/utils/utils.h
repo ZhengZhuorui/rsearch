@@ -8,6 +8,36 @@ using std::pair;
 using std::vector;
 using std::ifstream;
 using std::ofstream;
+
+// ==================== pair compare ==================== 
+template<typename T1, typename T2>
+struct pair_greator{
+    bool operator()(pair<T1, T2> const &a, pair<T1, T2> const &b) const{
+        if (a.first == b.first) {
+            return a.second < b.second;
+        }
+        return a.first > b.first; 
+    }
+};
+
+template<typename T1, typename T2>
+struct is_same_type
+{
+    operator bool()
+    {
+        return false;
+    }
+};
+ 
+template<typename T1>
+struct is_same_type<T1, T1>
+{
+    operator bool()
+    {
+        return true;
+    }
+};
+
 // ==================== math ==================== 
 template<typename T>
 inline typemap_t<T> dot_prod(const T* d1, const T* d2, int dimension){
@@ -58,12 +88,13 @@ inline float vec_dis<float, COSINE>(const float* d1, const float* d2, int dimens
 template<typename T,
         DistanceType dist_type>
 inline typemap_t<T> get_offset(const T* d, int dimension){
-    if (dist_type == EUCLIDEAN){
-        return -dot_prod<T>(d, d, dimension) / 2;
-    }
-    else{
-        return 0;
-    }
+    typemap_t<T> v = 0;
+    if (dist_type == EUCLIDEAN)
+        v -= dot_prod<T>(d, d, dimension) / 2;
+    if (is_same_type<T, int8_t>() == true)
+        for (int i = 0; i <= dimension; ++i)
+            v -= 64 * d[i];
+    return v;
 }
 
 inline void norm(float* data, int n, int dimension){
@@ -126,36 +157,6 @@ inline void get_code_v1(const T1* x, const T1* pq, const typemap_t<T1>* pq_offse
     }
 }*/
 
-
-// ==================== pair compare ==================== 
-template<typename T1, typename T2>
-struct pair_greator{
-    bool operator()(pair<T1, T2> const &a, pair<T1, T2> const &b) const{
-        if (a.first == b.first) {
-            return a.second < b.second;
-        }
-        return a.first > b.first; 
-    }
-};
-
-template<typename T1, typename T2>
-struct is_same_type
-{
-    operator bool()
-    {
-        return false;
-    }
-};
- 
-template<typename T1>
-struct is_same_type<T1, T1>
-{
-    operator bool()
-    {
-        return true;
-    }
-};
-
 // ==================== I/O ==================== 
 template<typename T>
 inline void r_read(ifstream &fin, T* x, int n){
@@ -178,7 +179,7 @@ template<typename T>
 inline void r_file2bytes(ifstream &fin, vector<T>& x, int& n, int& dimension){
     r_read<int32_t>(fin, &n, 1);
     r_read<int32_t>(fin, &dimension, 1);
-    x.reserve(1LL * n * dimension);
+    x.resize(1LL * n * dimension);
     r_read<T>(fin, x.data(), n * dimension);   
 }
 
@@ -202,7 +203,7 @@ inline int init_random(float* data, int n, int dimension){
     const int MO = 65535;
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < dimension; ++j){
-            data[i * dimension + j] = 1.0 * (rand() % MO) / MO;
+            data[i * dimension + j] = 2.0 * (rand() % MO) / MO - 1.0;
         }
     }
     return 0;

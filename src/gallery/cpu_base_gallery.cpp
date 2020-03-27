@@ -44,9 +44,9 @@ template<typename T,
         DistanceType dist_type>
 int cpu_base_gallery<T, dist_type>::add(const T* const x, const int n){
     this->mtx.lock();
-    this->data.reserve((this->num + n) * this->dimension);
+    this->data.resize((this->num + n) * this->dimension);
     memcpy(this->data.data() + 1LL * this->num * this->dimension, x, 1LL * sizeof(T) * n * this->dimension);
-    this->offset.reserve((this->num+n));
+    this->offset.resize(this->num + n);
     for (int i = 0; i < n; ++i){
         this->index[this->max_id] = this->num + i;
         this->ids.push_back(this->max_id);
@@ -55,6 +55,7 @@ int cpu_base_gallery<T, dist_type>::add(const T* const x, const int n){
     for (int i = 0 ; i < n ; ++i){
         this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension,  this->dimension);
     }    
+    //std::cout << "[add]" << this->offset[26924] <<std::endl;
     this->num += n;
     this->mtx.unlock();
     return 0;
@@ -79,9 +80,9 @@ int cpu_base_gallery<T, dist_type>::add_with_uids(const T* const x, const idx_t 
         this->max_id = std::max(this->max_id, uids[i] + 1);
     }
     
-    this->data.reserve((this->num + n) * this->dimension);
+    this->data.resize((this->num + n) * this->dimension);
     memcpy(this->data.data() + 1LL * this->num * this->dimension, x, 1LL * sizeof(T) * n * this->dimension);
-    this->offset.reserve(this->num + n);
+    this->offset.resize(this->num + n);
     for (int i = 0 ; i < n ; ++i){
         this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension, this->dimension);
     }  
@@ -132,8 +133,8 @@ int cpu_base_gallery<T, dist_type>::remove_by_uids(const idx_t* const uids, cons
         this->ids.pop_back();
         this->num--;
     }
-    this->data.reserve(this->num * this->dimension);
-    this->offset.reserve(this->num);
+    this->data.resize(this->num * this->dimension);
+    this->offset.resize(this->num);
     this->mtx.unlock();
     return 0;   
 }
@@ -173,5 +174,60 @@ template int cpu_base_gallery<int8_t, COSINE>::reset();
 template int cpu_base_gallery<float, COSINE>::reset();
 template int cpu_base_gallery<int8_t, EUCLIDEAN>::reset();
 template int cpu_base_gallery<float, EUCLIDEAN>::reset();
+
+template<typename T,
+        DistanceType dist_type>
+int cpu_base_gallery<T, dist_type>::load_data(std::string file_name){
+    this->mtx.lock();
+    ifstream fin(file_name, ifstream::binary);
+    int type, d, n;
+    r_read(fin, &type, 1);
+    r_read(fin, &d, 1);
+    if (type != CPU_BASE_GALLERY || d != this->dimension)
+        return LOAD_DATA_ERROR;
+    r_read(fin, &n, 1);
+    vector<idx_t> ids_tmp(n);
+    r_read(fin, ids_tmp.data(), n);
+    for (int i = 0; i < n; ++i){
+        if (this->index.find(ids_tmp[i]) == this->index.end())
+            return INDEX_EXISTS;
+    }
+    this->ids.resize(this->num + n);
+    memcpy(this->ids.data() + this->num, ids_tmp.data(), n * sizeof(idx_t));
+    for (int i = 0; i < n; ++i){
+        this->index[this->ids[i]] = this->num + i;
+    }
+    this->data.resize(1LL * (this->num + n) * this->dimension);
+    r_read(fin, this->data.data() + 1LL * this->num * this->dimension, n * dimension);
+    this->offset.resize(this->num + n);
+    r_read(fin, this->offset.data() + 1LL * this->num, n);
+    this->num += n;
+    this->mtx.unlock();
+    return 0;
+}
+template int cpu_base_gallery<int8_t, COSINE>::load_data(std::string file_name);
+template int cpu_base_gallery<float, COSINE>::load_data(std::string file_name);
+template int cpu_base_gallery<int8_t, EUCLIDEAN>::load_data(std::string file_name);
+template int cpu_base_gallery<float, EUCLIDEAN>::load_data(std::string file_name);
+
+template<typename T,
+        DistanceType dist_type>
+int cpu_base_gallery<T, dist_type>::store_data(std::string file_name){
+    this->mtx.lock();
+    ofstream fout(file_name, ofstream::binary);
+    int type = CPU_BASE_GALLERY;
+    r_write(fout, &type, 1);
+    r_write(fout, &this->dimension, 1);
+    r_write(fout, &this->num, 1);
+    r_write(fout, this->ids.data(), this->num);
+    r_write(fout, this->data.data(), this->num * this->dimension);
+    r_write(fout, this->offset.data(), this->num);
+    this->mtx.unlock();
+    return 0;
+}
+template int cpu_base_gallery<int8_t, COSINE>::store_data(std::string file_name);
+template int cpu_base_gallery<float, COSINE>::store_data(std::string file_name);
+template int cpu_base_gallery<int8_t, EUCLIDEAN>::store_data(std::string file_name);
+template int cpu_base_gallery<float, EUCLIDEAN>::store_data(std::string file_name);
 
 }

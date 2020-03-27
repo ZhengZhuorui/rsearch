@@ -6,7 +6,7 @@ public:
     ThreadPool();
     ~ThreadPool();
     
-    typedef std::function<int()> task;
+    typedef std::function<void()> task;
     typedef std::queue<task> tasks;
     void start();
     void stop();

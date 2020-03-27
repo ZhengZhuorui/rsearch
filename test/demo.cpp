@@ -20,11 +20,12 @@ int main(){
     for (int i = 0; i < dimension; ++i)
         printf("%.4f ", data[1000 *dimension + i]);
     printf("\n");
-    rsearch::probe<T, rsearch::EUCLIDEAN> *p = rsearch::create_probe<T, rsearch::EUCLIDEAN>(dimension, topk, rsearch::X86_RAPID);
+    rsearch::probe<T, rsearch::EUCLIDEAN> *p = rsearch::create_probe<T, rsearch::EUCLIDEAN>(dimension, topk, rsearch::X86_PQIVF);
     rsearch::gallery<T, rsearch::EUCLIDEAN> *ga;
     
     printf("target 2\n");
     p->create_gallery(&ga);
+    ga->init();
     ga->add(data.data(), n);
     //ga->init();
     printf("target 3\n");

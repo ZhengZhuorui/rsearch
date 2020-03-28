@@ -474,7 +474,7 @@ void dot_4x1(const float *a, const float *b, const float *offset_ptr, float *dst
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[2]);
     xmm[4] = _mm_hadd_ps(xmm[4], xmm[6]);   
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
-    xmm[0] = _mm_sub_ps(xmm[0], offset);
+    xmm[0] = _mm_add_ps(xmm[0], offset);
     _mm_storeu_ps(dst    , xmm[0]);
 }
 
@@ -525,7 +525,7 @@ void dot_4x2(const float *a, const float *b, const float *offset_ptr, float *dst
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[2]);
     xmm[4] = _mm_hadd_ps(xmm[4], xmm[6]);
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
-    xmm[0] = _mm_sub_ps(xmm[0], offset);
+    xmm[0] = _mm_add_ps(xmm[0], offset);
     
     offset = _mm_loadu_ps(offset_ptr + 4);
     xmm[8] = _mm256_extractf128_ps(acc[4], 0);
@@ -546,7 +546,7 @@ void dot_4x2(const float *a, const float *b, const float *offset_ptr, float *dst
     xmm[8] = _mm_hadd_ps(xmm[8], xmm[10]);
     xmm[12] = _mm_hadd_ps(xmm[12], xmm[14]);
     xmm[8] = _mm_hadd_ps(xmm[8], xmm[12]);
-    xmm[8] = _mm_sub_ps(xmm[8], offset);
+    xmm[8] = _mm_add_ps(xmm[8], offset);
     
     _mm_storeu_ps(dst      , xmm[0]);
     _mm_storeu_ps(dst + ldc, xmm[8]);
@@ -625,7 +625,7 @@ void dot_nt_4x1(const float *a, const float *b, const float *offset_ptr, const i
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[2]);
     xmm[4] = _mm_hadd_ps(xmm[4], xmm[6]);   
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
-    xmm[0] = _mm_sub_ps(xmm[0], offset);
+    xmm[0] = _mm_add_ps(xmm[0], offset);
     _mm_storeu_ps(dst    , xmm[0]);
 }
 
@@ -675,7 +675,7 @@ void dot_nt_4x2(const float *a, const float *b, const float *offset_ptr, const i
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[2]);
     xmm[4] = _mm_hadd_ps(xmm[4], xmm[6]);
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
-    xmm[0] = _mm_sub_ps(xmm[0], offset);
+    xmm[0] = _mm_add_ps(xmm[0], offset);
     
     offset = _mm_loadu_ps(offset_ptr + 4);
     xmm[8] = _mm256_extractf128_ps(acc[4], 0);
@@ -696,7 +696,7 @@ void dot_nt_4x2(const float *a, const float *b, const float *offset_ptr, const i
     xmm[8] = _mm_hadd_ps(xmm[8], xmm[10]);
     xmm[12] = _mm_hadd_ps(xmm[12], xmm[14]);
     xmm[8] = _mm_hadd_ps(xmm[8], xmm[12]);
-    xmm[8] = _mm_sub_ps(xmm[8], offset);
+    xmm[8] = _mm_add_ps(xmm[8], offset);
     
     _mm_storeu_ps(dst      , xmm[0]);
     _mm_storeu_ps(dst + ldc, xmm[8]);

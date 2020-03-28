@@ -90,8 +90,9 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
         int pn = std::min(this->max_batch, n - i);
         memcpy(this->x_tmp.data(), x + 1LL * i * this->dimension, pn * this->dimension * sizeof(T));
         if (is_same_type<T, int8_t>() == true){
-            for (int k = 0; k < pn * this->dimension; ++k)
-                this->x_tmp[i] += 64;
+            for (int k = 0; k < pn * this->dimension; ++k){
+                this->x_tmp[k] += 64;
+            }
         }
 
         for (int j = 0; j < num ; j += this->max_block){

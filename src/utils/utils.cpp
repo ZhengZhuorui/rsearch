@@ -6,7 +6,7 @@ void __get_random_data(float* data, int n, int dimension){
     int status;
     char *type_name = abi::__cxa_demangle(typeid(float).name(), NULL,  NULL, &status);
     char fname[200];
-    sprintf(fname, "/home/zzr/data/.rsearch.%s.%d.%d.bin", type_name, dimension, n);
+    sprintf(fname, "/home/zhenghzuorui/data/.rsearch.%s.%d.%d.bin", type_name, dimension, n);
     
     if (file_exist(fname)){
         //printf("[__get_random_data] target 1, file = %s\n", fname);

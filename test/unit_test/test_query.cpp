@@ -18,7 +18,7 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
     target_name = rsearch::GetMethodName(mt);
     type_name = rsearch::GetTypeName<T>();
 
-    file_name = "/home/zzr/data/rsearch_gallery." + rsearch::GetGalleryName(mt) + "." + std::to_string(N) + "." + std::to_string(Dimension) + "." + \
+    file_name = "/home/zhengzhuorui/data/rsearch_gallery." + rsearch::GetGalleryName(mt) + "." + std::to_string(N) + "." + std::to_string(Dimension) + "." + \
                 type_name + ".bin";
     rsearch::probe<T, dist_type>* probe = rsearch::create_probe<T, dist_type>(Dimension, K, mt);
     std::cout << "[test_query] target 1\n" << std::endl; 
@@ -95,12 +95,12 @@ TEST_F(UnitTest, QueryPerfTest) {
     
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::DUMMY)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::DUMMY)) );
-    //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_RAPID)) );
-    //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_RAPID)) );
+    EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_RAPID)) );
+    EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::EUCLIDEAN>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
-    EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_RAPID)) );
+    //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_PQIVF)) );
 }

@@ -57,7 +57,7 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::init(){
     std::string dist_type_name = GetDistancetypeName<dist_type>();
-    std::string train_file_name = "/home/zhengzhuorui/data/pqivf_train_data." + dist_type_name + ".bin";
+    std::string train_file_name = "/home/zhengzhuorui/project/data/pqivf_train_data." + dist_type_name + ".bin";
     if (this->have_train_ == false){  
         if (file_exist(train_file_name) == true){
             int code = this->load_train_data(train_file_name);

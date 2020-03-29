@@ -44,7 +44,7 @@ template<typename T,
         DistanceType dist_type>
 int cpu_base_gallery<T, dist_type>::add(const T* const x, const int n){
     this->mtx.lock();
-    this->data.resize((this->num + n) * this->dimension);
+    this->data.resize(1LL * (this->num + n) * this->dimension);
     memcpy(this->data.data() + 1LL * this->num * this->dimension, x, 1LL * sizeof(T) * n * this->dimension);
     this->offset.resize(this->num + n);
     for (int i = 0; i < n; ++i){
@@ -80,7 +80,7 @@ int cpu_base_gallery<T, dist_type>::add_with_uids(const T* const x, const idx_t 
         this->max_id = std::max(this->max_id, uids[i] + 1);
     }
     
-    this->data.resize((this->num + n) * this->dimension);
+    this->data.resize(1LL * (this->num + n) * this->dimension);
     memcpy(this->data.data() + 1LL * this->num * this->dimension, x, 1LL * sizeof(T) * n * this->dimension);
     this->offset.resize(this->num + n);
     for (int i = 0 ; i < n ; ++i){
@@ -133,7 +133,7 @@ int cpu_base_gallery<T, dist_type>::remove_by_uids(const idx_t* const uids, cons
         this->ids.pop_back();
         this->num--;
     }
-    this->data.resize(this->num * this->dimension);
+    this->data.resize(1LL * this->num * this->dimension);
     this->offset.resize(this->num);
     this->mtx.unlock();
     return 0;   

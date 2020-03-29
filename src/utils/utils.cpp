@@ -7,7 +7,6 @@ void __get_random_data(float* data, int n, int dimension){
     char *type_name = abi::__cxa_demangle(typeid(float).name(), NULL,  NULL, &status);
     char fname[200];
     sprintf(fname, "/home/zhengzhuorui/project/data/.rsearch.%s.%d.%d.bin", type_name, dimension, n);
-    
     if (file_exist(fname)){
         //printf("[__get_random_data] target 1, file = %s\n", fname);
         ifstream fin(fname, ifstream::binary);
@@ -23,9 +22,9 @@ void __get_random_data(float* data, int n, int dimension){
 template<typename T,
         DistanceType dist_type>
 void get_random_data(vector<T>& data, int n, int dimension){
-    data.resize(n * dimension);
+    data.resize(1LL * n * dimension);
     std::vector<float> data_float;
-    data_float.resize(n * dimension);
+    data_float.resize(1LL * n * dimension);
     __get_random_data(data_float.data(), n, dimension);
     norm(data_float.data(), n, dimension);
     if (is_same_type<T, float>() == true)

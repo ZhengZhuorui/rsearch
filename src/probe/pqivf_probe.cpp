@@ -98,7 +98,7 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
         memcpy(x_tmp.data(), x + 1LL * i * this->dimension, 1LL * pn * this->dimension * sizeof(T));
 
         if (is_same_type<T, int8_t>() == true){
-            for (int k = 0; k < pn * this->dimension; ++k)
+            for (int64_t k = 0; k < 1LL * pn * this->dimension; ++k)
                 x_tmp[k] += 64;
         }
         this->cq_mm->mul(x_tmp.data(), c_ga->cq.data(), c_ga->cq_offset.data(), pn, this->cq_num, &cq_res);
@@ -108,7 +108,6 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
         //    std::cout << this->code_book[j] << "?";
 
         for (int j = 0; j < pn; ++j){
-            //std::cout << "[query] target 4" << std::endl;
             int cnt = 0;
             for (int _j = 0; _j < this->select_cq; ++_j){
 
@@ -137,7 +136,6 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
                     
                 }
             }
-            //std::cout << "target 5 " << cnt << " " << this->prefix[this->cq_num]<< std::endl;
             if (cnt > this->topk + 1){
                 std::nth_element(this->res, this->res + this->topk + 1, this->res + cnt + 1, pair_greator<Tout, int>());
                 for (int k = 0; k < this->topk; ++k)
@@ -155,7 +153,7 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
                 std::sort(ans.data(), ans.data() + this->topk + 1, pair_greator<Tout, int>());
                 for (int k =0; k < this->topk; ++k){
                     sims[(i + j) * this->topk + k] = ans[k].first;
-                    std::cout << this->prefix[0] << " " << this->prefix[this->cq_num] << " | " << ans[k].second << std::endl;
+                    //std::cout << this->prefix[0] << " " << this->prefix[this->cq_num] << " | " << ans[k].second << std::endl;
                     int v = std::upper_bound(this->prefix, this->prefix + this->cq_num + 1, ans[k].second) - this->prefix - 1;
                     idx[(i + j) * this->topk + k] = c_ga->ids[v][ans[k].second - this->prefix[v]];
                 }

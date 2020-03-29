@@ -1,5 +1,6 @@
 #include "gallery/pqivf_gallery.h"
 #include "utils/helpers.h"
+#include "utils/utils.h"
 namespace rsearch{
 using std::ofstream;
 using std::ifstream;
@@ -29,13 +30,13 @@ pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& t
     this->block_num.resize(this->cq_num);
     this->ids.resize(this->cq_num);
     this->data.resize(this->cq_num);
+    this->x_tmp.resize(this->max_batch * this->max_block);
     this->index.clear();
     this->cq_mm = new rapid_matrix_mul<T>();
     this->pq_mm = new rapid_matrix_mul<T>();
     this->cq_mm->set(this->dimension, 1, this->max_batch, this->cq_num);
     this->pq_mm->set(this->pq_dimension, 1, this->max_batch * this->code_len, this->pq_num);
 
-    //this->ix = (int8_t*)malloc(this->max_batch * this->code_len);
 }
 template pqivf_gallery<int8_t, COSINE>::pqivf_gallery(int, struct pqivf_traits&);
 template pqivf_gallery<float, COSINE>::pqivf_gallery(int, struct pqivf_traits&);
@@ -72,7 +73,7 @@ int pqivf_gallery<T, dist_type>::init(){
             this->store_train_data(train_file_name);            
         }
     }
-    if (is_same_type<T,int8_t>() == true){
+    if (is_same_type<T, int8_t>() == true){
         float_7bits(this->cq_float.data(), (int8_t*)this->cq.data(), this->cq_num * this->dimension);
         float_7bits(this->pq_float.data(), (int8_t*)this->pq.data(), this->pq_num * this->pq_dimension);
     }
@@ -98,14 +99,19 @@ template int pqivf_gallery<float, EUCLIDEAN>::init();
 template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::reset(){
-    this->data.clear();
     this->index.clear();
-    this->ids.clear();
     this->cq.clear();
     this->pq.clear();
     this->cq_offset.clear();
     this->pq_offset.clear();
-    this->block_num.clear();
+    this->cq_float.clear();
+    this->pq_float.clear();
+    for (int i = 0; i < this->cq_num; ++i){
+        this->block_num[i] = 0;
+        this->data[i].clear();
+        this->ids[i].clear();
+    }
+    
     this->num = 0;
     this->max_id = 0;
     this->have_train_ = false;
@@ -122,10 +128,15 @@ int pqivf_gallery<T, dist_type>::add(const T* const x, const int n){
     this->mtx.lock();
     pair<Tout, idx_t>* cq_res;
     pair<Tout, idx_t>* pq_res;
+    memcpy(x_tmp.data(), x, 1LL * n * this->dimension);
+    if (is_same_type<T, int8_t>() == true){
+        for (int64_t i = 0; i < 1LL * n * this->dimension; ++i)
+            x_tmp[i] += 64;
+    }
     for (int i = 0; i < n; i += this->max_batch){
         int qn = std::min(this->max_batch, n - i);
-        this->cq_mm->mul(x + 1LL * i * this->dimension, this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
-        this->pq_mm->mul(x + 1LL * i * this->dimension, this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
+        this->cq_mm->mul(x_tmp.data() + 1LL * i * this->dimension, this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
+        this->pq_mm->mul(x_tmp.data() + 1LL * i * this->dimension, this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
                         this->pq_num, &pq_res);
         for (int j = 0; j < qn; ++j)
             this->add_one(pq_res + 1LL * j * this->code_len, this->max_id++, cq_res[j].second);
@@ -142,7 +153,7 @@ template int pqivf_gallery<float, EUCLIDEAN>::add(const float* const x, const in
 template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::add_one(const pair<Tout, idx_t>* const x, const int id, const int cq_id){
-    this->data[cq_id].resize((this->block_num[cq_id] + 1) * this->code_len);
+    this->data[cq_id].resize(1LL * (this->block_num[cq_id] + 1) * this->code_len);
     //memcpy(this->data[cq_id].data() + 1LL * this->block_num[cq_id] * this->code_len, x, this->code_len * sizeof(uint8_t));
     for (int j = 0; j < this->code_len; ++j)
         this->data[cq_id][1LL * this->block_num[cq_id] * this->code_len + j] = x[j].second;
@@ -222,7 +233,7 @@ int pqivf_gallery<T, dist_type>::remove_by_uids(const idx_t* const uids, const i
         this->ids[p.first].pop_back();
         this->index.erase(uids[i]);
         this->block_num[p.first]--;
-        this->data[p.first].resize(this->block_num[p.first] * this->code_len);
+        this->data[p.first].resize(1LL * this->block_num[p.first] * this->code_len);
     }
     this->num -= n;
     this->mtx.unlock();
@@ -256,7 +267,7 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::train(const float* data, const int n, const int dimension){
     k_means<float, dist_type>(data, n, this->cq_num, this->dimension, this->cq_float);
-    k_means<float, dist_type>(data, n * this->code_len, this->pq_num, this->pq_dimension, this->pq_float);
+    k_means<float, dist_type>(data, 1LL * n * this->code_len, this->pq_num, this->pq_dimension, this->pq_float);
     this->have_train_ = true;
     return 0;
 }
@@ -352,7 +363,7 @@ int pqivf_gallery<T, dist_type>::load_data(std::string file_name){
             this->index[this->ids[i][this->block_num[i] + j]] = std::make_pair(i, this->block_num[i] + j);
 
         this->data[i].resize(1LL * (this->block_num[i] + block_num_tmp[i]) * this->code_len);
-        r_read(fin, this->data[i].data() + 1LL * this->block_num[i] * this->code_len, block_num_tmp[i] * this->code_len);
+        r_read(fin, this->data[i].data() + 1LL * this->block_num[i] * this->code_len, 1LL * block_num_tmp[i] * this->code_len);
         this->block_num[i] += block_num_tmp[i];
     }
     this->mtx.unlock();
@@ -377,7 +388,7 @@ int pqivf_gallery<T, dist_type>::store_data(std::string file_name){
     for (int i = 0; i < this->cq_num; ++i)
         r_write(fout, this->ids[i].data(), this->block_num[i]);
     for (int i = 0; i < this->cq_num; ++i)
-        r_write(fout, this->data[i].data(), this->block_num[i] * this->code_len);   
+        r_write(fout, this->data[i].data(), 1LL * this->block_num[i] * this->code_len);   
     this->mtx.unlock();
     return 0;
 }

@@ -187,7 +187,7 @@ template<typename T>
 inline void r_bytes2file(ofstream &fout, T* x, int &n, int &dimension){
     r_write<int32_t>(fout, &n, 1);
     r_write<int32_t>(fout, &dimension, 1);
-    r_write<T>(fout, x, n * dimension);
+    r_write<T>(fout, x, 1LL * n * dimension);
 }
 
 inline bool file_exist(const char *file_name)
@@ -207,7 +207,7 @@ inline int init_random(float* data, int n, int dimension){
     const int MO = 65535;
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < dimension; ++j){
-            data[i * dimension + j] = 2.0 * (rand() % MO) / MO - 1.0;
+            data[1LL * i * dimension + j] = 2.0 * (rand() % MO) / MO - 1.0;
         }
     }
     return 0;

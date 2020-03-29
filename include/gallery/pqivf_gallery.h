@@ -67,6 +67,7 @@ private:
     vector<int> block_num;
     unordered_map<idx_t, pair<int, int> > index;
     vector<vector<idx_t> > ids;
+    vector<T> x_tmp;
 
     int dimension;
     int num;

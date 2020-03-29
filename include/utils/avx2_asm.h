@@ -10,6 +10,7 @@
 #include <emmintrin.h>
 #include <smmintrin.h>
 #include <immintrin.h>
+#include <avx2intrin.h>
 
 #include "rsearch_type.h"
 namespace rsearch{

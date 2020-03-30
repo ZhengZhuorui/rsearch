@@ -759,4 +759,14 @@ void r_dot_prod(const T *A, const T *B, const typemap_t<T> *offset, const int M,
 template void r_dot_prod<float>(const float *A, const float *B, const float *offset, const int M, const int N, const int K, float *dst, const int ldc);
 template void r_dot_prod<int8_t>(const int8_t *A, const int8_t *B, const int *offset, const int M, const int N, const int K, int *dst, const int ldc);
 
+template<int K>
+void ld_add(const float *mem, const int32_t* index, const float* dst, const int M){
+    __m256 ymm[4];
+    for (int i = 0; i < K; i += 8){
+        ymm[0] = _mm256_i32gather
+    }
+}
+
+
+
 }

@@ -45,11 +45,9 @@ void test_perf(){
     std::cout << std::endl;
     get_data(b, m, dimension);*/
     rsearch::matrix_mul<T>* mm = new rsearch::rapid_matrix_mul<T>;
-    int64_t Bytes = 1LL * n * m * dimension;
+    int64_t Bytes = 1LL * n * m;
     mm->set(dimension, 128, n, m);
     pair<Tout, int>* res;
-    //T *a_ptr = a.data(), *b_ptr = b.data();
-    //Tout *offset_ptr = offset.data(), res_ptr = res_vec.data();
     gettimeofday(&time1, &zone);
     for (int i = 0; i < nIter; ++i)
         //mm->mul(a.data(), b.data(), offset.data(), n, m, &res);
@@ -67,6 +65,7 @@ void test_perf(){
     //if (res_vec[0] != ans){
     //    std::cout << "Error! expect: "<< ans << "result" << res_vec[0] << std::endl;
     //}
+    delete mm;
 }
 
 int main(){

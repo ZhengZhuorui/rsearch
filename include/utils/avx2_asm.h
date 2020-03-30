@@ -57,5 +57,20 @@ void dot_nt_4x2(const float *a, const float *b, const float *offset_ptr, const i
 template<typename T>
 void r_dot_prod(const T *A, const T *B, const typemap_t<T> *offset, const int M, const int N, const int K, typemap_t<T> *dst, const int ldc);
 
+template<int K>
+void ld_add_4x1(const int *mem, const int32_t* index, const int* dst);
+
+template<int K>
+void ld_add_1x1(const int *mem, const int32_t* index, const int* dst);
+
+template<int K>
+void ld_add_4x1(const float *mem, const int32_t* index, const float* dst);
+
+template<int K>
+void ld_add_1x1(const float *mem, const int32_t* index, const float* dst);
+
+template<typename T>
+void r_ld_add(const T *mem, const int32_t* index, T* dst, const int M,const int N, const int K, const int ldc);
+
 }
 #endif

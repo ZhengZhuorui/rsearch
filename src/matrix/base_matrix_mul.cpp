@@ -6,6 +6,16 @@ int base_matrix_mul<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, 
     this->max_block = max_block;
     this->dimension = dimension;
     this->topk = topk;
+    {
+    if (this->value != NULL)
+        free(this->value);
+    if (this->topk_value != NULL)
+        free(this->topk_value);
+    if (this->topk_index != NULL)
+        free(this->topk_index);
+    if (this->res != NULL)
+        free(this->res);
+    }
     this->value = (Tout*)malloc(max_block * max_batch * sizeof(Tout));
     this->topk_value = (Tout*)malloc(max_batch * topk * sizeof(Tout));
     this->topk_index = (idx_t*)malloc(max_batch * topk * sizeof(idx_t));

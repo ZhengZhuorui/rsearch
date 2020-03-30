@@ -12,10 +12,21 @@ using std::pair;
 template<typename T>
 class rapid_matrix_mul : public matrix_mul<T>{
 public:
-    rapid_matrix_mul():matrix_mul<T>(){}
+    rapid_matrix_mul():matrix_mul<T>(){
+        this->value = NULL;
+        this->topk_value = NULL;
+        this->topk_index = NULL;
+        this->res = NULL;
+    }
     virtual ~rapid_matrix_mul(){
-        free(this->value);
-        free(this->res);
+        if (this->value != NULL)
+            free(this->value);
+        if (this->topk_value != NULL)
+            free(this->topk_value);
+        if (this->topk_index != NULL)
+            free(this->topk_index);
+        if (this->res != NULL)
+            free(this->res);
     }
     using Tout = typemap_t<T>;
     virtual int set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block);

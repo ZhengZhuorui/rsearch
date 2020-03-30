@@ -760,13 +760,191 @@ template void r_dot_prod<float>(const float *A, const float *B, const float *off
 template void r_dot_prod<int8_t>(const int8_t *A, const int8_t *B, const int *offset, const int M, const int N, const int K, int *dst, const int ldc);
 
 template<int K>
-void ld_add(const float *mem, const int32_t* index, const float* dst, const int M){
-    __m256 ymm[4];
+void ld_add_4x1(const int *mem, const int32_t* index, const int* dst){
+    __m256i ymm[4];
+    __m256i ind[4];
+    __m256i acc[4];
+    for(int i=0; i < 8; ++i)
+        acc[i] = _mm256_setzero_si256();
+
     for (int i = 0; i < K; i += 8){
-        ymm[0] = _mm256_i32gather
+        ind[0] = _mm256_loadu_si256((__m256i)(index));
+        ind[1] = _mm256_loadu_si256((__m256i)(index + K));
+        ind[2] = _mm256_loadu_si256((__m256i)(index + K * 2));
+        ind[3] = _mm256_loadu_si256((__m256i)(index + K * 3));
+
+        ymm[0] = _mm256_i32gather_epi32(mem, ind[0], 4);
+        ymm[1] = _mm256_i32gather_epi32(mem, ind[1], 4);
+        ymm[2] = _mm256_i32gather_epi32(mem, ind[2], 4);
+        ymm[3] = _mm256_i32gather_epi32(mem, ind[3], 4);
+
+        acc[0] = _mm256_add_epi32(ymm[0], acc[0]);
+        acc[1] = _mm256_add_epi32(ymm[1], acc[1]);
+        acc[2] = _mm256_add_epi32(ymm[2], acc[2]);
+        acc[3] = _mm256_add_epi32(ymm[3], acc[3]);
+        
+        index += 8;
     }
+
+    __m128i xmm[8];
+    xmm[0] = _mm256_extracti128_si256(acc[0], 0);
+    xmm[1] = _mm256_extracti128_si256(acc[0], 1);
+    xmm[2] = _mm256_extracti128_si256(acc[1], 0);
+    xmm[3] = _mm256_extracti128_si256(acc[1], 1);
+
+    xmm[4] = _mm256_extracti128_si256(acc[2], 0);
+    xmm[5] = _mm256_extracti128_si256(acc[2], 1);
+    xmm[6] = _mm256_extracti128_si256(acc[3], 0);
+    xmm[7] = _mm256_extracti128_si256(acc[3], 1);
+
+    xmm[0] = _mm_add_epi32(xmm[0], xmm[1]);
+    xmm[2] = _mm_add_epi32(xmm[2], xmm[3]);
+    xmm[4] = _mm_add_epi32(xmm[4], xmm[5]);
+    xmm[6] = _mm_add_epi32(xmm[6], xmm[7]);
+
+    xmm[0] = _mm_hadd_epi32(xmm[0], xmm[2]);
+    xmm[4] = _mm_hadd_epi32(xmm[4], xmm[6]);
+    xmm[0] = _mm_hadd_epi32(xmm[0], xmm[4]);
+
+    _mm_storeu_si128((__m128i *)(dst), xmm[0]);
 }
 
+template<int K>
+void ld_add_1x1(const int *mem, const int32_t* index, const int* dst){
+    __m256i ymm;
+    __m256i ind;
+    __m256i acc;
+    acc = _mm256_setzero_si256();
+
+    for (int i = 0; i < K; i += 8){
+        ind = _mm256_loadu_si256((__m256i)(index));
+        ymm = _mm256_i32gather_epi32(mem, ind, 4);
+        acc = _mm256_add_epi32(ymm, acc);
+        
+        index += 8;
+    }
+    __m128i xmm[2];
+    
+    xmm[0] = _mm256_extracti128_si256(acc, 0);
+    xmm[1] = _mm256_extracti128_si256(acc, 1);
+
+    xmm[0] = _mm_add_epi32(xmm[0], xmm[1]);
+
+    xmm[0] = _mm_hadd_epi32(xmm[0], xmm[0]);
+    xmm[0] = _mm_hadd_epi32(xmm[0], xmm[0]);
+ 
+    c[0] =  _mm_extract_epi32(xmm[0], 0);
+}
+
+template<int K>
+void ld_add_4x1(const float *mem, const int32_t* index, const float* dst){
+    __m256i ymm[4];
+    __m256i ind[4];
+    __m256i acc[4];
+    for(int i=0; i < 8; ++i)
+        acc[i] = _mm256_setzero_ps();
+
+    for (int i = 0; i < K; i += 8){
+        ind[0] = _mm256_loadu_ps((__m256i)(index));
+        ind[1] = _mm256_loadu_ps((__m256i)(index + K));
+        ind[2] = _mm256_loadu_ps((__m256i)(index + K * 2));
+        ind[3] = _mm256_loadu_ps((__m256i)(index + K * 3));
+
+        ymm[0] = _mm256_i32gather_ps(mem, ind[0], 4);
+        ymm[1] = _mm256_i32gather_ps(mem, ind[1], 4);
+        ymm[2] = _mm256_i32gather_ps(mem, ind[2], 4);
+        ymm[3] = _mm256_i32gather_ps(mem, ind[3], 4);
+
+        acc[0] = _mm256_add_ps(ymm[0], acc[0]);
+        acc[1] = _mm256_add_ps(ymm[1], acc[1]);
+        acc[2] = _mm256_add_ps(ymm[2], acc[2]);
+        acc[3] = _mm256_add_ps(ymm[3], acc[3]);
+        
+        index += 8;
+    }
+
+    __m128i xmm[8];
+    xmm[0] = _mm256_extracti128_ps(acc[0], 0);
+    xmm[1] = _mm256_extracti128_ps(acc[0], 1);
+    xmm[2] = _mm256_extracti128_ps(acc[1], 0);
+    xmm[3] = _mm256_extracti128_ps(acc[1], 1);
+
+    xmm[4] = _mm256_extracti128_ps(acc[2], 0);
+    xmm[5] = _mm256_extracti128_ps(acc[2], 1);
+    xmm[6] = _mm256_extracti128_ps(acc[3], 0);
+    xmm[7] = _mm256_extracti128_ps(acc[3], 1);
+
+    xmm[0] = _mm_add_ps(xmm[0], xmm[1]);
+    xmm[2] = _mm_add_ps(xmm[2], xmm[3]);
+    xmm[4] = _mm_add_ps(xmm[4], xmm[5]);
+    xmm[6] = _mm_add_ps(xmm[6], xmm[7]);
+
+    xmm[0] = _mm_hadd_ps(xmm[0], xmm[2]);
+    xmm[4] = _mm_hadd_ps(xmm[4], xmm[6]);
+    xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
+
+    _mm_storeu_si128((__m128i *)(dst), xmm[0]);
+}
+
+template<int K>
+void ld_add_1x1(const float *mem, const int32_t* index, const float* dst){
+    __m256i ymm;
+    __m256i ind;
+    __m256i acc;
+    acc = _mm256_setzero_ps();
+
+    for (int i = 0; i < K; i += 8){
+        ind = _mm256_loadu_ps((__m256i)(index));
+        ymm = _mm256_i32gather_ps(mem, ind, 4);
+        acc = _mm256_add_ps(ymm, acc);
+        
+        index += 8;
+    }
+    __m128i xmm[2];
+    
+    xmm[0] = _mm256_extractf128_ps(acc, 0);
+    xmm[1] = _mm256_extractf128_ps(acc, 1);
+
+    xmm[0] = _mm_add_ps(xmm[0], xmm[1]);
+
+    xmm[0] = _mm_hadd_ps(xmm[0], xmm[0]);
+    xmm[0] = _mm_hadd_ps(xmm[0], xmm[0]);
+ 
+    c[0] =  _mm_extract_ps(xmm[0], 0);
+}
+
+template<typename T>
+void r_ld_add(const T *mem, const int32_t* index, T* dst, const int M, const int N, const int K, const int ldc){
+    int i = 0, j = 0;
+    switch (K)
+    {
+    case 32:
+        for (; j < M; ++j){
+            i = 0;
+            for (; i + 3 < N; i += 4)
+                ld_add_4x1<32>(mem + j * ldc, index + i * K, dst);
+            for (; i < N; ++i)
+                ld_add_1x1<32>(mem + j * ldc, index + i * K, dst);
+        }
+        break;
+    case 16:
+        for (; j < M; ++j){
+            i = 0;
+            for (; i + 3 < N; i += 4)
+                ld_add_4x1<16>(mem + j * ldc, index + i * K, dst);
+            for (; i < N; ++i)
+                ld_add_1x1<16>(mem + j * ldc, index + i * K, dst);
+        }
+        break;
+    default:
+        break;
+    }   
+}
+
+template 
+void r_ld_add<int>(const int *mem, const int32_t* index, int* dst, const int M,const int N, const int K, const int ldc);
+template
+void r_ld_add<float>(const float *mem, const int32_t* index, float* dst, const int M,const int N, const int K, const int ldc);
 
 
 }

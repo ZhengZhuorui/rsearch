@@ -1,5 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
+#define CODEBOOK_LINE_SIZE 256
 
 namespace rsearch{
 
@@ -33,8 +34,8 @@ typedef enum MethodType{
     DUMMY = 0,
     X86_RAPID = 1, 
     X86_PQIVF = 2,
-    X86_MULTI_PLATFORM = 3,
-    //X86_FAISS_FLAT = 4,
+    X86_RAPID_MULTI_THREAD = 3,
+    X86_PQIVF_MULTI_THREAD = 4,
 
     
 } MethodType;

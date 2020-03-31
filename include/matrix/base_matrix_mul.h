@@ -35,6 +35,7 @@ private:
     idx_t* topk_index;
     pair<Tout, idx_t>* res;
     int32_t max_batch, max_block, dimension, topk;
+    std::mutex mtx;
 };
 
 }

@@ -4,6 +4,7 @@
 #include "matrix/rapid_matrix_mul.h"
 #include "gallery/pqivf_gallery.h"
 #include "utils/utils.h"
+#include "matrix/rapid_matrix_la.h"
 
 namespace rsearch{
 using std::pair;
@@ -22,6 +23,7 @@ public:
 private:
     matrix_mul<T>* cq_mm;
     //matrix_mul<T>* pq_mm;
+    matrix_la<T>* mtx_la;
     int32_t max_batch, max_block, topk, dimension;
 
     int cq_num;

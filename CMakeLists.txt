@@ -64,8 +64,11 @@ target_link_libraries(rsearchStatic ${LINK_LIBS})
 add_executable(demo test/demo.cpp)
 target_link_libraries(demo rsearch)
 
-add_executable(benchmark_rapid_int8 test/benchmark/benchmark_rapid_int8)
-target_link_libraries(benchmark_rapid_int8 rsearch)
+add_executable(benchmark_rapid_mul test/benchmark/benchmark_rapid_mul)
+target_link_libraries(benchmark_rapid_mul rsearch)
+
+add_executable(benchmark_rapid_la test/benchmark/benchmark_rapid_la)
+target_link_libraries(benchmark_rapid_la rsearch)
 
 file(GLOB_RECURSE UNIT_TEST_SRC test/unit_test/*.c*)
 add_executable(unit_test ${UNIT_TEST_SRC})

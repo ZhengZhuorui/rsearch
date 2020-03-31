@@ -4,6 +4,7 @@ template<typename T,
         DistanceType dist_type>
 pqivf_probe<T, dist_type>::pqivf_probe(int dimension, int topk):probe<T, dist_type>(){
     this->cq_mm = new rapid_matrix_mul<T>;
+    this->mtx_la = new rapid_matrix_la<T>;
 
     this->dimension = dimension;
     this->topk = topk;
@@ -24,6 +25,8 @@ pqivf_probe<T, dist_type>::pqivf_probe(int dimension, int topk):probe<T, dist_ty
 
     this->x_tmp.resize(this->max_batch * this->dimension);
     this->cq_mm->set(this->dimension, this->select_cq, this->max_batch, this->cq_num);
+    this->mtx_la->set(this->code_len, this->topk, 1, this->max_block, this->pq_num);
+
 }
 template pqivf_probe<int8_t, COSINE>::pqivf_probe(int, int);
 template pqivf_probe<float, COSINE>::pqivf_probe(int, int);
@@ -90,7 +93,8 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
         this->prefix[i] = this->prefix[i - 1] + c_ga->block_num[i - 1];
     }
     std::cout << std::endl;
-    memset(this->res, 0, this->res_cache_size * sizeof(pair<Tout, idx_t>));
+    //memset(this->res, 0, this->res_cache_size * sizeof(pair<Tout, idx_t>));
+    pair<Tout, idx_t>* mtx_res;
     std::cout << "[query] target 2 : " << this->pq_num << " " << this->prefix[this->cq_num]<< std::endl;
     for (int i = 0; i < n; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
@@ -116,7 +120,7 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
                 int num = c_ga->block_num[cq_id];
                 for (int vec_id = 0; vec_id < num; vec_id += this->res_cache_size){
                     int qn = std::min(this->max_block, num - vec_id);
-                    if (cnt + qn > this->res_cache_size){
+                    /*if (cnt + qn > this->res_cache_size){
                         if (cnt > this->topk + 1){
                             std::nth_element(this->res, this->res + this->topk + 1, this->res + cnt + 1, pair_greator<Tout, int>());
                             for (int k = 0; k < this->topk; ++k)
@@ -128,14 +132,17 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
                         }
                         memset(this->res, 0, sizeof(pair<Tout, int>) * cnt);
                         cnt = 0;
-                    }
+                    }*/
                     //std::cout << "[query] target 4.1" << std::endl;
-                    get_res(data + 1LL * vec_id * this->dimension, &this->code_book[j * this->code_len * this->pq_num],
-                                  this->code_len, this->pq_num, this->prefix[cq_id], qn, this->res + cnt);
-                    cnt += qn;
-                    
+                    //get_res(data + 1LL * vec_id * this->dimension, &this->code_book[j * this->code_len * this->pq_num],
+                    //              this->code_len, this->pq_num, this->prefix[cq_id], qn, this->res + cnt);
+                    this->mtx_la->la(data + vec_id, code_book, 1, qn, &mtx_res);
+                    int k_sz = std::min(qn, this->topk);
+                    for (int k = 0; k < std::min(qn, this->topk); ++k)
+                    ans.push_back(mtx_res[k]);
                 }
             }
+            /*
             if (cnt > this->topk + 1){
                 std::nth_element(this->res, this->res + this->topk + 1, this->res + cnt + 1, pair_greator<Tout, int>());
                 for (int k = 0; k < this->topk; ++k)
@@ -146,7 +153,8 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
                     ans.push_back(res[k]);
             }
             memset(this->res, 0, sizeof(pair<Tout, int>) * cnt);
-            cnt = 0;
+            cnt = 0;*/
+            
             //std::cout << "target 6 " << ans.size() << " " << this->prefix[this->cq_num] << std::endl;
             if ((int32_t)ans.size() > this->topk){
                 std::nth_element(ans.data(), ans.data() + this->topk + 1, ans.data() + ans.size() + 1, pair_greator<Tout, int>());

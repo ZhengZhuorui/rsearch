@@ -24,7 +24,7 @@ public:
             free(this->res);
     }
     virtual int set(int32_t code_len, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension) override;
-    virtual int la(const T* const A, const T* const code_book, int batch, int block, pair<T, idx_t> **res) override;
+    virtual int la(const int32_t* const A, const T* const code_book, int batch, int block, pair<T, idx_t> **res) override;
 
 private:
     T* value;
@@ -33,6 +33,6 @@ private:
     pair<T, idx_t>* res;
     int32_t max_batch, max_block, dimension, topk;
     int32_t code_book_size;
-
+    std::mutex mtx;
 };
 }

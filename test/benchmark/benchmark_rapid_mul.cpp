@@ -13,7 +13,7 @@ using std::vector;
 int n = 32;
 int m = 8192;
 int dimension = 512;
-int nIter = 100;
+int nIter = 1000;
 void get_data(vector<int8_t>&data, int n, int dimension){
     data.resize(n * dimension);
     memset(data.data(), 0, n * dimension * sizeof(int8_t));
@@ -56,8 +56,9 @@ void test_perf(){
     gettimeofday(&time2, &zone);
     float delta = (time2.tv_sec - time1.tv_sec) * 1000.0 + (time2.tv_usec - time1.tv_usec) / 1000.0;
     //float gbytes = Bytes / 1024.0 / 1024.0 / 1024.0 / (delta/nIter) * 1000;
-    float gbytes = Bytes / 1000.0 / 1000.0 / 1000.0 / (delta / nIter) * 1000;
-    printf("BENCHMARK [%s]: %.4fms, calc : %.2fB\n", type_name.c_str(), delta, gbytes);
+    //float gbytes = Bytes / 1000.0 / 1000.0 / 1000.0 / (delta / nIter) * 1000;
+    float QPS = 1.0 * n * m / (delta / nIter);
+    printf("BENCHMARK [%s]: %.4fms, calc : %.2fB\n", type_name.c_str(), delta, QPS);
     Tout ans = 0;
     for (int k = 0; k < dimension; ++k)
         ans += a[k] * b[k];

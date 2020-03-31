@@ -2,6 +2,7 @@
 namespace rsearch{
 template<typename T>
 int base_matrix_mul<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block){
+    this->mtx.lock();
     this->max_batch = max_batch;
     this->max_block = max_block;
     this->dimension = dimension;
@@ -20,6 +21,7 @@ int base_matrix_mul<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, 
     this->topk_value = (Tout*)malloc(max_batch * topk * sizeof(Tout));
     this->topk_index = (idx_t*)malloc(max_batch * topk * sizeof(idx_t));
     this->res = (pair<Tout, idx_t>*)malloc(max_batch * topk * sizeof(pair<Tout, idx_t>));
+    this->mtx.unlock();
     return 0;
 }
 template int base_matrix_mul<int8_t>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block);
@@ -27,6 +29,7 @@ template int base_matrix_mul<float>::set(int32_t dimension, int32_t topk, int32_
 
 template<typename T>
 int base_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* const offset, int batch, int block, pair<Tout, idx_t> **res){
+    this->mtx.lock();
     if (batch > this->max_batch || block > this->max_block)
         return SIZE_TOO_BIG;
     //std::cout << "[mul] target 0" << std::endl;    
@@ -50,6 +53,7 @@ int base_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* cons
         }
     }
     (*res) = this->res;
+    this->mtx.unlock();
     return 0;
 }
 template int base_matrix_mul<int8_t>::mul(const int8_t* const A, const int8_t* const B, const int* const offset, int batch, int block, pair<int, idx_t> **res);

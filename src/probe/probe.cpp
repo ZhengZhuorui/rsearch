@@ -14,6 +14,9 @@ probe<T, dist_type>* create_probe(int dimension, int topk, MethodType method_typ
         case X86_PQIVF:
             r = new pqivf_probe<T, dist_type>(dimension, topk);
             break;
+        case X86_RAPID_MULTI_THREAD:
+            r = new cpu_base_mt_probe<T, dist_type, rapid_matrix_mul<T> >(dimension, topk);
+            break;
         default:
             r = NULL;
             break;

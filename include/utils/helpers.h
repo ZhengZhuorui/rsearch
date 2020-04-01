@@ -19,6 +19,9 @@ inline std::string GetMethodName(MethodType dev) {
     case X86_PQIVF:
         sprintf(target_name, "X86_PQIVF");
         break;
+    case X86_RAPID_MULTI_THREAD:
+        sprintf(target_name, "X86_PQIVF_METHOD");
+        break;
     default:
         sprintf(target_name, "UN_KNOWN");
         break;
@@ -39,6 +42,9 @@ inline std::string GetGalleryName(MethodType dev){
         break;
     case X86_PQIVF:
         sprintf(target_name, "PQIVF_GALLERY");
+        break;
+    case X86_RAPID_MULTI_THREAD:
+        sprintf(target_name, "CPU_BASE_GALLEY");
         break;
     default:
         sprintf(target_name, "UN_KNOWN");

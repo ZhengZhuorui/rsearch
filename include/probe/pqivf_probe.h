@@ -23,7 +23,7 @@ public:
 private:
     matrix_mul<T>* cq_mm;
     //matrix_mul<T>* pq_mm;
-    matrix_la<T>* mtx_la;
+    matrix_la<Tout>* mtx_la;
     int32_t max_batch, max_block, topk, dimension;
 
     int cq_num;

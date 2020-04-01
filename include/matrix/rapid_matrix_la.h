@@ -33,6 +33,6 @@ private:
     pair<T, idx_t>* res;
     int32_t max_batch, max_block, dimension, topk;
     int32_t code_book_size;
-    std::mutex mtx;
+    //std::mutex mtx;
 };
 }

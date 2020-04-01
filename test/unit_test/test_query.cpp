@@ -47,6 +47,7 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
     if (rsearch::file_exist(file_name.c_str()) == false){
         std::cout << "[test_query] target 3.1" << file_name << std::endl;
         ret = ga->add(x.data(), N);
+        std::cout << "[test_query] target 3.2" << std::endl;
         ga->store_data(file_name);
     }
     else{
@@ -86,6 +87,7 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
         }
     }
     std::cout << "correct : " << 1.0 * correct / batch << std::endl;
+    x.clear();
     delete probe;
     delete ga;
     return flag;
@@ -104,5 +106,5 @@ TEST_F(UnitTest, QueryPerfTest) {
     EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID)) );
     EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID_MULTI_THREAD)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_PQIVF)) );
-    EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_PQIVF)) );
+    //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_PQIVF)) );
 }

@@ -6,6 +6,7 @@
 #include "gallery/cpu_base_gallery.h"
 #include "utils/utils.h"
 #include "utils/ThreadPool.h"
+#include "utils/MthManager.h"
 namespace rsearch{
 
 template<typename T,
@@ -23,11 +24,15 @@ private:
     virtual void query_bunch(const int mm_id, const T* x, const T* data, const Tout* offset, const int batch, const int block, const int base_id);
     std::vector<matrix_mul<T>*> mm;
     int32_t max_batch, max_block, topk, dimension;
+    int ans_topk_size;
     std::vector<T> x_tmp;
     ThreadPool* threadpool;
+    MthManager* mth_manager;
     int nprocs;
     std::mutex mtx;
-    vector<vector<pair<Tout, idx_t> > > ans;
+    //vector<vector<pair<Tout, idx_t> > > ans;
+    vector<vector<pair<Tout, idx_t> > >ans;
+    
 };
 
 }

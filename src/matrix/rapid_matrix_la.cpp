@@ -4,37 +4,45 @@
 namespace rsearch{
 template<typename T>
 int rapid_matrix_la<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension){
-    this->mtx.lock();
+    //this->mtx.lock();
     this->max_batch = max_batch;
     this->max_block = max_block;
     this->dimension = dimension;
     this->topk = topk;
     this->code_book_size = code_per_dimension * this->dimension;
     {
-    if (this->value != NULL)
+    if (this->value != NULL){
         free(this->value);
-    if (this->topk_value != NULL)
+        this->value = NULL;
+    }
+    if (this->topk_value != NULL){
         free(this->topk_value);
-    if (this->topk_index != NULL)
+        this->topk_value = NULL;
+    }
+    if (this->topk_index != NULL){
         free(this->topk_index);
-    if (this->res != NULL)
+        this->topk_index = NULL;
+    }
+    if (this->res != NULL){
         free(this->res);
+        this->res = NULL;
+    }
     }
     this->value = (T*)malloc(1LL * max_batch * max_block * sizeof(T));
     this->topk_value = (T*)malloc(1LL * max_batch * topk * sizeof(T));
     this->topk_index = (idx_t*)malloc(1LL * max_batch * topk * sizeof(idx_t));
     this->res = (pair<T, idx_t>*)malloc(1LL * max_batch * topk * sizeof(pair<T, idx_t>));
-    this->mtx.unlock();
+    //this->mtx.unlock();
     return 0;
 }
-template int rapid_matrix_la<int8_t>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension);
+template int rapid_matrix_la<int>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension);
 template int rapid_matrix_la<float>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension);
 
 template<typename T>
 int rapid_matrix_la<T>::la(const int32_t* const A, const T* const code_book, int batch, int block, pair<T, idx_t> **res){
     //if (batch > this->max_batch || block > this->max_block)
     //    return SIZE_TOO_BIG;
-    this->mtx.lock();
+    //this->mtx.lock();
     {
         r_ld_add(code_book, A, this->value, batch, block, this->dimension, this->code_book_size, this->max_block);
     }
@@ -48,7 +56,7 @@ int rapid_matrix_la<T>::la(const int32_t* const A, const T* const code_book, int
         }
     }
     (*res) = this->res;
-    this->mtx.unlock();
+    //this->mtx.unlock();
     return 0;
 }
 template int rapid_matrix_la<int>::la(const int32_t* const A, const int* const code_book, int batch, int block, pair<int, idx_t> **res);

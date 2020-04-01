@@ -46,6 +46,7 @@ private:
     std::mutex mtx;
     friend cpu_base_probe<T, dist_type, base_matrix_mul<T> >;
     friend cpu_base_probe<T, dist_type, rapid_matrix_mul<T> >;
+    friend cpu_base_mt_probe<T, dist_type, rapid_matrix_mul<T> >;
 };
 
 }

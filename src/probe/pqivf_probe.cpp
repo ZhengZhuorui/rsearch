@@ -4,7 +4,7 @@ template<typename T,
         DistanceType dist_type>
 pqivf_probe<T, dist_type>::pqivf_probe(int dimension, int topk):probe<T, dist_type>(){
     this->cq_mm = new rapid_matrix_mul<T>;
-    this->mtx_la = new rapid_matrix_la<T>;
+    this->mtx_la = new rapid_matrix_la<Tout>;
 
     this->dimension = dimension;
     this->topk = topk;
@@ -60,7 +60,7 @@ template int pqivf_probe<int8_t, EUCLIDEAN>::create_gallery(gallery<int8_t, EUCL
 template int pqivf_probe<float, EUCLIDEAN>::create_gallery(gallery<float, EUCLIDEAN> ** ga_ptr);
 
 template<typename T>
-inline void get_res(uint8_t* data, T* code_book, int code_len, int ldc, int qid, int block, pair<T, idx_t>* res){
+inline void get_res(int* data, int* code_book, int code_len, int ldc, int qid, int block, pair<T, idx_t>* res){
     /*
         for (int i = 0; i < block; ++i)
             for (int j = 0; j < code_len; ++j){
@@ -112,11 +112,11 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
         //    std::cout << this->code_book[j] << "?";
 
         for (int j = 0; j < pn; ++j){
-            int cnt = 0;
+            //int cnt = 0;
             for (int _j = 0; _j < this->select_cq; ++_j){
 
                 int cq_id = cq_res[j * this->select_cq + _j].second;
-                uint8_t* data= c_ga->data[cq_id].data();
+                int* data= c_ga->data[cq_id].data();
                 int num = c_ga->block_num[cq_id];
                 for (int vec_id = 0; vec_id < num; vec_id += this->res_cache_size){
                     int qn = std::min(this->max_block, num - vec_id);
@@ -138,8 +138,8 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T, 
                     //              this->code_len, this->pq_num, this->prefix[cq_id], qn, this->res + cnt);
                     this->mtx_la->la(data + vec_id, code_book, 1, qn, &mtx_res);
                     int k_sz = std::min(qn, this->topk);
-                    for (int k = 0; k < std::min(qn, this->topk); ++k)
-                    ans.push_back(mtx_res[k]);
+                    for (int k = 0; k < k_sz; ++k)
+                        ans.push_back(std::make_pair(mtx_res[k].first, mtx_res[k].second + this->prefix[cq_id] + vec_id));
                 }
             }
             /*

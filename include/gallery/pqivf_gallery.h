@@ -63,7 +63,7 @@ private:
     vector<float> cq_float;
     vector<float> pq_float;
 
-    vector<vector<uint8_t> > data;
+    vector<vector<int> > data;
     vector<int> block_num;
     unordered_map<idx_t, pair<int, int> > index;
     vector<vector<idx_t> > ids;

@@ -2,6 +2,7 @@
 #include "rsearch_def.h"
 #include "probe/cpu_base_probe.h"
 #include "probe/pqivf_probe.h"
+#include "probe/cpu_base_mt_probe.h"
 
 namespace rsearch{
 

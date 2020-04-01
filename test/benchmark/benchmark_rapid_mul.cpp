@@ -45,7 +45,7 @@ void test_perf(){
     std::cout << std::endl;
     get_data(b, m, dimension);*/
     rsearch::matrix_mul<T>* mm = new rsearch::rapid_matrix_mul<T>;
-    int64_t Bytes = 1LL * n * m;
+    //int64_t Bytes = 1LL * n * m;
     mm->set(dimension, 128, n, m);
     pair<Tout, int>* res;
     gettimeofday(&time1, &zone);

@@ -227,7 +227,7 @@ int pqivf_gallery<T, dist_type>::remove_by_uids(const idx_t* const uids, const i
     for (int i = 0; i < n; ++i){
         pair<int, int> p = this->index[uids[i]];
         memcpy(this->data[p.first].data() + 1LL * p.second * this->code_len, 
-               this->data[p.first].data() + 1LL * (this->block_num[p.first] - 1) * this->code_len, this->code_len * sizeof(T));
+               this->data[p.first].data() + 1LL * (this->block_num[p.first] - 1) * this->code_len, this->code_len * sizeof(int));
         this->ids[p.first][p.second] = this->ids[p.first][this->block_num[p.first] - 1];
         this->index[this->ids[p.first][p.second]] = p;
         this->ids[p.first].pop_back();

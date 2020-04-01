@@ -11,7 +11,7 @@ public:
     void start();
     void stop();
     void add_task(const task&);
-
+    void synchronize();
 
 private:
     ThreadPool(const ThreadPool&);

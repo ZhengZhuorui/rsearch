@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(rsearch)
 
-set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp -Wall -mavx2 -masm=intel -march=native -m64")
+set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp -Wall -mavx2 -masm=intel -march=native -m64 -g")
 
 option(BUILD_DEBUG "option for debug mode" off)
 

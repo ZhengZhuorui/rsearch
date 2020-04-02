@@ -82,7 +82,6 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
             std::cout << "Expect uid: " << target + i << ", real uid: "  << top_uids[i * K] << ", real sims:" << sims[i * K]<< std::endl;
             for (int j = 0; j < K; ++j)
                 if (top_uids[i * K + j] == target + i) ++correct;
-            std::cout << std::endl;
             flag = -1;
         }
     }
@@ -103,7 +102,7 @@ TEST_F(UnitTest, QueryPerfTest) {
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(30000, 128, 512, rsearch::X86_RAPID)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
-    EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID)) );
+    //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID)) );
     EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID_MULTI_THREAD)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_PQIVF)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_PQIVF)) );

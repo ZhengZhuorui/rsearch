@@ -3,7 +3,7 @@ namespace rsearch{
 ThreadPool::ThreadPool():m_mutex(),
                         is_started(false){
     this->nprocs = std::thread::hardware_concurrency();
-    //this->nprocs = 1;
+    this->un_work_num = this->nprocs;
 }
 ThreadPool::~ThreadPool(){
     if (is_started == true)
@@ -16,23 +16,12 @@ void ThreadPool::start(){
     }
 }
 void ThreadPool::synchronize(){
-    while (this->m_task.empty() == false){
-        std::this_thread::yield();
-    }
-    this->m_mutex.lock();
-    this->is_started = false;
-    for (auto it : this->m_threads){
-        if (it->joinable() == true){
-            it->join();
-        }
-    }
-    this->is_started = true;
-    this->m_mutex.unlock();
-    //std::cout << "[join] end." << std::endl;
+    std::unique_lock<std::mutex> lck(this->work_mutex);
+    this->cv.wait(lck);
 }
 
 void ThreadPool::stop(){
-    std::lock_guard<std::mutex> lck(this->m_mutex);
+    //std::lock_guard<std::mutex> lck(this->m_mutex);
     this->is_started = false;
     for (auto it : this->m_threads){
         if (it->joinable() == true)
@@ -54,13 +43,20 @@ void ThreadPool::thread_loop(){
         task t = NULL;
         this->m_mutex.lock();
         if (this->m_task.empty() == false){
+            --this->un_work_num;
             t = this->m_task.front();
             this->m_task.pop();
         }
         this->m_mutex.unlock();
+
         if (t != NULL){
             t();
+            ++this->un_work_num;
         }
+        if (this->un_work_num == this->nprocs && this->m_task.empty() == true){
+            this->cv.notify_one();
+        }
+
     }
     return;
 }

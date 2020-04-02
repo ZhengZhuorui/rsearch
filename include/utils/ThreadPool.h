@@ -21,6 +21,10 @@ private:
 
     std::vector<std::thread*> m_threads;
     std::mutex m_mutex;
+    std::mutex work_mutex;
+    std::condition_variable cv;
+
+    int un_work_num;
     tasks m_task;
     int ThreadSize;
     bool is_started;

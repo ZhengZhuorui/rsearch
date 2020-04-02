@@ -7,13 +7,14 @@ public:
     MthManager();
     ~MthManager();
     void work();
-    void add(task&);
+    void add_task(task&);
+    int size();
 private:
     std::vector<bool> used;
     std::queue<task> task_vec;
     int nprocs;
     std::mutex m_mutex;
     std::mutex task_mutex;
-}
+};
 
 }

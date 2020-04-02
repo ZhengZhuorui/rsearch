@@ -20,7 +20,7 @@ inline std::string GetMethodName(MethodType dev) {
         sprintf(target_name, "X86_PQIVF");
         break;
     case X86_RAPID_MULTI_THREAD:
-        sprintf(target_name, "X86_PQIVF_METHOD");
+        sprintf(target_name, "X86_RAPID_MULTI_THREAD");
         break;
     default:
         sprintf(target_name, "UN_KNOWN");

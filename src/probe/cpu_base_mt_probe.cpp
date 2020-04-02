@@ -1,4 +1,5 @@
 #include "probe/cpu_base_mt_probe.h"
+#include <sys/time.h>
 namespace rsearch{
 template<typename T,
         DistanceType dist_type,
@@ -15,7 +16,7 @@ cpu_base_mt_probe<T, dist_type, matrix_type>::cpu_base_mt_probe(int dimension, i
         this->mm[i] = new matrix_type;
         this->mm[i]->set(this->dimension, this->topk, this->max_batch, this->max_block);
     }
-    //ans.resize(this->max_batch);
+    ans.resize(this->max_batch);
     //for (int i = 0; i < max_batch; ++i)
     //    ans.clear();
     this->threadpool = new ThreadPool;
@@ -32,9 +33,9 @@ template<typename T,
         DistanceType dist_type,
         typename matrix_type>
 cpu_base_mt_probe<T, dist_type, matrix_type>::~cpu_base_mt_probe(){
-    this->threadpool->stop();
-    for (int i = 0; i < this->nprocs; ++i)
+    for (int i = 0; i < this->nprocs; ++i){
         delete this->mm[i];
+    }
 }
 
 template cpu_base_mt_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::~cpu_base_mt_probe();
@@ -60,14 +61,14 @@ template int cpu_base_mt_probe<float, EUCLIDEAN, rapid_matrix_mul<float> >::crea
 template<typename T,
         DistanceType dist_type,
         typename matrix_type>
-void cpu_base_mt_probe<T, dist_type, matrix_type>::query_bunch(const int mm_id, const T* x, const T* data, const Tout* offset, const int batch, const int block, const int block_id){    
+void cpu_base_mt_probe<T, dist_type, matrix_type>::query_bunch(const int thread_id, const T* x, const T* data, const Tout* offset, const int batch, const int block, const int block_id){    
     pair<Tout, idx_t>* res;
-    this->mm[mm_id]->mul(x, data, offset, batch, block, &res);
+    this->mm[thread_id]->mul(x, data, offset, batch, block, &res);
     int base_id = block_id * this->max_block;
-    for (int k = 0; k < batch; ++k)
+    for (int k = 0; k < batch; ++k){
         for (int l = 0; l < this->topk; ++l)
-            //this->ans[k].push_back(std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + base_id));
-            this->ans[k][block_id * this->topk+ l] = std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + base_id);
+            this->ans[k][block_id * this->topk + l] = std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + base_id);
+    }
 }
 
 template void cpu_base_mt_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::query_bunch(const int mm_id, const int8_t* x, const int8_t* data, const int* offset, const int batch, const int block, const int base_id);
@@ -84,6 +85,10 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
     T* data= (T*)c_ga->data.data();
     Tout* offset = (Tout*)c_ga->offset.data();
 
+    struct timezone zone;
+    struct timeval time1;
+    struct timeval time2;
+    float delta = 0;
     if (num < this->topk){
         //std::cout<< "num < topk" <<num<< std::endl;
         ans.resize(n);
@@ -102,13 +107,11 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
         }
         return 0;
     }
-    int mm_id = 0;
     this->ans_topk_size = ((num - 1) / this->max_block + 1) * topk;
-    //ans.resize(1LL * this->max_batch * this->ans_topk_size);
+    std::cout << std::thread::hardware_concurrency() << std::endl;
     for (int i = 0; i < this->max_batch; ++i)
-        this->ans.resize(this->ans_topk_size);
+        this->ans[i].resize(this->ans_topk_size);
     this->threadpool->start();
-    int times = 0;
     for (int i = 0 ; i < n ; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
         memcpy(this->x_tmp.data(), x + 1LL * i * this->dimension, pn * this->dimension * sizeof(T));
@@ -117,23 +120,27 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
                 this->x_tmp[k] += 64;
             }
         }
-        std::cout << "[multi_thread] start 0." << std::endl;
-        
+        std::cout << "[query] target 1" << std::endl;
         for (int j = 0; j < num ; j += this->max_block){
             int block_size = std::min(this->max_block, num - j);
             //this->query_bunch(mm_id, x_tmp.data(), data + 1LL * j * this->dimension, offset + j, pn, block_size, j);
-            std::function<void(int)> f = std::bind(&cpu_base_mt_probe<T, dist_type, matrix_type>::query_bunch, this, placeholders::_1, x_tmp.data(),
+            std::function<void(int)> f = std::bind(&cpu_base_mt_probe<T, dist_type, matrix_type>::query_bunch, this, std::placeholders::_1, x_tmp.data(),
                                                  data + 1LL * j * this->dimension, offset + j, pn, block_size, j / this->max_block);
-            this->mth_manager.add(f);
-            ++times;
-            mm_id = (mm_id + 1) % this->nprocs;
+            this->mth_manager->add_task(f);
         }
+        std::cout << "[query] target 2 " << this->mth_manager->size() << std::endl;
         std::function<void()> work = std::bind(&MthManager::work, this->mth_manager);
-        for (int i = 0; i < times; ++i)
+        int work_sz = this->mth_manager->size();
+
+        gettimeofday(&time1, &zone);
+        for (int i = 0; i < work_sz; ++i)
             this->threadpool->add_task(work);
-        std::cout << "[multi_thread] wait." << std::endl;
+
         this->threadpool->synchronize();
-        std::cout << "[multi_thread] end." << std::endl;
+        gettimeofday(&time2, &zone);
+        delta += (time2.tv_sec - time1.tv_sec) * 1000.0 + (time2.tv_usec - time1.tv_usec) / 1000.0;
+
+        std::cout << "[query] target 3 " << " " << this->mth_manager->size() << std::endl;
         for (int k = 0; k < pn; ++k){
             //std::cout << c_ga->offset[ans[k][0].second] << " ";
 
@@ -147,7 +154,8 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
             memset(ans[k].data(), 0, this->ans_topk_size * sizeof(pair<Tout, idx_t>));
         }
     }
-    //std::cout << std::endl;
+    this->threadpool->stop();
+    printf("[query] cost %.4fms.\n", delta);
     return 0;
 }
 

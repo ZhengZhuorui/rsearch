@@ -901,7 +901,6 @@ void ld_add_1x1(const int *mem, const int32_t* index, int* dst){
     __m256i ymm;
     __m256i ind;
     __m256i acc;
-//    int a = 0;
     acc = _mm256_setzero_si256();
 
     for (int i = 0; i < K; i += 8){
@@ -922,11 +921,6 @@ void ld_add_1x1(const int *mem, const int32_t* index, int* dst){
     xmm[0] = _mm_hadd_epi32(xmm[0], xmm[0]);
  
     dst[0] =  _mm_extract_epi32(xmm[0], 0);
-}
-
-template<int K>
-void ld_add_8x1(const float *mem, const int32_t* index, float* dst){
-
 }
 
 template<int K>
@@ -1003,7 +997,8 @@ void ld_add_1x1(const float *mem, const int32_t* index, float* dst){
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[0]);
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[0]);
  
-    dst[0] =  _mm_extract_ps(xmm[0], 0);
+    //dst[0] =  _mm_extract_ps(xmm[0], 0);
+    _MM_EXTRACT_FLOAT(dst[0], xmm[0], 0);
 }
 
 

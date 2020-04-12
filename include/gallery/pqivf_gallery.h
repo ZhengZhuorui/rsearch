@@ -16,7 +16,7 @@ struct pqivf_traits{
 
 template<typename T,
         DistanceType dist_type>
-class pqivf_gallery : public gallery<T, dist_type>{
+class pqivf_gallery : public gallery<T>{
 public:
     using Tout = typemap_t<T>;
 
@@ -79,9 +79,7 @@ private:
     int pq_dimension;
     int pq_num;
     int code_len;
-    //float k;
     int max_batch, max_block;
-    //int8_t* ix;
     std::mutex mtx;
 
     rapid_matrix_mul<T>* cq_mm;

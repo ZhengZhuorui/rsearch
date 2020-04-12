@@ -36,9 +36,8 @@ typedef enum MethodType{
     X86_PQIVF = 2,
     X86_RAPID_MULTI_THREAD = 3,
     X86_PQIVF_MULTI_THREAD = 4,
-
-    
 } MethodType;
+
 
 typedef enum GalleryType{
     CPU_BASE_GALLERY = 0,

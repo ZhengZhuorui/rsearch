@@ -18,11 +18,11 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
     target_name = rsearch::GetMethodName(mt);
     type_name = rsearch::GetTypeName<T>();
 
-    file_name = "/home/zhengzhuorui/project/data/rsearch_gallery." + rsearch::GetGalleryName(mt) + "." + std::to_string(N) + "." + std::to_string(Dimension) + "." + \
+    file_name = "/home/zhengzhuorui/project/data/rsearch_gallery." + rsearch::GetGalleryName(mt) + "." + rsearch::GetDistancetypeName<dist_type>() + "." + std::to_string(N) + "." + std::to_string(Dimension) + "." + \
                 type_name + ".bin";
-    rsearch::probe<T, dist_type>* probe = rsearch::create_probe<T, dist_type>(Dimension, K, mt);
+    rsearch::probe<T>* probe = rsearch::create_probe<T>(Dimension, K, dist_type, mt);
     std::cout << "[test_query] target 1\n" << std::endl; 
-    rsearch::gallery<T, dist_type>* ga;
+    rsearch::gallery<T>* ga;
     int ret = probe->create_gallery(&ga);
     std::cout << "[test_query] target 2" << std::endl; 
     if (ret != 0){
@@ -32,7 +32,7 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
     std::vector<T> x;
     const int batch = 128;
     rsearch::idx_t top_uids[K * batch];//, real_uids[K * batch];
-    int target = 1123;
+    int target = 1124;
     //for (int i = 0; i < batch; ++i)
     //    real_uids[i] = target + i;
 
@@ -78,10 +78,10 @@ int test_query(const int N, const int K, const int Dimension, const rsearch::Met
     int flag = 0;
     int correct = 0;
     for (int i = 0; i < batch; ++i){
+        for (int j = 0; j < K; ++j)
+            if (top_uids[i * K + j] == target + i) ++correct;
         if (top_uids[i * K] != target + i){
             std::cout << "Expect uid: " << target + i << ", real uid: "  << top_uids[i * K] << ", real sims:" << sims[i * K]<< std::endl;
-            for (int j = 0; j < K; ++j)
-                if (top_uids[i * K + j] == target + i) ++correct;
             flag = -1;
         }
     }
@@ -103,7 +103,10 @@ TEST_F(UnitTest, QueryPerfTest) {
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
     //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID)) );
-    EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID_MULTI_THREAD)) );
+    //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_RAPID_MULTI_THREAD)) );
+    //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(30000, 128, 512, rsearch::X86_PQIVF)) );
+    //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(30000, 128, 512, rsearch::X86_PQIVF)) );
     //EXPECT_EQ(0, (test_query<float, rsearch::COSINE>(1000000, 128, 512, rsearch::X86_PQIVF)) );
-    //EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_PQIVF)) );
+    EXPECT_EQ(0, (test_query<int8_t, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_PQIVF)) );
+    EXPECT_EQ(0, (test_query<float, rsearch::EUCLIDEAN>(5000000, 128, 512, rsearch::X86_PQIVF)) );
 }

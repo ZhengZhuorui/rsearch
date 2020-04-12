@@ -17,7 +17,9 @@ void ThreadPool::start(){
 }
 void ThreadPool::synchronize(){
     std::unique_lock<std::mutex> lck(this->work_mutex);
-    this->cv.wait(lck);
+    while (this->un_work_num != this->nprocs || this->m_task.empty() == false)
+        this->cv.wait(lck);
+    //std::cout << this->un_work_num << " " << this->m_task.size() << std::endl;
 }
 
 void ThreadPool::stop(){
@@ -37,9 +39,6 @@ void ThreadPool::add_task(const task& t){
 
 void ThreadPool::thread_loop(){
     while (this->is_started == true){
-        while (this->m_task.empty() == true && this->is_started == true){
-            std::this_thread::yield();
-        }
         task t = NULL;
         this->m_mutex.lock();
         if (this->m_task.empty() == false){
@@ -53,9 +52,9 @@ void ThreadPool::thread_loop(){
             t();
             ++this->un_work_num;
         }
-        if (this->un_work_num == this->nprocs && this->m_task.empty() == true){
+        if (this->un_work_num == this->nprocs && this->m_task.empty() == true)
             this->cv.notify_one();
-        }
+        
 
     }
     return;

@@ -9,7 +9,7 @@ using std::vector;
 using std::pair;
 template<typename T,
         DistanceType dist_type>
-pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& traits) : gallery<T, dist_type>(){
+pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& traits) : gallery<T>(){
     this->dimension = dimension;
     this->num = 0;
     this->max_id = 0;
@@ -30,7 +30,7 @@ pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& t
     this->block_num.resize(this->cq_num);
     this->ids.resize(this->cq_num);
     this->data.resize(this->cq_num);
-    this->x_tmp.resize(this->max_batch * this->max_block);
+    this->x_tmp.resize(this->max_batch * this->dimension);
     this->index.clear();
     this->cq_mm = new rapid_matrix_mul<T>();
     this->pq_mm = new rapid_matrix_mul<T>();
@@ -58,7 +58,8 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::init(){
     std::string dist_type_name = GetDistancetypeName<dist_type>();
-    std::string train_file_name = "/home/zhengzhuorui/project/data/pqivf_train_data." + dist_type_name + ".bin";
+    std::string train_file_name = "/home/zhengzhuorui/project/data/pqivf_train_data." + dist_type_name + "." + std::to_string(this->cq_num) + "." + \
+        std::to_string(this->pq_dimension) + "." + std::to_string(this->pq_num) + ".bin";
     if (this->have_train_ == false){  
         if (file_exist(train_file_name) == true){
             int code = this->load_train_data(train_file_name);
@@ -85,7 +86,7 @@ int pqivf_gallery<T, dist_type>::init(){
     for (int i = 0; i < cq_num; ++i){
         this->cq_offset[i] = get_offset<T, dist_type>(this->cq.data() + 1LL * i * this->dimension, this->dimension);
     }
-    std::cout << "[init] target 3" << std::endl;
+    //std::cout << "[init] target 3" << std::endl;
     for (int i = 0; i < pq_num; ++i){
         this->pq_offset[i] = get_offset<T, dist_type>(this->pq.data() + 1LL * i * this->pq_dimension, this->pq_dimension);
     }
@@ -128,15 +129,15 @@ int pqivf_gallery<T, dist_type>::add(const T* const x, const int n){
     this->mtx.lock();
     pair<Tout, idx_t>* cq_res;
     pair<Tout, idx_t>* pq_res;
-    memcpy(x_tmp.data(), x, 1LL * n * this->dimension);
-    if (is_same_type<T, int8_t>() == true){
-        for (int64_t i = 0; i < 1LL * n * this->dimension; ++i)
-            x_tmp[i] += 64;
-    }
     for (int i = 0; i < n; i += this->max_batch){
         int qn = std::min(this->max_batch, n - i);
-        this->cq_mm->mul(x_tmp.data() + 1LL * i * this->dimension, this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
-        this->pq_mm->mul(x_tmp.data() + 1LL * i * this->dimension, this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
+        memcpy(x_tmp.data(), x + 1LL * i * this->dimension, 1LL * qn * this->dimension * sizeof(T));
+        if (is_same_type<T, int8_t>() == true){
+            for (int k = 0; k < 1LL * qn * this->dimension; ++k)
+                x_tmp[k] += 64;
+        }
+        this->cq_mm->mul(x_tmp.data(), this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
+        this->pq_mm->mul(x_tmp.data(), this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
                         this->pq_num, &pq_res);
         for (int j = 0; j < qn; ++j)
             this->add_one(pq_res + 1LL * j * this->code_len, this->max_id++, cq_res[j].second);
@@ -156,7 +157,7 @@ int pqivf_gallery<T, dist_type>::add_one(const pair<Tout, idx_t>* const x, const
     this->data[cq_id].resize(1LL * (this->block_num[cq_id] + 1) * this->code_len);
     //memcpy(this->data[cq_id].data() + 1LL * this->block_num[cq_id] * this->code_len, x, this->code_len * sizeof(uint8_t));
     for (int j = 0; j < this->code_len; ++j)
-        this->data[cq_id][1LL * this->block_num[cq_id] * this->code_len + j] = x[j].second;
+        this->data[cq_id][1LL * this->block_num[cq_id] * this->code_len + j] = x[j].second + j * this->pq_num;
     this->ids[cq_id].push_back(id);
     this->index[id] = std::make_pair(cq_id, this->block_num[cq_id]);
     this->block_num[cq_id]++;
@@ -178,13 +179,20 @@ int pqivf_gallery<T, dist_type>::add_with_uids(const T* const x, const idx_t * c
             return INDEX_EXISTS;
         }
     }
+    pair<Tout, idx_t>* cq_res;
+    pair<Tout, idx_t>* pq_res;
     for (int i = 0; i < n; i += this->max_batch){
-        pair<Tout, idx_t>* cq_res;
-        pair<Tout, idx_t>* pq_res;
+        
         int qn = std::min(this->max_batch, n - i);
+        memcpy(x_tmp.data(), x + 1LL * i * this->dimension, 1LL * qn * this->dimension * sizeof(T));
+        if (is_same_type<T, int8_t>() == true){
+            for (int64_t i = 0; i < 1LL * qn * this->dimension; ++i)
+                x_tmp[i] += 64;
+        }
 
-        this->cq_mm->mul(x + 1LL * i * this->dimension, this->cq.data(), this->cq_offset.data(), this->max_batch, this->cq_num, &cq_res);
-        this->pq_mm->mul(x + 1LL * i * this->dimension, this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
+
+        this->cq_mm->mul(this->x_tmp.data(), this->cq.data(), this->cq_offset.data(), this->max_batch, this->cq_num, &cq_res);
+        this->pq_mm->mul(this->x_tmp.data(), this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
                         this->pq_num, &pq_res);
             
         for (int j = 0; j < qn; ++j){

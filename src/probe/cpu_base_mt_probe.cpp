@@ -144,9 +144,9 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
         for (int k = 0; k < pn; ++k){
             //std::cout << c_ga->offset[ans[k][0].second] << " ";
 
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size() + 1,
+            std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
                              pair_greator<Tout, idx_t>());
-            std::sort(ans[k].data(), ans[k].data() + this->topk + 1, pair_greator<Tout, idx_t>());
+            std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
             for (int j = 0 ; j < this->topk ; ++j){
                 sims[(i + k) * this->topk + j] = ans[k][j].first;
                 idx[(i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];

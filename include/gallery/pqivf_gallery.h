@@ -54,7 +54,7 @@ public:
 
 private:
 
-    int add_one(const pair<Tout, idx_t>* const x, const int id, const int cq_id);
+    int add_one(const int id, const int cq_id);
 
     vector<T> cq;
     vector<T> pq;
@@ -68,6 +68,7 @@ private:
     unordered_map<idx_t, pair<int, int> > index;
     vector<vector<idx_t> > ids;
     vector<T> x_tmp;
+    vector<T> x_tmp_div;
 
     int dimension;
     int num;
@@ -80,6 +81,7 @@ private:
     int pq_num;
     int code_len;
     int max_batch, max_block;
+    int codebook_size;
     std::mutex mtx;
 
     rapid_matrix_mul<T>* cq_mm;

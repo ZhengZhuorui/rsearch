@@ -40,6 +40,7 @@ private:
     uint32_t nprocs;
 
     vector<T> x_tmp;
+    vector<T> x_tmp_div;
 };
 
 }

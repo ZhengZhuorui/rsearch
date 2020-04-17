@@ -88,6 +88,7 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
     }
     for (int i = 0 ; i < n ; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
+
         memcpy(this->x_tmp.data(), x + 1LL * i * this->dimension, pn * this->dimension * sizeof(T));
         if (is_same_type<T, int8_t>() == true){
             for (int64_t k = 0; k < 1LL * pn * this->dimension; ++k){
@@ -107,9 +108,9 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
 
         for (int k = 0; k < pn; ++k){
             //std::cout << c_ga->offset[ans[k][0].second] << " ";
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk + 1, ans[k].data() + ans[k].size() + 1,
+            std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
                              pair_greator<Tout, idx_t>());
-            std::sort(ans[k].data(), ans[k].data() + this->topk + 1, pair_greator<Tout, idx_t>());
+            std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
             for (int j = 0 ; j < this->topk ; ++j){
                 sims[(i + k) * this->topk + j] = ans[k][j].first;
                 //sims[(i + k) * this->topk + j] = vec_dis<T, dist_type>(x + 1LL * i * this->dimension, data + 1LL * c_ga->ids[ans[k][j].second] * dimension, dimension);

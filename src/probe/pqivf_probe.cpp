@@ -1,4 +1,5 @@
 #include "probe/pqivf_probe.h"
+#include <sys/time.h>
 namespace rsearch{
 template<typename T,
         DistanceType dist_type>
@@ -21,13 +22,14 @@ pqivf_probe<T, dist_type>::pqivf_probe(int dimension, int topk):probe<T>(){
 
     //this->res = (pair<Tout, idx_t>*)malloc(this->res_cache_size * sizeof(pair<Tout, idx_t>));
     //memset(this->res, 0, this->res_cache_size * sizeof(pair<Tout, idx_t>));
-    this->code_book = (Tout*)malloc(this->max_batch * this->pq_num * this->code_len * sizeof(Tout));
+    this->code_book = (Tout*)malloc(this->max_batch * this->codebook_size * sizeof(Tout));
     this->prefix = (int32_t*)malloc((this->cq_num + 5) * sizeof(int32_t));
     this->nprocs = std::thread::hardware_concurrency();
 
     this->x_tmp.resize(this->max_batch * this->dimension);
+    this->x_tmp_div.resize(this->max_batch * this->dimension);
     this->cq_mm->set(this->dimension, this->select_cq, this->max_batch, this->cq_num);
-    this->mtx_la->set(this->code_len, this->topk, 1, this->max_block, this->pq_num);
+    this->mtx_la->set(this->code_len, this->topk, 1, this->max_block, this->codebook_size);
 
 }
 template pqivf_probe<int8_t, COSINE>::pqivf_probe(int, int);
@@ -97,51 +99,75 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
     for (int i = 1; i <= this->cq_num; ++i){
         this->prefix[i] = this->prefix[i - 1] + c_ga->block_num[i - 1];
     }
-    
+    struct timezone zone;
+    struct timeval time1;
+    struct timeval time2;
+    struct timeval time3;
+    struct timeval time4;
+    float delta1 = 0;
+    float delta2 = 0;
     //std::cout << "[query] target 2 : " << code_book[0]<< std::endl;
     std::cout << "[query] target 2" << std::endl;
+    gettimeofday(&time1, &zone);
     for (int i = 0; i < n; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
         
         memcpy(x_tmp.data(), x + 1LL * i * this->dimension, 1LL * pn * this->dimension * sizeof(T));
-
+        std::cout << "[query] target 3" << std::endl;
         if (is_same_type<T, int8_t>() == true){
             for (int64_t k = 0; k < 1LL * pn * this->dimension; ++k)
                 x_tmp[k] += 64;
         }
+        divide(x_tmp.data(), x_tmp_div.data(), pn, this->dimension, this->pq_dimension);
+        std::cout << x_tmp[0] << " " << x_tmp[this->dimension] << std::endl;
         this->cq_mm->mul(x_tmp.data(), c_ga->cq.data(), c_ga->cq_offset.data(), pn, this->cq_num, &cq_res);
-        
-        r_dot_prod<T>(x_tmp.data(), c_ga->pq.data(), c_ga->pq_offset.data(), pn * this->code_len, this->pq_num, this->pq_dimension, this->code_book, this->pq_num);
-        for (int j = 0; j < pn; ++j)
-        std::cout << cq_res[j * this->select_cq].first << " "<<cq_res[j * this->select_cq].second << " | ";
+        //std::cout << cq_res[0].second << " " << cq_res[select_cq].second << std::endl;
+        for (int j = 0; j < code_len; ++j){
+            r_dot_prod<T>(x_tmp_div.data() + j * pn * this->pq_dimension, c_ga->pq.data() + j * this->pq_num * this->pq_dimension,
+                        c_ga->pq_offset.data() + j * this->pq_num,
+                        pn, this->pq_num, this->pq_dimension, this->code_book + j * this->pq_num, this->codebook_size);
+        }
+        std::cout << "[query] target 4" << std::endl;
+        std::cout << c_ga->index[1123].first << " " << c_ga->index[1123].second << std::endl;
+        for (int j = 0; j < this->select_cq; ++j){
+            std::cout << cq_res[j]
+        }
         for (int j = 0; j < pn; ++j){
-            int cnt = 0;
             for (int _j = 0; _j < this->select_cq; ++_j){
-                    
+                //std::cout << "[query] target 4.1:" << _j << std::endl;
                 int cq_id = cq_res[j * this->select_cq + _j].second;
                 int* data= c_ga->data[cq_id].data();
                 int num = c_ga->block_num[cq_id];
+                static int m = 0;
+                if (m < 1024){
+                    //std::cout << num << " " << cq_id << std::endl;
+                    if (cq_id == 2512)
+                        std::cout << cq_id << num << std::endl;
+                    ++m;
+                }
 
                 for (int vec_id = 0; vec_id < num; vec_id += this->max_block){
                     int qn = std::min(this->max_block, num - vec_id);                   
                     
                     this->mtx_la->la(data + vec_id, code_book + j * this->codebook_size, 1, qn, &mtx_res);
-                    
                     int k_sz = std::min(qn, this->topk);
-                    for (int k = 0; k < k_sz; ++k)
-                        ans.push_back(std::make_pair(mtx_res[k].first, mtx_res[k].second + this->prefix[cq_id] + vec_id));
-                        
+                    for (int k = 0; k < k_sz; ++k){
+                        ans.push_back(std::make_pair(mtx_res[k].first, mtx_res[k].second + this->prefix[cq_id] + vec_id));                        
+                        //if (mtx_res[k].second + this->prefix[cq_id] + vec_id > 30000)
+                        //    std::cout << mtx_res[k].second + this->prefix[cq_id] + vec_id << std::endl;
+                    }
                 }
             }
-
-            //std::cout << "target6 " << ans.size() << " " << this->prefix[this->cq_num] << std::endl;
+            //std::cout << "[query] target 5:" << j << std::endl;
             if ((int32_t)ans.size() > this->topk){
-                std::nth_element(ans.data(), ans.data() + this->topk + 1, ans.data() + ans.size() + 1, pair_greator<Tout, int>());
+                std::nth_element(ans.data(), ans.data() + this->topk, ans.data() + ans.size(), pair_greator<Tout, int>());
                 std::sort(ans.data(), ans.data() + this->topk + 1, pair_greator<Tout, int>());
+                //std::cout << "[query] target 6:" << j << std::endl;
                 for (int k =0; k < this->topk; ++k){
                     sims[(i + j) * this->topk + k] = ans[k].first;
                     //std::cout << this->prefix[0] << " " << this->prefix[this->cq_num] << " | " << ans[k].second << std::endl;
                     int v = std::upper_bound(this->prefix, this->prefix + this->cq_num + 1, ans[k].second) - this->prefix - 1;
+                    //std::cout << "[query] target 7:" << j << " " << ans[k].second << " " << v << std::endl;
                     idx[(i + j) * this->topk + k] = c_ga->ids[v][ans[k].second - this->prefix[v]];
                 }
                 ans.clear();
@@ -160,6 +186,7 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
                 ans.clear();
             }
         }
+        
     }
     return 0;
 }

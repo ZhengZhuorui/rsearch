@@ -188,6 +188,7 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
         }
         
     }
+    gettimeofday(&time2, &zone);
     return 0;
 }
 template int pqivf_probe<int8_t, COSINE>::query(const int8_t * const x, const int n, gallery<int8_t> * ga, int *sims, idx_t *idx);

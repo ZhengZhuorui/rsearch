@@ -36,14 +36,18 @@ typedef enum MethodType{
     X86_PQIVF = 2,
     X86_RAPID_MULTI_THREAD = 3,
     X86_PQIVF_MULTI_THREAD = 4,
-
-    
+    FAISS_FLAT = 5,
+    FAISS_LSH = 6,
+    FAISS_HNSW = 7,
+    FAISS_IVFPQ = 8,
 } MethodType;
+
 
 typedef enum GalleryType{
     CPU_BASE_GALLERY = 0,
     PQIVF_GALLERY = 1,
 } GalleryType;
+
 
 template<typename T>
 struct TMap{};

@@ -1,6 +1,7 @@
 #pragma once
 #include <rsearch_type.h>
 #include <gtest/gtest.h>
+#define private public
 
 const float SCALE = 463.0f;
 

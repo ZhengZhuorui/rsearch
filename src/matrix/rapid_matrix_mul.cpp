@@ -43,6 +43,7 @@ int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* con
     {
         r_dot_prod<T>(A, B, offset, batch, block, this->dimension, this->value, this->max_block);
     }
+    //std::cout << "[mul]" << this->value[0] << " " << this->value[this->max_block] << std::endl;
     {
         cpu_select_kv(this->value, this->topk_value, this->topk_index, this->topk, block, batch, this->max_block, true);
     }

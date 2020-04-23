@@ -8,7 +8,7 @@ using std::vector;
 using std::unordered_map;
 template<typename T,
         DistanceType dist_type>
-class cpu_base_gallery : public gallery<T, dist_type>{
+class cpu_base_gallery : public gallery<T>{
 public:
     using Tout = typemap_t<T>;
     cpu_base_gallery(int dimension);

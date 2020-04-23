@@ -22,6 +22,18 @@ inline std::string GetMethodName(MethodType dev) {
     case X86_RAPID_MULTI_THREAD:
         sprintf(target_name, "X86_RAPID_MULTI_THREAD");
         break;
+    case FAISS_FLAT:
+        sprintf(target_name, "FAISS_FLAT");
+        break;
+    case FAISS_LSH:
+        sprintf(target_name, "FAISS_LSH");
+        break;
+    case FAISS_HNSW:
+        sprintf(target_name, "FAISS_HNSW");
+        break;
+    case FAISS_IVFPQ:
+        sprintf(target_name, "FAISS_IVFPQ");
+        break;
     default:
         sprintf(target_name, "UN_KNOWN");
         break;
@@ -45,6 +57,12 @@ inline std::string GetGalleryName(MethodType dev){
         break;
     case X86_RAPID_MULTI_THREAD:
         sprintf(target_name, "CPU_BASE_GALLEY");
+        break;
+    case FAISS_FLAT:
+    case FAISS_LSH:
+    case FAISS_HNSW:
+    case FAISS_IVFPQ:
+        sprintf(target_name, "FAISS");
         break;
     default:
         sprintf(target_name, "UN_KNOWN");

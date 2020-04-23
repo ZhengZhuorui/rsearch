@@ -31,9 +31,9 @@ void test_perf(){
     
     for (int i = 0; i < m; ++i)
         for (int j = 0, k = 0; j < code_len; ++j, k += code_per_dimension)
-            index[i * code_len + j] = k + j % code_per_dimension;
+            index[i * code_len + j] = k + rand() % code_per_dimension;
     for (int i = 0; i < n * code_len * code_per_dimension; ++i)
-        code_book[i] = i % code_per_dimension;
+        code_book[i] = rand() % code_per_dimension;
     vector<T> ans(n * m);
     //rsearch::matrix_la<T>* mm = new rsearch::rapid_matrix_la<T>;
     
@@ -54,12 +54,17 @@ void test_perf(){
     float QPS = 1.0 * n * m / (delta / nIter);
     printf("BENCHMARK [%s]: %.4fms, calc : %.2fB\n", type_name.c_str(), delta, QPS);
     T ans_tmp = 0;
-    
+    /*for (int i = 0; i < m; ++i){
+        for (int j = 0; j < code_len; ++j)
+            std::cout << index[i * code_len + j] << " ";
+        std::cout << std::endl;
+    }*/
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < m; ++j){
+            //std::cout << ans[i * m + j] << std::endl;
             ans_tmp = 0;
             for (int k = 0; k < code_len; ++k)
-                ans_tmp += code_book[i * code_per_dimension * code_len + index[j * code_len + k] - k * code_per_dimension];
+                ans_tmp += code_book[i * code_per_dimension * code_len + index[j * code_len + k]];
             //std::cout << ans[0] << " " << ans[i * m + j] << std::endl;
             if (ans_tmp != ans[i * m + j]){
                 std::cout << "Error! " << i << " " << j << " expect: "<< ans_tmp << ", result" << ans[i * m + j] << std::endl;

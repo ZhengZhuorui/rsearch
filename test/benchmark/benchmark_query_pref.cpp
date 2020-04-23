@@ -12,7 +12,7 @@ void test_pq_pref(){
     target_name = rsearch::GetMethodName(mt);
     type_name = rsearch::GetTypeName<T>();
 
-    rsearch::probe<T, dist_type>* probe = rsearch::create_probe<T, dist_type>(512, 128, rsearch::X86_PQIVF);
+    rsearch::probe<T, dist_type>* probe = rsearch::create_probe<T>(512, 128, dist_type, rsearch::X86_PQIVF);
     rsearch::gallery<T, dist_type>* ga;
     int ret = probe->create_gallery(&ga);
     if (ret != 0){

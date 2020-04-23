@@ -428,7 +428,7 @@ void dot_1x1(const float *a, const float *b, const float *offset_ptr, float *dst
 
     float f;
     _MM_EXTRACT_FLOAT(f, xmm[0], 0);
-    dst[0] = f - offset_ptr[0];
+    dst[0] = f + offset_ptr[0];
 }
 
 template<int K>
@@ -527,7 +527,6 @@ void dot_4x2(const float *a, const float *b, const float *offset_ptr, float *dst
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
     xmm[0] = _mm_add_ps(xmm[0], offset);
     
-    offset = _mm_loadu_ps(offset_ptr + 4);
     xmm[8] = _mm256_extractf128_ps(acc[4], 0);
     xmm[9] = _mm256_extractf128_ps(acc[4], 1);
     xmm[10] = _mm256_extractf128_ps(acc[5], 0);
@@ -677,7 +676,6 @@ void dot_nt_4x2(const float *a, const float *b, const float *offset_ptr, const i
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[4]);
     xmm[0] = _mm_add_ps(xmm[0], offset);
     
-    offset = _mm_loadu_ps(offset_ptr + 4);
     xmm[8] = _mm256_extractf128_ps(acc[4], 0);
     xmm[9] = _mm256_extractf128_ps(acc[4], 1);
     xmm[10] = _mm256_extractf128_ps(acc[5], 0);
@@ -755,6 +753,8 @@ void r_dot_prod(const T *A, const T *B, const typemap_t<T> *offset, const int M,
         for (; iB < N; ++iB)
         for (iA = 0; iA < M; ++iA) dot_nt_1x1(B + iB * K, A + iA * K, offset + iB, K, dst + iA * ldc + iB);
     }
+    
+    
 }
 template void r_dot_prod<float>(const float *A, const float *B, const float *offset, const int M, const int N, const int K, float *dst, const int ldc);
 template void r_dot_prod<int8_t>(const int8_t *A, const int8_t *B, const int *offset, const int M, const int N, const int K, int *dst, const int ldc);
@@ -901,7 +901,6 @@ void ld_add_1x1(const int *mem, const int32_t* index, int* dst){
     __m256i ymm;
     __m256i ind;
     __m256i acc;
-//    int a = 0;
     acc = _mm256_setzero_si256();
 
     for (int i = 0; i < K; i += 8){
@@ -922,11 +921,6 @@ void ld_add_1x1(const int *mem, const int32_t* index, int* dst){
     xmm[0] = _mm_hadd_epi32(xmm[0], xmm[0]);
  
     dst[0] =  _mm_extract_epi32(xmm[0], 0);
-}
-
-template<int K>
-void ld_add_8x1(const float *mem, const int32_t* index, float* dst){
-
 }
 
 template<int K>
@@ -1003,7 +997,8 @@ void ld_add_1x1(const float *mem, const int32_t* index, float* dst){
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[0]);
     xmm[0] = _mm_hadd_ps(xmm[0], xmm[0]);
  
-    dst[0] =  _mm_extract_ps(xmm[0], 0);
+    //dst[0] =  _mm_extract_ps(xmm[0], 0);
+    _MM_EXTRACT_FLOAT(dst[0], xmm[0], 0);
 }
 
 

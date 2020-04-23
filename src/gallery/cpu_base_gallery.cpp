@@ -2,7 +2,7 @@
 namespace rsearch{
 template<typename T,
         DistanceType dist_type>
-cpu_base_gallery<T, dist_type>::cpu_base_gallery(int dimension) : gallery<T, dist_type>(){
+cpu_base_gallery<T, dist_type>::cpu_base_gallery(int dimension) : gallery<T>(){
     this->dimension = dimension;
     this->num = 0;
     this->max_id = 0;

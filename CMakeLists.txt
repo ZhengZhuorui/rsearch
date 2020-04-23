@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp
 
 option(BUILD_DEBUG "option for debug mode" off)
 
-option(FAISS "option for faiss" off)
+option(FAISS "option for faiss" on)
 if (FAISS)
     ADD_DEFINITIONS(-DWITH_FAISS)
 endif()
@@ -30,7 +30,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 # ---------- Add Faiss ----------
 if (FAISS)
-    set(FAISS_DIR "${CMAKE_SOURCE_DIR}/thirdparty/faiss-1.5")
+    set(FAISS_DIR "${CMAKE_SOURCE_DIR}/thirdparty/faiss")
     set(FAISS_INCLUDE "${FAISS_DIR}/include")
     set(FAISS_LIB "${FAISS_DIR}/lib/libfaiss.so")
     include_directories(${FAISS_INCLUDE})

@@ -9,7 +9,7 @@ using std::vector;
 using std::pair;
 template<typename T,
         DistanceType dist_type>
-pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& traits) : gallery<T, dist_type>(){
+pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& traits) : gallery<T>(){
     this->dimension = dimension;
     this->num = 0;
     this->max_id = 0;
@@ -19,23 +19,29 @@ pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& t
     this->pq_num = traits.pq_num;
     this->pq_dimension = traits.pq_dimension;
     this->code_len = this->dimension / this->pq_dimension;
+    this->codebook_size = this->code_len * this->pq_num;
 
     this->max_batch = 32;
     this->max_block = 512000;
     
     this->cq.resize(this->cq_num * this->dimension);
-    this->pq.resize(this->pq_num * this->pq_dimension);
     this->cq_offset.resize(this->cq_num);
-    this->pq_offset.resize(this->pq_num);
+    this->cq_float.resize(this->cq_num * this->dimension);
+
+    this->pq.resize(this->codebook_size * this->pq_dimension);
+    this->pq_offset.resize(this->codebook_size);
+    this->pq_float.resize(this->codebook_size * this->pq_dimension);
+
     this->block_num.resize(this->cq_num);
     this->ids.resize(this->cq_num);
     this->data.resize(this->cq_num);
-    this->x_tmp.resize(this->max_batch * this->max_block);
+    this->x_tmp.resize(this->max_batch * this->dimension);
+    this->x_tmp_div.resize(this->max_batch * this->dimension);
     this->index.clear();
     this->cq_mm = new rapid_matrix_mul<T>();
     this->pq_mm = new rapid_matrix_mul<T>();
     this->cq_mm->set(this->dimension, 1, this->max_batch, this->cq_num);
-    this->pq_mm->set(this->pq_dimension, 1, this->max_batch * this->code_len, this->pq_num);
+    this->pq_mm->set(this->pq_dimension, 1, this->max_batch, this->pq_num);
 
 }
 template pqivf_gallery<int8_t, COSINE>::pqivf_gallery(int, struct pqivf_traits&);
@@ -58,7 +64,8 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::init(){
     std::string dist_type_name = GetDistancetypeName<dist_type>();
-    std::string train_file_name = "/home/zhengzhuorui/project/data/pqivf_train_data." + dist_type_name + ".bin";
+    std::string train_file_name = "/home/zhengzhuorui/project/data/pqivf_train_data." + dist_type_name + "." + std::to_string(this->cq_num) + "." + \
+        std::to_string(this->pq_dimension) + "." + std::to_string(this->pq_num) + ".bin";
     if (this->have_train_ == false){  
         if (file_exist(train_file_name) == true){
             int code = this->load_train_data(train_file_name);
@@ -75,18 +82,18 @@ int pqivf_gallery<T, dist_type>::init(){
     }
     if (is_same_type<T, int8_t>() == true){
         float_7bits(this->cq_float.data(), (int8_t*)this->cq.data(), this->cq_num * this->dimension);
-        float_7bits(this->pq_float.data(), (int8_t*)this->pq.data(), this->pq_num * this->pq_dimension);
+        float_7bits(this->pq_float.data(), (int8_t*)this->pq.data(), this->pq_num * this->dimension);
     }
     else{
         memcpy(this->cq.data(), this->cq_float.data(), this->cq_num * this->dimension * sizeof(T) );
-        memcpy(this->pq.data(), this->pq_float.data(), this->pq_num * this->pq_dimension * sizeof(T) );
+        memcpy(this->pq.data(), this->pq_float.data(), this->pq_num * this->dimension * sizeof(T) );
     }
     std::cout << "[init] target 2" << std::endl;
     for (int i = 0; i < cq_num; ++i){
         this->cq_offset[i] = get_offset<T, dist_type>(this->cq.data() + 1LL * i * this->dimension, this->dimension);
     }
-    std::cout << "[init] target 3" << std::endl;
-    for (int i = 0; i < pq_num; ++i){
+    //std::cout << "[init] target 3" << std::endl;
+    for (int i = 0; i < pq_num * this->code_len; ++i){
         this->pq_offset[i] = get_offset<T, dist_type>(this->pq.data() + 1LL * i * this->pq_dimension, this->pq_dimension);
     }
     return 0;
@@ -128,20 +135,29 @@ int pqivf_gallery<T, dist_type>::add(const T* const x, const int n){
     this->mtx.lock();
     pair<Tout, idx_t>* cq_res;
     pair<Tout, idx_t>* pq_res;
-    memcpy(x_tmp.data(), x, 1LL * n * this->dimension);
-    if (is_same_type<T, int8_t>() == true){
-        for (int64_t i = 0; i < 1LL * n * this->dimension; ++i)
-            x_tmp[i] += 64;
-    }
     for (int i = 0; i < n; i += this->max_batch){
         int qn = std::min(this->max_batch, n - i);
-        this->cq_mm->mul(x_tmp.data() + 1LL * i * this->dimension, this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
-        this->pq_mm->mul(x_tmp.data() + 1LL * i * this->dimension, this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
-                        this->pq_num, &pq_res);
+        memcpy(x_tmp.data(), x + 1LL * i * this->dimension, 1LL * qn * this->dimension * sizeof(T));
+        if (is_same_type<T, int8_t>() == true){
+            for (int k = 0; k < 1LL * qn * this->dimension; ++k)
+                x_tmp[k] += 64;
+        }
+        divide(x_tmp.data(), x_tmp_div.data(), qn, this->dimension, this->pq_dimension);
+        this->cq_mm->mul(x_tmp.data(), this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
         for (int j = 0; j < qn; ++j)
-            this->add_one(pq_res + 1LL * j * this->code_len, this->max_id++, cq_res[j].second);
+            this->add_one(this->max_id++, cq_res[j].second);
+        
+        for (int j = 0; j < this->code_len; ++j){
+            this->pq_mm->mul(x_tmp_div.data() + j * qn * this->pq_dimension, this->pq.data() + j * this->pq_num * this->pq_dimension,
+                            this->pq_offset.data() + j * this->pq_num,
+                            qn, this->pq_num, &pq_res);
+            for (int k = 0; k < qn; ++k){
+                std::pair<int, int> p = this->index[this->max_id - qn + k];
+                this->data[p.first][p.second * this->code_len + j] = pq_res[k].second + j * this->pq_num;
+            }
+        }
     }
-    std::cout << "[add]" << cq_res[0].second << std::endl;
+    //std::cout << "[add]" << cq_res[0].second << std::endl;
     this->mtx.unlock();
     return 0;
 }
@@ -152,21 +168,21 @@ template int pqivf_gallery<float, EUCLIDEAN>::add(const float* const x, const in
 
 template<typename T,
         DistanceType dist_type>
-int pqivf_gallery<T, dist_type>::add_one(const pair<Tout, idx_t>* const x, const int id, const int cq_id){
+int pqivf_gallery<T, dist_type>::add_one(const int id, const int cq_id){
     this->data[cq_id].resize(1LL * (this->block_num[cq_id] + 1) * this->code_len);
     //memcpy(this->data[cq_id].data() + 1LL * this->block_num[cq_id] * this->code_len, x, this->code_len * sizeof(uint8_t));
-    for (int j = 0; j < this->code_len; ++j)
-        this->data[cq_id][1LL * this->block_num[cq_id] * this->code_len + j] = x[j].second;
+    //for (int j = 0; j < this->code_len; ++j)
+    //    this->data[cq_id][1LL * this->block_num[cq_id] * this->code_len + j] = x[j].second + j * this->pq_num;
     this->ids[cq_id].push_back(id);
     this->index[id] = std::make_pair(cq_id, this->block_num[cq_id]);
     this->block_num[cq_id]++;
     this->num++;
     return 0;
 }
-template int pqivf_gallery<int8_t, COSINE>::add_one(const pair<int, idx_t>* const x, const int id, const int cq_id);
-template int pqivf_gallery<float, COSINE>::add_one(const pair<float, idx_t>* const x, const int id, const int cq_id);
-template int pqivf_gallery<int8_t, EUCLIDEAN>::add_one(const pair<int, idx_t>* const x, const int id, const int cq_id);
-template int pqivf_gallery<float, EUCLIDEAN>::add_one(const pair<float, idx_t>* const x, const int id, const int cq_id);
+template int pqivf_gallery<int8_t, COSINE>::add_one(const int id, const int cq_id);
+template int pqivf_gallery<float, COSINE>::add_one(const int id, const int cq_id);
+template int pqivf_gallery<int8_t, EUCLIDEAN>::add_one(const int id, const int cq_id);
+template int pqivf_gallery<float, EUCLIDEAN>::add_one(const int id, const int cq_id);
 
 
 template<typename T,
@@ -178,18 +194,27 @@ int pqivf_gallery<T, dist_type>::add_with_uids(const T* const x, const idx_t * c
             return INDEX_EXISTS;
         }
     }
+    pair<Tout, idx_t>* cq_res;
+    pair<Tout, idx_t>* pq_res;
     for (int i = 0; i < n; i += this->max_batch){
-        pair<Tout, idx_t>* cq_res;
-        pair<Tout, idx_t>* pq_res;
         int qn = std::min(this->max_batch, n - i);
-
-        this->cq_mm->mul(x + 1LL * i * this->dimension, this->cq.data(), this->cq_offset.data(), this->max_batch, this->cq_num, &cq_res);
-        this->pq_mm->mul(x + 1LL * i * this->dimension, this->pq.data(), this->pq_offset.data(), qn * this->code_len, 
-                        this->pq_num, &pq_res);
-            
-        for (int j = 0; j < qn; ++j){
-            this->add_one(pq_res + 1LL * this->code_len, uids[i + j], cq_res[j].second);
-            this->max_id = std::max(this->max_id, uids[i + j] + 1);
+        memcpy(x_tmp.data(), x + 1LL * i * this->dimension, 1LL * qn * this->dimension * sizeof(T));
+        if (is_same_type<T, int8_t>() == true){
+            for (int k = 0; k < 1LL * qn * this->dimension; ++k)
+                x_tmp[k] += 64;
+        }
+        divide(x_tmp.data(), x_tmp_div.data(), qn, this->dimension, this->pq_dimension);
+        this->cq_mm->mul(x_tmp.data(), this->cq.data(), this->cq_offset.data(), qn, this->cq_num, &cq_res);
+        for (int j = 0; j < qn; ++j)
+            this->add_one(uids[i + j], cq_res[j].second);
+        for (int j = 0; j < this->code_len; ++j){
+            this->pq_mm->mul(x_tmp_div.data() + j * qn * this->pq_dimension, this->pq.data() + j * this->pq_num * this->pq_dimension,
+                            this->pq_offset.data() + j * this->pq_num,
+                            qn, this->pq_num, &pq_res);
+            for (int k = 0; k < qn; ++k){
+                std::pair<int, int> p = this->index[uids[i + k]];
+                this->data[p.first][p.second * this->code_len + j] = pq_res[k].second + j * this->pq_num;
+            }
         }
     }
     this->mtx.unlock();
@@ -267,7 +292,14 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::train(const float* data, const int n, const int dimension){
     k_means<float, dist_type>(data, n, this->cq_num, this->dimension, this->cq_float);
-    k_means<float, dist_type>(data, 1LL * n * this->code_len, this->pq_num, this->pq_dimension, this->pq_float);
+
+    vector<float> data_tmp(n * this->dimension);
+    divide(data, data_tmp.data(), n, dimension, pq_dimension);
+    for (int i = 0; i < this->code_len; ++i){
+        vector<float> pq_tmp;
+        k_means<float, dist_type>(data_tmp.data() + i * (n * this->pq_dimension), n, this->pq_num, this->pq_dimension, pq_tmp);
+        memcpy(this->pq_float.data() + i * this->pq_num * this->pq_dimension, pq_tmp.data(), sizeof(float) * this->pq_num * this->pq_dimension);
+    }
     this->have_train_ = true;
     return 0;
 }
@@ -290,7 +322,7 @@ int pqivf_gallery<T, dist_type>::store_train_data(std::string file_name){
     struct pqivf_traits traits = {this->cq_num, this->select_cq, this->pq_dimension, this->pq_num};
     r_write(fout, &traits, 1);
     r_write(fout, this->cq_float.data(), this->cq_num * this->dimension);
-    r_write(fout, this->pq_float.data(), this->pq_num * this->pq_dimension);
+    r_write(fout, this->pq_float.data(), this->pq_num * this->dimension);
     return 0;
 }
 template int pqivf_gallery<int8_t, COSINE>::store_train_data(std::string file_name);
@@ -311,10 +343,8 @@ int pqivf_gallery<T, dist_type>::load_train_data(std::string file_name){
     if (d != this->dimension || dt != dist_type || traits.cq_num != this->cq_num || traits.select_cq != this->select_cq || 
         traits.pq_dimension != this->pq_dimension || traits.pq_num != this->pq_num)
     return TRAINDATA_ERROR;
-    this->cq_float.resize(this->cq_num * this->dimension);
-    this->pq_float.resize(this->pq_num * this->pq_dimension);
     r_read(fin, this->cq_float.data(), this->cq_num * this->dimension);
-    r_read(fin, this->pq_float.data(), this->pq_num * this->pq_dimension);
+    r_read(fin, this->pq_float.data(), this->codebook_size * this->pq_dimension);
     this->have_train_ = true;
     return 0;
 }

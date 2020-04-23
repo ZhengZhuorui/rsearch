@@ -3,13 +3,13 @@
 #include "utils/topk_select.h"
 namespace rsearch{
 template<typename T>
-int rapid_matrix_la<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension){
+int rapid_matrix_la<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t codebook_size){
     //this->mtx.lock();
     this->max_batch = max_batch;
     this->max_block = max_block;
     this->dimension = dimension;
     this->topk = topk;
-    this->code_book_size = code_per_dimension * this->dimension;
+    this->codebook_size = codebook_size;
     {
     if (this->value != NULL){
         free(this->value);
@@ -35,8 +35,8 @@ int rapid_matrix_la<T>::set(int32_t dimension, int32_t topk, int32_t max_batch, 
     //this->mtx.unlock();
     return 0;
 }
-template int rapid_matrix_la<int>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension);
-template int rapid_matrix_la<float>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t code_per_dimension);
+template int rapid_matrix_la<int>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t codebook_size);
+template int rapid_matrix_la<float>::set(int32_t dimension, int32_t topk, int32_t max_batch, int32_t max_block, int32_t codebook_size);
 
 template<typename T>
 int rapid_matrix_la<T>::la(const int32_t* const A, const T* const code_book, int batch, int block, pair<T, idx_t> **res){
@@ -44,11 +44,16 @@ int rapid_matrix_la<T>::la(const int32_t* const A, const T* const code_book, int
     //    return SIZE_TOO_BIG;
     //this->mtx.lock();
     {
-        r_ld_add(code_book, A, this->value, batch, block, this->dimension, this->code_book_size, this->max_block);
+        r_ld_add(code_book, A, this->value, batch, block, this->dimension, this->codebook_size, this->max_block);
     }
     {
         cpu_select_kv(this->value, this->topk_value, this->topk_index, this->topk, block, batch, this->max_block, true);
     }
+    /*static int m = 0;
+    if (m < 1024){
+        std::cout << this->topk_value[0] << std::endl;
+        ++m;
+    }*/
     for (int i = 0 ; i < batch; ++i){
         for (int j = 0 ; j < topk; ++j){
             this->res[i * this->topk + j].first = this->topk_value[i * this->topk + j];

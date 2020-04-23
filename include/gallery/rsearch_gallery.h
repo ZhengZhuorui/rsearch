@@ -2,8 +2,7 @@
 #include "rsearch_def.h"
 #include "utils/utils.h"
 namespace rsearch{
-template<typename T,
-        DistanceType dist_type>
+template<typename T>
 class gallery{
 public:
     gallery(){}

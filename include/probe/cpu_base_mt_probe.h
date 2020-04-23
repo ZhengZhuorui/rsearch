@@ -17,9 +17,9 @@ public:
     cpu_base_mt_probe(int dimension, int topk);
     ~cpu_base_mt_probe();
     using Tout = typemap_t<T>;
-    virtual int create_gallery(gallery<T, dist_type> ** ga_ptr) override;
-    virtual int query(const T * const x, const int n, gallery<T, dist_type> * ga, Tout *sims, idx_t *idx) override;
-    virtual int query_with_uids(const T* const x, const int n, gallery<T, dist_type> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx) override;
+    virtual int create_gallery(gallery<T> ** ga_ptr) override;
+    virtual int query(const T * const x, const int n, gallery<T> * ga, Tout *sims, idx_t *idx) override;
+    virtual int query_with_uids(const T* const x, const int n, gallery<T> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx) override;
 private:
     virtual void query_bunch(const int mm_id, const T* x, const T* data, const Tout* offset, const int batch, const int block, const int base_id);
     std::vector<matrix_mul<T>*> mm;

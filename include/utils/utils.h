@@ -131,7 +131,14 @@ inline float float_7bits(const float* data, int8_t* td, int64_t n, float k = 463
     return 0;
 }
 
-
+template<typename T>
+void divide(const T* src, T* dst, int n, int dimension, int div_dimension){
+    int len = dimension / div_dimension;
+    for (int i = 0; i < n; ++i){
+        for (int j = 0; j < len; ++j)
+            memcpy(dst + 1LL * j * (n * div_dimension) + 1LL * i * div_dimension, src + 1LL * i * dimension + 1LL * j * div_dimension, sizeof(T) * div_dimension);
+    }
+}
 /*
 template<typename T1,
         typename T2,

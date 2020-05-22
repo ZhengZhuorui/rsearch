@@ -25,7 +25,7 @@ int k_means(const T* data, const int n, const int cluster_center, const int dime
             //std::cout << id << " ";
         #endif
         memcpy(res.data() + i * dimension, data + id * dimension, dimension * sizeof(T));
-        res_offset[i] = get_offset<T, dist_type>(res.data() + i * dimension, dimension);
+        res_offset[i] = get_offset<T, dist_type>(res.data() + 1LL * i * dimension, dimension);
     }
     matrix_mul<T>* mm;
     pair<T, idx_t>* dis;
@@ -48,7 +48,7 @@ int k_means(const T* data, const int n, const int cluster_center, const int dime
             for (int k = 0; k < size; ++k){
                 cluster_num[dis[k].second]++;
                 for (int l = 0; l < dimension; ++l){
-                    res[dis[k].second * dimension + l] += data[(j + k) * dimension + l];
+                    res[dis[k].second * dimension + l] += data[1LL * (j + k) * dimension + l];
                 }
                 #ifdef DEBUG_KMEANS
                 T v = vec_dis<T, dist_type>(data + (j + k) * dimension, res_tmp.data() + dis[k].second * dimension, dimension);

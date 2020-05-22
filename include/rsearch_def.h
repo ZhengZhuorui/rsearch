@@ -8,6 +8,7 @@ template<typename T, DistanceType dist_type, typename matrix_type> class base_pr
 template<typename T, DistanceType dist_type, typename matrix_type> class cpu_base_probe;
 template<typename T, DistanceType dist_type, typename matrix_type> class cpu_base_mt_probe;
 template<typename T, DistanceType dist_type> class pqivf_probe;
+template<typename T, DistanceType dist_type> class pqivf_mt_probe;
 template<typename T> class faiss_probe;
 
 //gallery

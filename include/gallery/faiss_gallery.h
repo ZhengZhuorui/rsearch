@@ -1,6 +1,7 @@
 #pragma once 
 #include "gallery/rsearch_gallery.h"
 #include "faiss/Index.h"
+#include "faiss/index_factory.h"
 namespace rsearch {
 
 template<typename T>
@@ -25,7 +26,7 @@ public:
 
     virtual int reset() override ;
 
-    virtual int train(const float* const x, int n, int dimension);
+    virtual int train(const float* const x, int n);
 
     virtual bool have_train(){return this->have_train_;}
 

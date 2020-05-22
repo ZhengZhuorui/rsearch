@@ -35,12 +35,16 @@ private:
     int codebook_size;
 
     //pair<Tout, idx_t>* res;
+    pair<Tout, idx_t>* merge_cache;
+    vector<pair<Tout, idx_t> > ans;
+
     Tout* code_book;
     int32_t* prefix;
     uint32_t nprocs;
 
     vector<T> x_tmp;
     vector<T> x_tmp_div;
+    vector<Tout> x_offset;
 };
 
 }

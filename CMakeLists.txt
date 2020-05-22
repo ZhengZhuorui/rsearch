@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(rsearch)
 
-set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp -Wall -mavx2 -masm=intel -march=native -m64 -g")
+set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp -Wall -mavx2 -masm=intel -march=native -m64")
+
+execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/env.sh)
+set(RSEARCH_DIR /home/$ENV{USER}/rsearch)
+set(RSEARCH_DATA_DIR ${RSEARCH_DIR}/data)
+
+configure_file(${CMAKE_SOURCE_DIR}/configure.h.in ${CMAKE_SOURCE_DIR}/include/configure.h @ONLY)
 
 option(BUILD_DEBUG "option for debug mode" off)
 

@@ -12,6 +12,7 @@ cpu_base_mt_probe<T, dist_type, matrix_type>::cpu_base_mt_probe(int dimension, i
     this->max_batch = 32;
     this->max_block = 102400;
     this->x_tmp.resize(this->max_batch * this->dimension);
+    this->x_offset.resize(this->max_batch);
     for (int i = 0; i < this->nprocs; ++i){
         this->mm[i] = new matrix_type;
         this->mm[i]->set(this->dimension, this->topk, this->max_batch, this->max_block);
@@ -36,6 +37,8 @@ cpu_base_mt_probe<T, dist_type, matrix_type>::~cpu_base_mt_probe(){
     for (int i = 0; i < this->nprocs; ++i){
         delete this->mm[i];
     }
+    delete this->threadpool;
+    delete this->mth_manager;
 }
 
 template cpu_base_mt_probe<int8_t, COSINE, rapid_matrix_mul<int8_t> >::~cpu_base_mt_probe();
@@ -112,23 +115,27 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
     for (int i = 0; i < this->max_batch; ++i)
         this->ans[i].resize(this->ans_topk_size);
     this->threadpool->start();
+    int block_ = std::max(this->max_block, num / 16);
     for (int i = 0 ; i < n ; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
+        if (dist_type == EUCLIDEAN)
+            for (int j = 0; j < pn; ++j)
+                this->x_offset[j] = dot_prod(x + 1LL * (i + j) * dimension, x + 1LL * (i + j) * dimension, this->dimension);
         memcpy(this->x_tmp.data(), x + 1LL * i * this->dimension, pn * this->dimension * sizeof(T));
         if (is_same_type<T, int8_t>() == true){
-            for (int64_t k = 0; k < 1LL * pn * this->dimension; ++k){
+            for (int64_t k = 0; k < pn * this->dimension; ++k){
                 this->x_tmp[k] += 64;
             }
         }
-        std::cout << "[query] target 1" << std::endl;
-        for (int j = 0; j < num ; j += this->max_block){
-            int block_size = std::min(this->max_block, num - j);
+        //std::cout << "[query] target 1" << std::endl;
+        for (int j = 0; j < num ; j += block_){
+            int block_size = std::min(block_, num - j);
             //this->query_bunch(mm_id, x_tmp.data(), data + 1LL * j * this->dimension, offset + j, pn, block_size, j);
             std::function<void(int)> f = std::bind(&cpu_base_mt_probe<T, dist_type, matrix_type>::query_bunch, this, std::placeholders::_1, x_tmp.data(),
                                                  data + 1LL * j * this->dimension, offset + j, pn, block_size, j / this->max_block);
             this->mth_manager->add_task(f);
         }
-        std::cout << "[query] target 2 " << this->mth_manager->size() << std::endl;
+        //std::cout << "[query] target 2 " << this->mth_manager->size() << std::endl;
         std::function<void()> work = std::bind(&MthManager::work, this->mth_manager);
         int work_sz = this->mth_manager->size();
 
@@ -140,19 +147,29 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
         gettimeofday(&time2, &zone);
         delta += (time2.tv_sec - time1.tv_sec) * 1000.0 + (time2.tv_usec - time1.tv_usec) / 1000.0;
 
-        std::cout << "[query] target 3 " << " " << this->mth_manager->size() << std::endl;
-        for (int k = 0; k < pn; ++k){
-            //std::cout << c_ga->offset[ans[k][0].second] << " ";
-
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
-                             pair_greator<Tout, idx_t>());
-            std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
-            for (int j = 0 ; j < this->topk ; ++j){
-                sims[(i + k) * this->topk + j] = ans[k][j].first;
-                idx[(i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
+        //std::cout << "[query] target 3 " << " " << this->mth_manager->size() << std::endl;
+        if (dist_type == EUCLIDEAN)
+                for (int k = 0; k < pn; ++k){
+                std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
+                                pair_greator<Tout, idx_t>());
+                std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
+                for (int j = 0 ; j < this->topk ; ++j){
+                    sims[1LL * (i + k) * this->topk + j] = this->x_offset[k] - 2 * ans[k][j].first;
+                    idx[1LL * (i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
+                }
+                memset(ans[k].data(), 0, this->ans_topk_size * sizeof(pair<Tout, idx_t>));
             }
-            memset(ans[k].data(), 0, this->ans_topk_size * sizeof(pair<Tout, idx_t>));
-        }
+        else 
+            for (int k = 0; k < pn; ++k){
+                std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
+                                pair_greator<Tout, idx_t>());
+                std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
+                for (int j = 0 ; j < this->topk ; ++j){
+                    sims[1LL * (i + k) * this->topk + j] = ans[k][j].first;
+                    idx[(1LL * i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
+                }
+                memset(ans[k].data(), 0, this->ans_topk_size * sizeof(pair<Tout, idx_t>));
+            }
     }
     this->threadpool->stop();
     printf("[query] cost %.4fms.\n", delta);

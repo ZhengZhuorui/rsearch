@@ -11,13 +11,13 @@ using std::pair;
 using std::vector;
 int n = 32;
 int m = 8192;
-int code_len = 32;
-int code_per_dimension = 256;
+int code_len = 16;
+int code_num = 256;
 int nIter = 1000;
 template<typename T>
 void get_index(vector<T> idx, int n, int mo){
     for (int i = 0; i < n; ++i)
-        idx[i] = rand() % code_per_dimension;
+        idx[i] = rand() % code_num;
 }
 
 template<typename T>
@@ -26,14 +26,14 @@ void test_perf(){
     struct timeval time1;
     struct timeval time2;
     std::string type_name = rsearch::GetTypeName<T>();
-    vector<T> code_book(n * code_len * code_per_dimension);
+    vector<T> code_book(n * code_len * code_num);
     vector<int32_t> index(m * code_len);
     
     for (int i = 0; i < m; ++i)
-        for (int j = 0, k = 0; j < code_len; ++j, k += code_per_dimension)
-            index[i * code_len + j] = k + rand() % code_per_dimension;
-    for (int i = 0; i < n * code_len * code_per_dimension; ++i)
-        code_book[i] = rand() % code_per_dimension;
+        for (int j = 0, k = 0; j < code_len; ++j, k += code_num)
+            index[i * code_len + j] = k + rand() % code_num;
+    for (int i = 0; i < n * code_len * code_num; ++i)
+        code_book[i] = rand() % 65535;
     vector<T> ans(n * m);
     //rsearch::matrix_la<T>* mm = new rsearch::rapid_matrix_la<T>;
     
@@ -45,7 +45,7 @@ void test_perf(){
     for (int i = 0; i < nIter; ++i){
         //mm->mul(a.data(), b.data(), offset.data(), n, m, &res);
         //rsearch::r_dot_prod<T>(a.data(), b.data(), offset.data(), n, m, dimension, res_vec.data(), m);
-        rsearch::r_ld_add(code_book.data(), index.data(), ans.data(), n, m, code_len, code_per_dimension * code_len, m);
+        rsearch::r_ld_add(code_book.data(), index.data(), ans.data(), n, m, code_len, code_num * code_len, m);
     }
     gettimeofday(&time2, &zone);
     std::cout << "target 2 " << std::endl;
@@ -61,11 +61,9 @@ void test_perf(){
     }*/
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < m; ++j){
-            //std::cout << ans[i * m + j] << std::endl;
             ans_tmp = 0;
             for (int k = 0; k < code_len; ++k)
-                ans_tmp += code_book[i * code_per_dimension * code_len + index[j * code_len + k]];
-            //std::cout << ans[0] << " " << ans[i * m + j] << std::endl;
+                ans_tmp += code_book[i * code_num * code_len + index[j * code_len + k]];
             if (ans_tmp != ans[i * m + j]){
                 std::cout << "Error! " << i << " " << j << " expect: "<< ans_tmp << ", result" << ans[i * m + j] << std::endl;
                 return; 
@@ -73,7 +71,7 @@ void test_perf(){
         }
     }
     /*for (int k = 0; k < code_len; ++k)
-        ans_tmp += code_book[index[k] - k * code_per_dimension];
+        ans_tmp += code_book[index[k] - k * code_num];
     std::cout << ans_tmp << " " << ans[0] << std::endl;*/
     //if (res_vec[0] != ans){
     //    std::cout << "Error! expect: "<< ans << "result" << res_vec[0] << std::endl;

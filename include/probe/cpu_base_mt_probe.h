@@ -8,7 +8,7 @@
 #include "utils/ThreadPool.h"
 #include "utils/MthManager.h"
 namespace rsearch{
-
+using std::vector;
 template<typename T,
         DistanceType dist_type,
         typename matrix_type>
@@ -22,10 +22,12 @@ public:
     virtual int query_with_uids(const T* const x, const int n, gallery<T> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx) override;
 private:
     virtual void query_bunch(const int mm_id, const T* x, const T* data, const Tout* offset, const int batch, const int block, const int base_id);
-    std::vector<matrix_mul<T>*> mm;
+    vector<matrix_mul<T>*> mm;
     int32_t max_batch, max_block, topk, dimension;
     int ans_topk_size;
-    std::vector<T> x_tmp;
+    vector<T> x_tmp;
+    vector<Tout> x_offset;
+    
     ThreadPool* threadpool;
     MthManager* mth_manager;
     int nprocs;

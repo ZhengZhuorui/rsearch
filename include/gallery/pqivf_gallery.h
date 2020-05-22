@@ -42,8 +42,7 @@ public:
 
     virtual int load_data(std::string file_name) override;
 
-
-    virtual int train(const float* const x, int n, int dimension);
+    virtual int train(const float* const x, int n);
 
     virtual bool have_train(){return this->have_train_;}
 
@@ -88,6 +87,7 @@ private:
     rapid_matrix_mul<T>* pq_mm;
 
     friend pqivf_probe<T, dist_type>;
+    friend pqivf_mt_probe<T, dist_type>;
 };
 
 

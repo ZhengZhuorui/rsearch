@@ -23,7 +23,7 @@ pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& t
     this->codebook_size = this->code_len * this->pq_num;
 
     this->max_batch = 32;
-    this->max_block = 512000;
+    this->max_block = 51200;
     
     this->cq.resize(this->cq_num * this->dimension);
     this->cq_offset.resize(this->cq_num);
@@ -98,13 +98,15 @@ int pqivf_gallery<T, dist_type>::init(){
     }
     else{
         memcpy(this->cq.data(), this->cq_float.data(), this->cq_num * this->dimension * sizeof(T) );
-        memcpy(this->pq.data(), this->pq_float.data(), this->pq_num * this->dimension * sizeof(T) );
+        memcpy(this->pq.data(), this->pq_float.data(), this->codebook_size * this->pq_dimension * sizeof(T) );
     }
+    this->cq_float.clear();
+    this->pq_float.clear();
     std::cout << "[init] target 2" << std::endl;
-    for (int i = 0; i < cq_num; ++i){
+    for (int i = 0; i < this->cq_num; ++i){
         this->cq_offset[i] = get_offset<T, dist_type>(this->cq.data() + 1LL * i * this->dimension, this->dimension);
     }
-    for (int i = 0; i < pq_num * this->code_len; ++i){
+    for (int i = 0; i < this->pq_num * this->code_len; ++i){
         this->pq_offset[i] = get_offset<T, dist_type>(this->pq.data() + 1LL * i * this->pq_dimension, this->pq_dimension);
     }
     return 0;

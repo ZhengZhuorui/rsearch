@@ -114,6 +114,7 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
     float delta2 = 0;
     //std::cout << "[query] target 2" << std::endl;
     gettimeofday(&time1, &zone);
+    memset(this->x_offset.data(), 0, this->max_batch * sizeof(T));
     
     for (int i = 0; i < n; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);

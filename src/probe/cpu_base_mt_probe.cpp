@@ -111,7 +111,7 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
         return 0;
     }
     this->ans_topk_size = ((num - 1) / this->max_block + 1) * topk;
-    std::cout << std::thread::hardware_concurrency() << std::endl;
+    //std::cout << std::thread::hardware_concurrency() << std::endl;
     for (int i = 0; i < this->max_batch; ++i)
         this->ans[i].resize(this->ans_topk_size);
     this->threadpool->start();
@@ -172,7 +172,7 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
             }
     }
     this->threadpool->stop();
-    printf("[query] cost %.4fms.\n", delta);
+    //printf("[query] cost %.4fms.\n", delta);
     return 0;
 }
 

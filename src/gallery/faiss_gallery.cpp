@@ -22,7 +22,7 @@ faiss_gallery<T>::faiss_gallery(int dimension, MethodType method_type) : gallery
     this->have_train_ = false;
     switch(method_type){
         case FAISS_LSH:
-            this->m_index = new faiss::IndexLSH(dimension, dimension / 8);
+            this->m_index = new faiss::IndexLSH(dimension, dimension);
             break;
         case FAISS_FLAT:
             this->m_index = new faiss::IndexFlat(dimension);
@@ -33,8 +33,8 @@ faiss_gallery<T>::faiss_gallery(int dimension, MethodType method_type) : gallery
             break;
         case FAISS_IVFPQ:
             this->quantizer = new faiss::IndexFlatL2(dimension);
-            this->m_index = new faiss::IndexIVFPQ(this->quantizer, dimension, 4096, dimension / 16, 8);
-            ((faiss::IndexIVFPQ * )(this->m_index))->nprobe = 1024;
+            this->m_index = new faiss::IndexIVFPQ(this->quantizer, dimension, 32, dimension / 16, 8);
+            ((faiss::IndexIVFPQ * )(this->m_index))->nprobe = 8;
             break;
         case FAISS_IVF:
             this->quantizer = new faiss::IndexFlatL2(dimension);

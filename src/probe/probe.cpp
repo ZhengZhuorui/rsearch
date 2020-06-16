@@ -14,7 +14,7 @@ probe<T>* create_probe(const int dimension, const int topk, DistanceType dist_ty
             if (dist_type == COSINE)
                 r = new cpu_base_probe<T, COSINE, rapid_matrix_mul<T> >(dimension, topk);
             if (dist_type == EUCLIDEAN)
-                r = new cpu_base_probe<T, EUCLIDEAN, base_matrix_mul<T> >(dimension, topk);
+                r = new cpu_base_probe<T, EUCLIDEAN, rapid_matrix_mul<T> >(dimension, topk);
             break;
         case X86_PQIVF:
             if (dist_type == COSINE)

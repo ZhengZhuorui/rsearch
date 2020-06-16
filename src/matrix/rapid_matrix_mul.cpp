@@ -44,6 +44,20 @@ int rapid_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* con
         r_dot_prod<T>(A, B, offset, batch, block, this->dimension, this->value, this->max_block);
     }
     //std::cout << "[mul]" << this->value[0] << " " << this->value[this->max_block] << std::endl;
+    
+    /*{
+        std::vector<pair<Tout, idx_t> > tmp;
+        tmp.resize(this->max_block);
+        for (int i = 0; i < batch; ++i){
+            for (int j = 0; j < block; ++j)
+                tmp[j] = std::make_pair(this->value[1LL * i * this->max_block + j], j);
+            std::nth_element(tmp.data(), tmp.data() + this->topk, tmp.data() + block, pair_greator<Tout, idx_t>());
+            std::sort(tmp.data(), tmp.data() + this->topk, pair_greator<Tout, idx_t>());
+            //memcpy(this->res + i )
+            for (int j = 0 ; j < this->topk; ++j)
+                this->res[i * this->topk + j] = tmp[j];
+        }
+    }*/
     {
         cpu_select_kv(this->value, this->topk_value, this->topk_index, this->topk, block, batch, this->max_block, true);
     }

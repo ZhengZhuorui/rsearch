@@ -151,21 +151,16 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
                     int k_sz = std::min(qn, this->topk);
                     for (int k = 0; k < k_sz; ++k){
                         ans.push_back(std::make_pair(mtx_res[k].first, mtx_res[k].second + this->prefix[cq_id] + vec_id));                        
-                        //if (mtx_res[k].second + this->prefix[cq_id] + vec_id > 30000)
-                        //    std::cout << mtx_res[k].second + this->prefix[cq_id] + vec_id << std::endl;
+                        
                     }
                 }
             }
-            //std::cout << "[query] target 5:" << j << std::endl;
             if ((int32_t)ans.size() > this->topk){
                 std::nth_element(ans.data(), ans.data() + this->topk, ans.data() + ans.size(), pair_greator<Tout, int>());
                 std::sort(ans.data(), ans.data() + this->topk + 1, pair_greator<Tout, int>());
-                //std::cout << "[query] target 6:" << j << std::endl;
                 for (int k =0; k < this->topk; ++k){
                     sims[(i + j) * this->topk + k] = ans[k].first;
-                    //std::cout << this->prefix[0] << " " << this->prefix[this->cq_num] << " | " << ans[k].second << std::endl;
                     int v = std::upper_bound(this->prefix, this->prefix + this->cq_num + 1, ans[k].second) - this->prefix - 1;
-                    //std::cout << "[query] target 7:" << j << " " << ans[k].second << " " << v << std::endl;
                     idx[(i + j) * this->topk + k] = c_ga->ids[v][ans[k].second - this->prefix[v]];
                 }
                 ans.clear();

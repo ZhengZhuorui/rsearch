@@ -52,6 +52,7 @@ void ThreadPool::thread_loop(){
             t();
             ++this->un_work_num;
         }
+        std::cout << "[thread pool]" << this->un_work_num << std::endl;
         if (this->un_work_num == this->nprocs && this->m_task.empty() == true)
             this->cv.notify_one();
         

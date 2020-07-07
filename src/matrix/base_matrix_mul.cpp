@@ -44,16 +44,19 @@ int base_matrix_mul<T>::mul(const T* const A, const T* const B, const Tout* cons
     for (int i = 0 ; i < batch; ++i){
         for (int j = 0 ; j < block; ++j){
             Tout v = 0;
-            for (int k = 0 ; k < this->dimension; ++k)
+            for (int k = 0 ; k < this->dimension; ++k){
                 v += (Tout)A[i * this->dimension + k] * (Tout)B[j * this->dimension + k];
+                //Tout tmp = (Tout)A[i * this->dimension + k] - (Tout)B[j * this->dimension + k];
+                //v += tmp * tmp;
+            }
             this->value[i * this->max_block + j]= v + offset[j];
+            //this->value[i * this->max_block + j] = v;
         }
     }
     //std::cout << " " <<this->value[26923] << " " << this->value[26924] << std::endl;
     {
         cpu_select_kv(this->value, this->topk_value, this->topk_index, this->topk, block, batch, this->max_block, true);
     }
-    //std::cout << "[mul] target 2" << std::endl;
     for (int i = 0 ; i < batch; ++i){
         for (int j = 0 ; j < topk; ++j){
             this->res[i * this->topk + j].first = this->topk_value[i * this->topk + j];

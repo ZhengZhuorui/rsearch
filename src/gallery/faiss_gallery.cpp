@@ -6,6 +6,7 @@
 #include "faiss/IndexFlat.h"
 #include "faiss/IndexIVFPQ.h"
 #include "faiss/IndexHNSW.h"
+#include "faiss/IndexIVFFlat.h"
 
 
 namespace rsearch{
@@ -18,19 +19,26 @@ template<typename T>
 faiss_gallery<T>::faiss_gallery(int dimension, MethodType method_type) : gallery<T>(){
     this->method_type = method_type;
     this->dimension = dimension;
+    this->have_train_ = false;
     switch(method_type){
         case FAISS_LSH:
-            this->m_index = new faiss::IndexLSH(dimension, 50);
+            this->m_index = new faiss::IndexLSH(dimension, dimension);
             break;
         case FAISS_FLAT:
             this->m_index = new faiss::IndexFlat(dimension);
             break;
         case FAISS_HNSW:
-            this->m_index = new faiss::IndexHNSW(dimension, 5);
+            //this->m_index = new faiss::IndexHNSW(dimension);
+            this->m_index = faiss::index_factory(dimension, "HNSW32");
             break;
         case FAISS_IVFPQ:
             this->quantizer = new faiss::IndexFlatL2(dimension);
-            this->m_index = new faiss::IndexIVFPQ(this->quantizer, dimension, 4096, dimension / 32, 8);
+            this->m_index = new faiss::IndexIVFPQ(this->quantizer, dimension, 32, dimension / 16, 8);
+            ((faiss::IndexIVFPQ * )(this->m_index))->nprobe = 8;
+            break;
+        case FAISS_IVF:
+            this->quantizer = new faiss::IndexFlatL2(dimension);
+            this->m_index = new faiss::IndexIVFFlat(this->quantizer, dimension, 4096);
             ((faiss::IndexIVFPQ * )(this->m_index))->nprobe = 1024;
             break;
         default:
@@ -50,11 +58,11 @@ template faiss_gallery<float>::~faiss_gallery();
 
 template<typename T>
 int faiss_gallery<T>::init(){
-    if (this->method_type == FAISS_IVFPQ || this->method_type == FAISS_LSH || this->method_type == FAISS_HNSW){
+    if (this->method_type == FAISS_IVFPQ || this->method_type == FAISS_LSH){
         if (this->have_train_ == false){  
             vector<float> data;
             get_random_data<float, EUCLIDEAN>(data, 200000, this->dimension);
-            this->train(data.data(), 200000, this->dimension);
+            this->train(data.data(), 200000);
         }
     }
     return 0;
@@ -103,11 +111,14 @@ int faiss_gallery<T>::query_by_uids(const idx_t* const uids, const int n, T * x)
 template int faiss_gallery<float>::query_by_uids(const idx_t * const uids, const int n, float* x);
 
 template<typename T>
-int faiss_gallery<T>::train(const float* data, const int n, const int dimension){
-    this->m_index->train(n, data);
+int faiss_gallery<T>::train(const float* data, const int n){
+    std::cout << "train" << std::endl;
+    if (this->method_type == FAISS_IVFPQ || this->method_type == FAISS_LSH)
+        this->m_index->train(n, data);
+    this->have_train_ = true;
     return 0;
 }
-template int faiss_gallery<float>::train(const float* data, const int n, const int dimension);
+template int faiss_gallery<float>::train(const float* data, const int n);
 
 template<typename T>
 int faiss_gallery<T>::load_data(std::string file_name){

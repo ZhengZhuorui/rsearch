@@ -4,6 +4,7 @@
 #include "probe/pqivf_probe.h"
 #include "probe/cpu_base_mt_probe.h"
 #include "probe/faiss_probe.h"
+#include "probe/pqivf_mt_probe.h"
 
 namespace rsearch{
 
@@ -32,7 +33,7 @@ public:
 };
 
 template<typename T>
-probe<T>* create_probe(int dimension, int topk, DistanceType dist_type, MethodType method_type);
+probe<T>* create_probe(const int dimension, const int topk, DistanceType dist_type, MethodType method_type);
 
 }
 

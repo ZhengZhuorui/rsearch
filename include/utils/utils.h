@@ -5,9 +5,42 @@
 #include <cxxabi.h>
 namespace rsearch{
 using std::pair;
+using std::make_pair;
 using std::vector;
 using std::ifstream;
 using std::ofstream;
+
+// ==================== public functions ==================
+// this function may be used while you use the library
+inline pair<float, float> __float_7bits(float* data, int64_t nt){
+    if (nt < 100)
+        return make_pair(-1, 0);
+    int64_t n = std::min(nt, (int64_t)200000);
+    std::vector<float> tmp(n);
+    memcpy(tmp.data(), data, n * sizeof(float));
+    //std::cout << "__float_7bits: "  << tmp[0] << std::endl;
+    int64_t l = 0.1 * n;
+    int64_t r = 0.9 * n;
+    float max_v, min_v;
+    std::nth_element(tmp.data(), tmp.data() + l, tmp.data() + n);
+    min_v = tmp[l];
+    std::nth_element(tmp.data(), tmp.data() + r, tmp.data() + n);
+    max_v = tmp[r];
+    float k = 126 / (max_v - min_v);
+    //float b = 70 - k * max_v;
+    float b = 63 - k * max_v;
+    std::cout << "__float_7bits: "  << n << " " << max_v << " " << min_v  << " " << k  << " " << b << std::endl;
+    return make_pair(k, b);
+}
+
+inline float float_7bits(const float* data, int8_t* td, int64_t n, float k = 463.0, float b = 0){
+    for (int64_t i = 0; i < n; ++i){
+        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i] + b)));
+    }
+    return 0;
+}
+
+
 
 // ==================== pair compare ==================== 
 template<typename T1, typename T2>
@@ -92,43 +125,17 @@ inline typemap_t<T> get_offset(const T* d, int dimension){
     if (dist_type == EUCLIDEAN)
         v -= dot_prod<T>(d, d, dimension) / 2;
     if (is_same_type<T, int8_t>() == true)
-        for (int i = 0; i <= dimension; ++i)
-            v -= 64 * d[i];
+        for (int i = 0; i < dimension; ++i)
+            v -= (int)64 * d[i];
     return v;
 }
 
-inline void norm(float* data, int n, int dimension){
+inline void norm(float* data, int n, int dimension, float scale = 1.0){
     for (int i = 0 ; i < n ; ++i){
         float len = sqrt(dot_prod<float>(data + 1LL * i * dimension, data + 1LL * i * dimension, dimension));
         //if (i == 1000) std::cout << "[norm] len = %d" << len << std::endl;
-        for (int j = 0; j < dimension; ++j) data[1LL * i * dimension + j] /= len;
+        for (int j = 0; j < dimension; ++j) data[1LL * i * dimension + j] /= (len / scale);
     }
-}
-
-inline float __float_7bits(float* data, int8_t* td, int64_t n){
-    float max_v, min_v;
-    for (int64_t i = 0; i < n; ++i){
-        max_v = std::max(max_v, data[i]);
-        min_v = std::min(min_v, data[i]);
-    }
-    
-    for (int64_t i = 0; i < n; ++i){
-        max_v = std::max(max_v, data[i]);
-        min_v = std::min(min_v, data[i]);
-    }
-    float k = 140 / (max_v - min_v);
-    //float b = 70 - k * max_v;
-    for (int64_t i = 0 ;i < n; ++i){
-        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
-    }
-    return k;
-}
-
-inline float float_7bits(const float* data, int8_t* td, int64_t n, float k = 463.0){
-    for (int64_t i = 0 ;i < n; ++i){
-        td[i] = std::max((int)-63, std::min(63, (int)(k * data[i])));
-    }
-    return 0;
 }
 
 template<typename T>
@@ -138,6 +145,28 @@ void divide(const T* src, T* dst, int n, int dimension, int div_dimension){
         for (int j = 0; j < len; ++j)
             memcpy(dst + 1LL * j * (n * div_dimension) + 1LL * i * div_dimension, src + 1LL * i * dimension + 1LL * j * div_dimension, sizeof(T) * div_dimension);
     }
+}
+
+template<typename T>
+void merge(pair<T,  idx_t>* cache, pair<T,  idx_t>* a, pair<T,  idx_t>* b, int a_sz, int b_sz){
+    int i=0, j=0, k=0;
+    
+    while (true){
+        if (k >= a_sz || j >= b_sz) break;
+        if (a[i].second != -1 && a[i].first > b[j].first){
+            cache[k] = a[i];
+            ++i;
+            ++k;
+        }
+        else {
+            cache[k] = b[j];
+            ++j;
+            ++k;
+        }
+    }
+    if (k < a_sz)
+        memcpy(cache + k, a + i, (a_sz - k) * sizeof(pair<T, idx_t>));
+    memcpy(a, cache, a_sz * sizeof(pair<T, idx_t>));
 }
 /*
 template<typename T1,
@@ -186,6 +215,7 @@ template<typename T>
 inline void r_file2bytes(ifstream &fin, vector<T>& x, int& n, int& dimension){
     r_read<int32_t>(fin, &n, 1);
     r_read<int32_t>(fin, &dimension, 1);
+    std::cout << n << " " << dimension << std::endl;
     x.resize(1LL * n * dimension);
     r_read<T>(fin, x.data(), 1LL * n * dimension);   
 }
@@ -210,13 +240,10 @@ inline bool file_exist(std::string file_name){
 
 // ==================== Create data ==================== 
 
-inline int init_random(float* data, int n, int dimension){
+inline int init_random(float* data, int64_t n){
     const int MO = 65535;
-    for (int i = 0; i < n; ++i){
-        for (int j = 0; j < dimension; ++j){
-            data[1LL * i * dimension + j] = 2.0 * (rand() % MO) / MO - 1.0;
-        }
-    }
+    for (int64_t i = 0; i < n; ++i)
+        data[i] = 2.0 * (rand() % MO) / MO - 1.0;
     return 0;
 }
 

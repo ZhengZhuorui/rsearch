@@ -33,6 +33,7 @@ public:
 
     virtual int load_data(std::string file_name) override;
 
+    virtual int train(const float* const x, int n){return 0;}
 private:
     vector<T> data;
     unordered_map<idx_t, idx_t> index;

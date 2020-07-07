@@ -10,6 +10,7 @@ cpu_base_probe<T, dist_type, matrix_type>::cpu_base_probe(int dimension, int top
     this->max_batch = 32;
     this->max_block = 102400;
     this->x_tmp.resize(this->max_batch * this->dimension);
+    this->x_offset.resize(this->max_batch);
     this->mm->set(this->dimension, this->topk, this->max_batch, this->max_block);
 }
 template cpu_base_probe<int8_t, COSINE, base_matrix_mul<int8_t> >::cpu_base_probe(int, int);
@@ -62,6 +63,7 @@ template<typename T,
         typename matrix_type>
 int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const int n, gallery<T> * ga, Tout *sims, idx_t *idx){
     cpu_base_gallery<T, dist_type>* c_ga = (cpu_base_gallery<T, dist_type>*) ga;
+    //int num = std::max(c_ga->num, 1000000);
     int num = c_ga->num;
     pair<Tout, idx_t>* res;
     vector<vector<pair<Tout, idx_t> > >ans(this->max_batch);
@@ -86,16 +88,19 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
         }
         return 0;
     }
+    
     for (int i = 0 ; i < n ; i += this->max_batch){
         int pn = std::min(this->max_batch, n - i);
-
+        if (dist_type == EUCLIDEAN)
+            for (int j = 0; j < pn; ++j)
+                this->x_offset[j] = dot_prod(x + 1LL * (i + j) * dimension, x + 1LL * (i + j) * dimension, this->dimension);
         memcpy(this->x_tmp.data(), x + 1LL * i * this->dimension, pn * this->dimension * sizeof(T));
         if (is_same_type<T, int8_t>() == true){
-            for (int64_t k = 0; k < 1LL * pn * this->dimension; ++k){
+            for (int64_t k = 0; k < pn * this->dimension; ++k){
                 this->x_tmp[k] += 64;
             }
         }
-
+        
         for (int j = 0; j < num ; j += this->max_block){
             int block_size = std::min(this->max_block, num - j);
             this->mm->mul(this->x_tmp.data(), data + 1LL * j * this->dimension, offset + j, 
@@ -105,19 +110,34 @@ int cpu_base_probe<T, dist_type, matrix_type>::query(const T * const x, const in
                 for (int l = 0; l < this->topk; ++l)
                     ans[k].push_back(std::make_pair(res[k * this->topk + l].first, res[k * this->topk + l].second + j));
         }
-
-        for (int k = 0; k < pn; ++k){
-            //std::cout << c_ga->offset[ans[k][0].second] << " ";
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
-                             pair_greator<Tout, idx_t>());
-            std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
-            for (int j = 0 ; j < this->topk ; ++j){
-                sims[(i + k) * this->topk + j] = ans[k][j].first;
-                //sims[(i + k) * this->topk + j] = vec_dis<T, dist_type>(x + 1LL * i * this->dimension, data + 1LL * c_ga->ids[ans[k][j].second] * dimension, dimension);
-                idx[(i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
+        
+        if (dist_type == EUCLIDEAN)
+            for (int k = 0; k < pn; ++k){
+                //std::cout << c_ga->offset[ans[k][0].second] << " ";
+                std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
+                                pair_greator<Tout, idx_t>());
+                std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
+                for (int j = 0 ; j < this->topk ; ++j){
+                    sims[1LL * (i + k) * this->topk + j] = this->x_offset[k] - 2 * ans[k][j].first;
+                    //sims[(i + k) * this->topk + j] = ans[k][j].first;
+                    //sims[(i + k) * this->topk + j] = vec_dis<T, dist_type>(x + 1LL * i * this->dimension, data + 1LL * c_ga->ids[ans[k][j].second] * dimension, dimension);
+                    idx[1LL * (i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
+                }
+                ans[k].clear();
             }
-            ans[k].clear();
-        }
+        else 
+            for (int k = 0; k < pn; ++k){
+                //std::cout << c_ga->offset[ans[k][0].second] << " ";
+                std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
+                                pair_greator<Tout, idx_t>());
+                std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
+                for (int j = 0 ; j < this->topk ; ++j){
+                    sims[1LL * (i + k) * this->topk + j] = ans[k][j].first;
+                    //sims[(i + k) * this->topk + j] = vec_dis<T, dist_type>(x + 1LL * i * this->dimension, data + 1LL * c_ga->ids[ans[k][j].second] * dimension, dimension);
+                    idx[1LL * (i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
+                }
+                ans[k].clear();
+            }
     }
     //std::cout << std::endl;
     return 0;

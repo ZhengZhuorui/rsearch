@@ -1,5 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
+#include "configure.h"
 #define CODEBOOK_LINE_SIZE 256
 
 namespace rsearch{
@@ -40,6 +41,7 @@ typedef enum MethodType{
     FAISS_LSH = 6,
     FAISS_HNSW = 7,
     FAISS_IVFPQ = 8,
+    FAISS_IVF = 9
 } MethodType;
 
 

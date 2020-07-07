@@ -69,6 +69,15 @@ void ld_add_4x1(const float *mem, const int32_t* index, float* dst);
 template<int K>
 void ld_add_1x1(const float *mem, const int32_t* index, float* dst);
 
+void ld_nt_add_4x1(const int *mem, const int32_t* index, int* dst, int K);
+
+void ld_nt_add_1x1(const int *mem, const int32_t* index, int* dst, int K);
+
+void ld_nt_add_4x1(const float *mem, const int32_t* index, float* dst, int K);
+
+void ld_nt_add_1x1(const float *mem, const int32_t* index, float* dst, int K);
+
+
 template<typename T>
 void r_ld_add(const T *mem, const int32_t* index, T* dst, const int M,const int N, const int K, const int code_book_size, const int ldc);
 

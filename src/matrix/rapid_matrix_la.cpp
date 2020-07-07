@@ -54,6 +54,8 @@ int rapid_matrix_la<T>::la(const int32_t* const A, const T* const code_book, int
         std::cout << this->topk_value[0] << std::endl;
         ++m;
     }*/
+    if (block == 660)
+        std::cout << "target 2" << std::endl;
     for (int i = 0 ; i < batch; ++i){
         for (int j = 0 ; j < topk; ++j){
             this->res[i * this->topk + j].first = this->topk_value[i * this->topk + j];

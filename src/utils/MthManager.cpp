@@ -34,7 +34,9 @@ void MthManager::work(){
 
     t(thread_id);
 
+    this->used_mutex.lock();
     this->used.push(thread_id);
+    this->used_mutex.unlock();
     
 }
 int MthManager::size(){

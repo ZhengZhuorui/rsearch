@@ -1,6 +1,7 @@
 #include "gallery/pqivf_gallery.h"
 #include "utils/helpers.h"
 #include "utils/utils.h"
+#include "faiss/Clustering.h"
 namespace rsearch{
 using std::ofstream;
 using std::ifstream;
@@ -22,7 +23,7 @@ pqivf_gallery<T, dist_type>::pqivf_gallery(int dimension, struct pqivf_traits& t
     this->codebook_size = this->code_len * this->pq_num;
 
     this->max_batch = 32;
-    this->max_block = 512000;
+    this->max_block = 51200;
     
     this->cq.resize(this->cq_num * this->dimension);
     this->cq_offset.resize(this->cq_num);
@@ -64,10 +65,13 @@ template<typename T,
         DistanceType dist_type>
 int pqivf_gallery<T, dist_type>::init(){
     std::string dist_type_name = GetDistancetypeName<dist_type>();
-    std::string train_file_name = "/home/zhengzhuorui/project/data/pqivf_train_data." + dist_type_name + "." + std::to_string(this->cq_num) + "." + \
-        std::to_string(this->pq_dimension) + "." + std::to_string(this->pq_num) + ".bin";
-    if (this->have_train_ == false){  
+    std::string train_file_name = std::string(DATA_DIR) + "/pqivf_train_data." + dist_type_name + "." + std::to_string(this->dimension)+ "." + \
+        std::to_string(this->cq_num) + "." + std::to_string(this->pq_dimension) + "." + std::to_string(this->pq_num) + ".bin";
+    std::cout << train_file_name << std::endl;
+    #ifdef DEBUG_0
+    if (this->have_train_ == false){
         if (file_exist(train_file_name) == true){
+            std::cout << train_file_name << std::endl;
             int code = this->load_train_data(train_file_name);
             if (code == TRAINDATA_ERROR)
                 return TRAINDATA_ERROR;
@@ -76,24 +80,33 @@ int pqivf_gallery<T, dist_type>::init(){
             vector<float> data;
             std::cout << "[init] target 2" <<std::endl;
             get_random_data<float, dist_type>(data, 200000, this->dimension);
-            this->train(data.data(), 200000, this->dimension);
+            this->train(data.data(), 200000);
             this->store_train_data(train_file_name);            
         }
     }
+    #else
+    if (this->have_train_ == false){
+        return NO_TRAIN;
+    }
+    #endif
     if (is_same_type<T, int8_t>() == true){
-        float_7bits(this->cq_float.data(), (int8_t*)this->cq.data(), this->cq_num * this->dimension);
-        float_7bits(this->pq_float.data(), (int8_t*)this->pq.data(), this->pq_num * this->dimension);
+        pair<float, float> arg = __float_7bits(this->cq_float.data(), this->cq_num * this->dimension);
+        float_7bits(this->cq_float.data(), (int8_t*)this->cq.data(), this->cq_num * this->dimension, arg.first, arg.second);
+        arg = __float_7bits(this->pq_float.data(), this->pq_num * this->dimension);
+        //std::cout << "arg:" << arg.first << " " << arg.second << std::endl;
+        float_7bits(this->pq_float.data(), (int8_t*)this->pq.data(), this->pq_num * this->dimension, arg.first, arg.second);
     }
     else{
         memcpy(this->cq.data(), this->cq_float.data(), this->cq_num * this->dimension * sizeof(T) );
-        memcpy(this->pq.data(), this->pq_float.data(), this->pq_num * this->dimension * sizeof(T) );
+        memcpy(this->pq.data(), this->pq_float.data(), this->codebook_size * this->pq_dimension * sizeof(T) );
     }
+    this->cq_float.clear();
+    this->pq_float.clear();
     std::cout << "[init] target 2" << std::endl;
-    for (int i = 0; i < cq_num; ++i){
+    for (int i = 0; i < this->cq_num; ++i){
         this->cq_offset[i] = get_offset<T, dist_type>(this->cq.data() + 1LL * i * this->dimension, this->dimension);
     }
-    //std::cout << "[init] target 3" << std::endl;
-    for (int i = 0; i < pq_num * this->code_len; ++i){
+    for (int i = 0; i < this->pq_num * this->code_len; ++i){
         this->pq_offset[i] = get_offset<T, dist_type>(this->pq.data() + 1LL * i * this->pq_dimension, this->pq_dimension);
     }
     return 0;
@@ -290,23 +303,26 @@ template int pqivf_gallery<float, EUCLIDEAN>::query_by_uids(const idx_t * const 
 
 template<typename T,
         DistanceType dist_type>
-int pqivf_gallery<T, dist_type>::train(const float* data, const int n, const int dimension){
-    k_means<float, dist_type>(data, n, this->cq_num, this->dimension, this->cq_float);
+int pqivf_gallery<T, dist_type>::train(const float* data, const int n){
+    //k_means<float, dist_type>(data, n, this->cq_num, this->dimension, this->cq_float);
+    faiss::kmeans_clustering(this->dimension, n, this->cq_num, data, this->cq_float.data());
 
-    vector<float> data_tmp(n * this->dimension);
+    vector<float> data_tmp(1LL * n * this->dimension);
     divide(data, data_tmp.data(), n, dimension, pq_dimension);
     for (int i = 0; i < this->code_len; ++i){
-        vector<float> pq_tmp;
-        k_means<float, dist_type>(data_tmp.data() + i * (n * this->pq_dimension), n, this->pq_num, this->pq_dimension, pq_tmp);
-        memcpy(this->pq_float.data() + i * this->pq_num * this->pq_dimension, pq_tmp.data(), sizeof(float) * this->pq_num * this->pq_dimension);
+        std::cout << "train: " << i << std::endl;
+        vector<float> pq_tmp(1LL * this->pq_num * this->pq_dimension);
+        //k_means<float, dist_type>(data_tmp.data() + i * (n * this->pq_dimension), n, this->pq_num, this->pq_dimension, pq_tmp);
+        faiss::kmeans_clustering(this->pq_dimension, n, this->pq_num, data_tmp.data() + 1LL * i * n * this->pq_dimension, pq_tmp.data());
+        memcpy(this->pq_float.data() + 1LL * i * this->pq_num * this->pq_dimension, pq_tmp.data(), 1LL * sizeof(float) * this->pq_num * this->pq_dimension);
     }
     this->have_train_ = true;
     return 0;
 }
-template int pqivf_gallery<int8_t, COSINE>::train(const float* data, const int n, const int dimension);
-template int pqivf_gallery<float, COSINE>::train(const float* data, const int n, const int dimension);
-template int pqivf_gallery<int8_t, EUCLIDEAN>::train(const float* data, const int n, const int dimension);
-template int pqivf_gallery<float, EUCLIDEAN>::train(const float* data, const int n, const int dimension);
+template int pqivf_gallery<int8_t, COSINE>::train(const float* data, const int n);
+template int pqivf_gallery<float, COSINE>::train(const float* data, const int n);
+template int pqivf_gallery<int8_t, EUCLIDEAN>::train(const float* data, const int n);
+template int pqivf_gallery<float, EUCLIDEAN>::train(const float* data, const int n);
 
 template<typename T,
         DistanceType dist_type>
@@ -322,7 +338,7 @@ int pqivf_gallery<T, dist_type>::store_train_data(std::string file_name){
     struct pqivf_traits traits = {this->cq_num, this->select_cq, this->pq_dimension, this->pq_num};
     r_write(fout, &traits, 1);
     r_write(fout, this->cq_float.data(), this->cq_num * this->dimension);
-    r_write(fout, this->pq_float.data(), this->pq_num * this->dimension);
+    r_write(fout, this->pq_float.data(), this->codebook_size * this->pq_dimension);
     return 0;
 }
 template int pqivf_gallery<int8_t, COSINE>::store_train_data(std::string file_name);
@@ -340,7 +356,7 @@ int pqivf_gallery<T, dist_type>::load_train_data(std::string file_name){
     r_read(fin, &d, 1);
     r_read(fin, &dt, 1);
     r_read(fin, &traits, 1);
-    if (d != this->dimension || dt != dist_type || traits.cq_num != this->cq_num || traits.select_cq != this->select_cq || 
+    if (d != this->dimension || dt != dist_type || traits.cq_num != this->cq_num || 
         traits.pq_dimension != this->pq_dimension || traits.pq_num != this->pq_num)
     return TRAINDATA_ERROR;
     r_read(fin, this->cq_float.data(), this->cq_num * this->dimension);
@@ -360,7 +376,6 @@ int pqivf_gallery<T, dist_type>::load_data(std::string file_name){
     if (this->have_train_ == false)
         return NO_TRAIN;
     this->mtx.lock();
-    std::cout << "[load data] target 1" << std::endl;
     ifstream fin(file_name, ifstream::binary);
     int type, d;
     r_read(fin, &type, 1);
@@ -376,7 +391,6 @@ int pqivf_gallery<T, dist_type>::load_data(std::string file_name){
     vector<vector<idx_t> > ids_tmp;
     ids_tmp.resize(this->cq_num);
     r_read(fin, block_num_tmp.data(), this->cq_num);
-    std::cout << "[load data] target 2" << std::endl;
     for (int i = 0; i < this->cq_num; ++i){
         ids_tmp[i].resize(block_num_tmp[i]);
         r_read(fin, ids_tmp[i].data(), block_num_tmp[i]);
@@ -385,13 +399,13 @@ int pqivf_gallery<T, dist_type>::load_data(std::string file_name){
                 return INDEX_EXISTS;
         }
     }
-    std::cout << "[load data] target 3" << std::endl;
     for (int i = 0; i < this->cq_num; ++i){
         this->ids[i].resize(this->block_num[i] + block_num_tmp[i]);
         memcpy(this->ids[i].data() + this->block_num[i], ids_tmp[i].data(), block_num_tmp[i] * sizeof(idx_t));
         for (int j = 0; j < block_num_tmp[i]; ++j)
             this->index[this->ids[i][this->block_num[i] + j]] = std::make_pair(i, this->block_num[i] + j);
-
+    }
+    for (int i = 0; i < this->cq_num; ++i){
         this->data[i].resize(1LL * (this->block_num[i] + block_num_tmp[i]) * this->code_len);
         r_read(fin, this->data[i].data() + 1LL * this->block_num[i] * this->code_len, 1LL * block_num_tmp[i] * this->code_len);
         this->block_num[i] += block_num_tmp[i];

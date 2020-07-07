@@ -16,22 +16,10 @@ rsearch::idx_t uids[10000];
 
 int main(){ 
     rsearch::get_random_data<float, rsearch::EUCLIDEAN>(data, n, dimension);
-    printf("target 1, n=%d, dimension=%d\n", n, dimension);
-    for (int i = 0; i < dimension; ++i)
-        printf("%.4f ", data[1000 *dimension + i]);
-    printf("\n");
     rsearch::probe<T> *p = rsearch::create_probe<T>(dimension, topk, rsearch::EUCLIDEAN, rsearch::X86_PQIVF);
     rsearch::gallery<T> *ga;
-    
-    printf("target 2\n");
     p->create_gallery(&ga);
     ga->init();
     ga->add(data.data(), n);
-    //ga->init();
-    printf("target 3\n");
     p->query(data.data() + 1000 * dimension, 10, ga, sims, uids);
-    for (int i = 0; i < 10; ++i){
-        printf("%f %u\n", sims[i * topk], uids[i * topk]);
-    }
-    
 }

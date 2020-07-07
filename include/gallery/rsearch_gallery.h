@@ -28,6 +28,8 @@ public:
     virtual int store_data(std::string file_name) = 0;
 
     virtual int load_data(std::string file_name) = 0;
+
+    virtual int train(const float* const x, int n) = 0;
     
 };
 

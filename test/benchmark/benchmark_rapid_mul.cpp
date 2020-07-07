@@ -40,14 +40,14 @@ void test_perf(){
     //rsearch::get_random_data<T, rsearch::COSINE>(b, m, dimension);
     get_data(a, n, dimension);
     get_data(b, m, dimension);
-    rsearch::matrix_mul<T>* mm = new rsearch::rapid_matrix_mul<T>;
+    rsearch::matrix_mul<T>* mm = new rsearch::base_matrix_mul<T>;
     //int64_t Bytes = 1LL * n * m;
     mm->set(dimension, 128, n, m);
     pair<Tout, int>* res;
     gettimeofday(&time1, &zone);
     for (int i = 0; i < nIter; ++i)
-        //mm->mul(a.data(), b.data(), offset.data(), n, m, &res);
-        rsearch::r_dot_prod<T>(a.data(), b.data(), offset.data(), n, m, dimension, res_vec.data(), 2 * m);
+        mm->mul(a.data(), b.data(), offset.data(), n, m, &res);
+        //rsearch::r_dot_prod<T>(a.data(), b.data(), offset.data(), n, m, dimension, res_vec.data(), 2 * m);
         
     gettimeofday(&time2, &zone);
     float delta = (time2.tv_sec - time1.tv_sec) * 1000.0 + (time2.tv_usec - time1.tv_usec) / 1000.0;
@@ -55,7 +55,7 @@ void test_perf(){
     //float gbytes = Bytes / 1000.0 / 1000.0 / 1000.0 / (delta / nIter) * 1000;
     float QPS = 1.0 * n * m / (delta / nIter);
     printf("BENCHMARK [%s]: %.4fms, calc : %.2fB\n", type_name.c_str(), delta, QPS);
-    Tout ans = 0;
+    /*Tout ans = 0;
     for (int i = 0 ; i < n; ++i)
     for (int j = 0 ; j < m; ++j){
         ans = 0;
@@ -64,7 +64,7 @@ void test_perf(){
         if (res_vec[i * 2 * m + j] != ans){
             std::cout << "Error! expect: "<< ans << "result: " << res_vec[i * 2 * m + j] << std::endl;
         }
-    }
+    }*/
     
     //if (res_vec[0] != ans){
     //    std::cout << "Error! expect: "<< ans << "result" << res_vec[0] << std::endl;
@@ -75,7 +75,7 @@ void test_perf(){
 int main(){
     
     test_perf<int8_t>();
-    test_perf<float>();
+    //test_perf<float>();
     //free(a);
     //free(b);
     //free(offset);

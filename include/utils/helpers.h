@@ -22,6 +22,9 @@ inline std::string GetMethodName(MethodType dev) {
     case X86_RAPID_MULTI_THREAD:
         sprintf(target_name, "X86_RAPID_MULTI_THREAD");
         break;
+    case X86_PQIVF_MULTI_THREAD:
+        sprintf(target_name, "X86_PQIVF_MULTI_THREAD");
+        break;
     case FAISS_FLAT:
         sprintf(target_name, "FAISS_FLAT");
         break;

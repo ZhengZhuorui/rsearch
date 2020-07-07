@@ -24,10 +24,9 @@ private:
     std::mutex work_mutex;
     std::condition_variable cv;
 
-    int un_work_num;
+    volatile int un_work_num;
     tasks m_task;
-    int ThreadSize;
-    bool is_started;
+    volatile bool is_started;
     int nprocs;
 };
 

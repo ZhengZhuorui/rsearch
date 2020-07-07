@@ -50,9 +50,16 @@ void ThreadPool::thread_loop(){
 
         if (t != NULL){
             t();
+            this->m_mutex.lock();
             ++this->un_work_num;
+            this->m_mutex.unlock();
+            //printf("[thread_loop]:%d %d\n", this->un_work_num, this->m_task.size());
         }
+<<<<<<< HEAD
         std::cout << "[thread pool]" << this->un_work_num << std::endl;
+=======
+        
+>>>>>>> 917c11f6982a425991144a94c09aa9e50fe1915a
         if (this->un_work_num == this->nprocs && this->m_task.empty() == true)
             this->cv.notify_one();
         

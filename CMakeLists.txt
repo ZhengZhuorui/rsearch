@@ -4,8 +4,13 @@ project(rsearch)
 set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp -Wall -mavx2 -masm=intel -march=native -m64")
 
 execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/env.sh)
+
+set(RSEARCH_PYTHON ${CMAKE_SOURCE_DIR}/python)
 set(RSEARCH_DIR /home/$ENV{USER}/rsearch)
 set(RSEARCH_DATA_DIR ${RSEARCH_DIR}/data)
+
+execute_process(COMMAND swig -c++ -python ${RSEARCH_PYTHON}/swigrsearch.swg)
+
 
 configure_file(${CMAKE_SOURCE_DIR}/configure.h.in ${CMAKE_SOURCE_DIR}/include/configure.h @ONLY)
 

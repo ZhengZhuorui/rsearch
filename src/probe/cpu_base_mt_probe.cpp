@@ -148,15 +148,6 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
         delta += (time2.tv_sec - time1.tv_sec) * 1000.0 + (time2.tv_usec - time1.tv_usec) / 1000.0;
 
         //std::cout << "[query] target 3 " << " " << this->mth_manager->size() << std::endl;
-<<<<<<< HEAD
-        for (int k = 0; k < pn; ++k){
-            std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
-                             pair_greator<Tout, idx_t>());
-            std::sort(ans[k].data(), ans[k].data() + this->topk, pair_greator<Tout, idx_t>());
-            for (int j = 0 ; j < this->topk ; ++j){
-                sims[(i + k) * this->topk + j] = ans[k][j].first;
-                idx[(i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
-=======
         if (dist_type == EUCLIDEAN)
                 for (int k = 0; k < pn; ++k){
                 std::nth_element(ans[k].data(), ans[k].data() + this->topk, ans[k].data() + ans[k].size(),
@@ -178,7 +169,6 @@ int cpu_base_mt_probe<T, dist_type, matrix_type>::query(const T * const x, const
                     idx[(1LL * i + k) * this->topk + j] = c_ga->ids[ans[k][j].second];
                 }
                 memset(ans[k].data(), 0, this->ans_topk_size * sizeof(pair<Tout, idx_t>));
->>>>>>> 917c11f6982a425991144a94c09aa9e50fe1915a
             }
     }
     this->threadpool->stop();

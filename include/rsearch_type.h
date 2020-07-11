@@ -25,7 +25,7 @@ enum Errorno{
 //using int32_t = int;
 //using int8_t = signed char;
 //using uint8_t = unsigned char;
-using idx_t = int32_t;
+typedef int32_t idx_t;
 typedef enum DistanceType{
     COSINE = 0,
     EUCLIDEAN = 1,
@@ -52,7 +52,9 @@ typedef enum GalleryType{
 
 
 template<typename T>
-struct TMap{};
+struct TMap{
+    typedef float type;
+};
 
 template <>
 struct TMap<int8_t>{

@@ -149,31 +149,14 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
                     this->mtx_la->la(data + vec_id, code_book + j * this->codebook_size, 1, qn, &mtx_res);
                     gettimeofday(&time4, &zone);
                     delta2 += (time4.tv_sec - time3.tv_sec) * 1000.0 + (time4.tv_usec - time3.tv_usec) / 1000.0;
-<<<<<<< HEAD
-                    int k_sz = std::min(qn, this->topk);
-                    for (int k = 0; k < k_sz; ++k){
-                        ans.push_back(std::make_pair(mtx_res[k].first, mtx_res[k].second + this->prefix[cq_id] + vec_id));                        
-                        
-                    }
-=======
                     //std::cout << "[query] target 5.2" << std::endl;
                     for (int k = 0; k < k_sz; ++k)
                         mtx_res[k].second += this->prefix[cq_id] + vec_id;
                     merge(this->merge_cache, this->ans.data(), mtx_res, topk, k_sz);
                     //std::cout << "[query] target 5.3" << std::endl;
->>>>>>> 917c11f6982a425991144a94c09aa9e50fe1915a
                 }
                 //std::cout << "[query] target 5.2" << std::endl;
             }
-<<<<<<< HEAD
-            if ((int32_t)ans.size() > this->topk){
-                std::nth_element(ans.data(), ans.data() + this->topk, ans.data() + ans.size(), pair_greator<Tout, int>());
-                std::sort(ans.data(), ans.data() + this->topk + 1, pair_greator<Tout, int>());
-                for (int k =0; k < this->topk; ++k){
-                    sims[(i + j) * this->topk + k] = ans[k].first;
-                    int v = std::upper_bound(this->prefix, this->prefix + this->cq_num + 1, ans[k].second) - this->prefix - 1;
-                    idx[(i + j) * this->topk + k] = c_ga->ids[v][ans[k].second - this->prefix[v]];
-=======
             std::sort(ans.data(), ans.data() + topk, pair_greator<Tout, int>());
             //std::cout << this->ans[0].first << " " << this->ans[1].first << std::endl;
             int k = 0;
@@ -183,7 +166,6 @@ int pqivf_probe<T, dist_type>::query(const T * const x, const int n, gallery<T> 
                     int v = std::upper_bound(this->prefix, this->prefix + this->cq_num + 1, ans[k].second) - this->prefix - 1;
                     idx[1LL * (i + j) * this->topk + k] = c_ga->ids[v][ans[k].second - this->prefix[v]];
                     ans[k] = make_pair(-INF, -1);
->>>>>>> 917c11f6982a425991144a94c09aa9e50fe1915a
                 }
             else
                 for (; k < this->topk && ans[k].first != -INF; ++k){

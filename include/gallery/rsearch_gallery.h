@@ -11,7 +11,7 @@ public:
 
     virtual int init() = 0;
 
-    using Tout = typemap_t<T>;
+    typedef typename TMap<T>::type Tout;
 
     virtual int add(const T* const x, const int n) = 0;
 

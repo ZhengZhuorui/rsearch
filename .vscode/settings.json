@@ -63,5 +63,6 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "string_view": "cpp"
-    }
+    },
+    "python.pythonPath": "D:\\python\\python.exe"
 }

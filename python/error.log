@@ -1,0 +1,1471 @@
+swigrsearch_wrap.cpp:3131:9: error: ‘idx_t’ does not name a type
+ typedef idx_t int32_t;
+         ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_probe_float_query(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:3705:3: error: ‘Tout’ was not declared in this scope
+   Tout *arg5 = (Tout *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3705:9: error: ‘arg5’ was not declared in this scope
+   Tout *arg5 = (Tout *) 0 ;
+         ^
+swigrsearch_wrap.cpp:3705:23: error: expected primary-expression before ‘)’ token
+   Tout *arg5 = (Tout *) 0 ;
+                       ^
+swigrsearch_wrap.cpp:3706:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg6 = (idx_t *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3706:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:3706:10: error: ‘arg6’ was not declared in this scope
+   idx_t *arg6 = (idx_t *) 0 ;
+          ^
+swigrsearch_wrap.cpp:3706:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg6 = (idx_t *) 0 ;
+                         ^
+swigrsearch_wrap.cpp:3752:28: error: ‘Tout’ does not name a type
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                            ^
+swigrsearch_wrap.cpp:3752:33: error: expected ‘>’ before ‘*’ token
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                                 ^
+swigrsearch_wrap.cpp:3752:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3752:35: error: expected primary-expression before ‘>’ token
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                                   ^
+swigrsearch_wrap.cpp:3752:43: error: expected ‘)’ before ‘;’ token
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                                           ^
+swigrsearch_wrap.cpp:3757:28: error: ‘idx_t’ does not name a type
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                            ^
+swigrsearch_wrap.cpp:3757:34: error: expected ‘>’ before ‘*’ token
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                                  ^
+swigrsearch_wrap.cpp:3757:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3757:36: error: expected primary-expression before ‘>’ token
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                                    ^
+swigrsearch_wrap.cpp:3757:44: error: expected ‘)’ before ‘;’ token
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                                            ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_probe_float_query_with_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:3772:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg5 = (idx_t *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3772:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:3772:10: error: ‘arg5’ was not declared in this scope
+   idx_t *arg5 = (idx_t *) 0 ;
+          ^
+swigrsearch_wrap.cpp:3772:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg5 = (idx_t *) 0 ;
+                         ^
+swigrsearch_wrap.cpp:3774:3: error: ‘Tout’ was not declared in this scope
+   Tout *arg7 = (Tout *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3774:9: error: ‘arg7’ was not declared in this scope
+   Tout *arg7 = (Tout *) 0 ;
+         ^
+swigrsearch_wrap.cpp:3774:23: error: expected primary-expression before ‘)’ token
+   Tout *arg7 = (Tout *) 0 ;
+                       ^
+swigrsearch_wrap.cpp:3775:10: error: ‘arg8’ was not declared in this scope
+   idx_t *arg8 = (idx_t *) 0 ;
+          ^
+swigrsearch_wrap.cpp:3775:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg8 = (idx_t *) 0 ;
+                         ^
+swigrsearch_wrap.cpp:3827:28: error: ‘idx_t’ does not name a type
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                            ^
+swigrsearch_wrap.cpp:3827:34: error: expected ‘>’ before ‘*’ token
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                                  ^
+swigrsearch_wrap.cpp:3827:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3827:36: error: expected primary-expression before ‘>’ token
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                                    ^
+swigrsearch_wrap.cpp:3827:44: error: expected ‘)’ before ‘;’ token
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                                            ^
+swigrsearch_wrap.cpp:3837:28: error: ‘Tout’ does not name a type
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                            ^
+swigrsearch_wrap.cpp:3837:33: error: expected ‘>’ before ‘*’ token
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                                 ^
+swigrsearch_wrap.cpp:3837:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3837:35: error: expected primary-expression before ‘>’ token
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                                   ^
+swigrsearch_wrap.cpp:3837:43: error: expected ‘)’ before ‘;’ token
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                                           ^
+swigrsearch_wrap.cpp:3842:28: error: ‘idx_t’ does not name a type
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                            ^
+swigrsearch_wrap.cpp:3842:34: error: expected ‘>’ before ‘*’ token
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                                  ^
+swigrsearch_wrap.cpp:3842:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3842:36: error: expected primary-expression before ‘>’ token
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                                    ^
+swigrsearch_wrap.cpp:3842:44: error: expected ‘)’ before ‘;’ token
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                                            ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_delete_probe_int8(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:3860:19: error: ‘int8’ was not declared in this scope
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3860:24: error: template argument 1 is invalid
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                        ^
+swigrsearch_wrap.cpp:3860:51: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                   ^
+swigrsearch_wrap.cpp:3860:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3860:56: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                        ^
+swigrsearch_wrap.cpp:3860:56: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3860:59: error: expected primary-expression before ‘)’ token
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                           ^
+swigrsearch_wrap.cpp:3870:44: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                            ^
+swigrsearch_wrap.cpp:3860:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3870:49: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                 ^
+swigrsearch_wrap.cpp:3870:49: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3870:51: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:3870:51: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3870:53: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:3870:61: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                             ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_probe_int8_create_gallery(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:3881:19: error: ‘int8’ was not declared in this scope
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3881:24: error: template argument 1 is invalid
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                        ^
+swigrsearch_wrap.cpp:3881:51: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                   ^
+swigrsearch_wrap.cpp:3881:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3881:56: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                        ^
+swigrsearch_wrap.cpp:3881:56: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3881:59: error: expected primary-expression before ‘)’ token
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                           ^
+swigrsearch_wrap.cpp:3882:21: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > **arg2 = (rsearch::gallery< int8 > **) 0 ;
+                     ^
+swigrsearch_wrap.cpp:3881:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3882:26: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > **arg2 = (rsearch::gallery< int8 > **) 0 ;
+                          ^
+swigrsearch_wrap.cpp:3882:26: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3882:56: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > **arg2 = (rsearch::gallery< int8 > **) 0 ;
+                                                        ^
+swigrsearch_wrap.cpp:3881:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3882:61: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > **arg2 = (rsearch::gallery< int8 > **) 0 ;
+                                                             ^
+swigrsearch_wrap.cpp:3882:61: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3882:65: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > **arg2 = (rsearch::gallery< int8 > **) 0 ;
+                                                                 ^
+swigrsearch_wrap.cpp:3896:44: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                            ^
+swigrsearch_wrap.cpp:3881:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3896:49: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                 ^
+swigrsearch_wrap.cpp:3896:49: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3896:51: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:3896:51: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3896:53: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:3896:61: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                             ^
+swigrsearch_wrap.cpp:3901:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg2 = reinterpret_cast< rsearch::gallery< int8 > ** >(argp2);
+                                              ^
+swigrsearch_wrap.cpp:3881:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3901:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg2 = reinterpret_cast< rsearch::gallery< int8 > ** >(argp2);
+                                                   ^
+swigrsearch_wrap.cpp:3901:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3901:53: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< rsearch::gallery< int8 > ** >(argp2);
+                                                     ^
+swigrsearch_wrap.cpp:3901:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3901:56: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< rsearch::gallery< int8 > ** >(argp2);
+                                                        ^
+swigrsearch_wrap.cpp:3901:64: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< rsearch::gallery< int8 > ** >(argp2);
+                                                                ^
+swigrsearch_wrap.cpp:3902:25: error: request for member ‘create_gallery’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->create_gallery(arg2);
+                         ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_probe_int8_query(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:3912:19: error: ‘int8’ was not declared in this scope
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3912:24: error: template argument 1 is invalid
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                        ^
+swigrsearch_wrap.cpp:3912:51: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                   ^
+swigrsearch_wrap.cpp:3912:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3912:56: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                        ^
+swigrsearch_wrap.cpp:3912:56: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3912:59: error: expected primary-expression before ‘)’ token
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                           ^
+swigrsearch_wrap.cpp:3913:9: error: ‘arg2’ was not declared in this scope
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+         ^
+swigrsearch_wrap.cpp:3913:23: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                       ^
+swigrsearch_wrap.cpp:3913:32: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                                ^
+swigrsearch_wrap.cpp:3915:21: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:3912:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3915:26: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:3915:26: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3915:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:3912:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3915:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:3915:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3915:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:3916:3: error: ‘Tout’ was not declared in this scope
+   Tout *arg5 = (Tout *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3916:9: error: ‘arg5’ was not declared in this scope
+   Tout *arg5 = (Tout *) 0 ;
+         ^
+swigrsearch_wrap.cpp:3916:23: error: expected primary-expression before ‘)’ token
+   Tout *arg5 = (Tout *) 0 ;
+                       ^
+swigrsearch_wrap.cpp:3917:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg6 = (idx_t *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3917:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:3917:10: error: ‘arg6’ was not declared in this scope
+   idx_t *arg6 = (idx_t *) 0 ;
+          ^
+swigrsearch_wrap.cpp:3917:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg6 = (idx_t *) 0 ;
+                         ^
+swigrsearch_wrap.cpp:3943:44: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                            ^
+swigrsearch_wrap.cpp:3912:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3943:49: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                 ^
+swigrsearch_wrap.cpp:3943:49: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3943:51: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:3943:51: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3943:53: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:3943:61: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                             ^
+swigrsearch_wrap.cpp:3948:28: error: ‘int8’ does not name a type
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:3948:33: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                 ^
+swigrsearch_wrap.cpp:3948:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3948:35: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                   ^
+swigrsearch_wrap.cpp:3948:43: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                           ^
+swigrsearch_wrap.cpp:3958:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                              ^
+swigrsearch_wrap.cpp:3912:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3958:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                   ^
+swigrsearch_wrap.cpp:3958:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3958:53: error: expected ‘>’ before ‘*’ token
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                     ^
+swigrsearch_wrap.cpp:3958:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3958:55: error: expected primary-expression before ‘>’ token
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                       ^
+swigrsearch_wrap.cpp:3958:63: error: expected ‘)’ before ‘;’ token
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                               ^
+swigrsearch_wrap.cpp:3963:28: error: ‘Tout’ does not name a type
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                            ^
+swigrsearch_wrap.cpp:3963:33: error: expected ‘>’ before ‘*’ token
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                                 ^
+swigrsearch_wrap.cpp:3963:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3963:35: error: expected primary-expression before ‘>’ token
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                                   ^
+swigrsearch_wrap.cpp:3963:43: error: expected ‘)’ before ‘;’ token
+   arg5 = reinterpret_cast< Tout * >(argp5);
+                                           ^
+swigrsearch_wrap.cpp:3968:28: error: ‘idx_t’ does not name a type
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                            ^
+swigrsearch_wrap.cpp:3968:34: error: expected ‘>’ before ‘*’ token
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                                  ^
+swigrsearch_wrap.cpp:3968:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:3968:36: error: expected primary-expression before ‘>’ token
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                                    ^
+swigrsearch_wrap.cpp:3968:44: error: expected ‘)’ before ‘;’ token
+   arg6 = reinterpret_cast< idx_t * >(argp6);
+                                            ^
+swigrsearch_wrap.cpp:3969:25: error: request for member ‘query’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->query((int8 const *)arg2,arg3,arg4,arg5,arg6);
+                         ^
+swigrsearch_wrap.cpp:3969:37: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->query((int8 const *)arg2,arg3,arg4,arg5,arg6);
+                                     ^
+swigrsearch_wrap.cpp:3969:70: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->query((int8 const *)arg2,arg3,arg4,arg5,arg6);
+                                                                      ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_probe_int8_query_with_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:3979:19: error: ‘int8’ was not declared in this scope
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3979:24: error: template argument 1 is invalid
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                        ^
+swigrsearch_wrap.cpp:3979:51: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                   ^
+swigrsearch_wrap.cpp:3979:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3979:56: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                        ^
+swigrsearch_wrap.cpp:3979:56: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3979:59: error: expected primary-expression before ‘)’ token
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                                                           ^
+swigrsearch_wrap.cpp:3980:9: error: ‘arg2’ was not declared in this scope
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+         ^
+swigrsearch_wrap.cpp:3980:23: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                       ^
+swigrsearch_wrap.cpp:3980:32: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                                ^
+swigrsearch_wrap.cpp:3982:21: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:3979:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3982:26: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:3982:26: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3982:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:3979:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:3982:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:3982:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:3982:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg4 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:3983:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg5 = (idx_t *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3983:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:3983:10: error: ‘arg5’ was not declared in this scope
+   idx_t *arg5 = (idx_t *) 0 ;
+          ^
+swigrsearch_wrap.cpp:3983:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg5 = (idx_t *) 0 ;
+                         ^
+swigrsearch_wrap.cpp:3985:3: error: ‘Tout’ was not declared in this scope
+   Tout *arg7 = (Tout *) 0 ;
+   ^
+swigrsearch_wrap.cpp:3985:9: error: ‘arg7’ was not declared in this scope
+   Tout *arg7 = (Tout *) 0 ;
+         ^
+swigrsearch_wrap.cpp:3985:23: error: expected primary-expression before ‘)’ token
+   Tout *arg7 = (Tout *) 0 ;
+                       ^
+swigrsearch_wrap.cpp:3986:10: error: ‘arg8’ was not declared in this scope
+   idx_t *arg8 = (idx_t *) 0 ;
+          ^
+swigrsearch_wrap.cpp:3986:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg8 = (idx_t *) 0 ;
+                         ^
+swigrsearch_wrap.cpp:4018:44: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                            ^
+swigrsearch_wrap.cpp:3979:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:4018:49: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::probe’
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                 ^
+swigrsearch_wrap.cpp:4018:49: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4018:51: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4018:51: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4018:53: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4018:61: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::probe< int8 > * >(argp1);
+                                                             ^
+swigrsearch_wrap.cpp:4023:28: error: ‘int8’ does not name a type
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4023:33: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                 ^
+swigrsearch_wrap.cpp:4023:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4023:35: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                   ^
+swigrsearch_wrap.cpp:4023:43: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                           ^
+swigrsearch_wrap.cpp:4033:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                              ^
+swigrsearch_wrap.cpp:3979:19: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::probe< int8 > *arg1 = (rsearch::probe< int8 > *) 0 ;
+                   ^
+swigrsearch_wrap.cpp:4033:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                   ^
+swigrsearch_wrap.cpp:4033:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4033:53: error: expected ‘>’ before ‘*’ token
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                     ^
+swigrsearch_wrap.cpp:4033:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4033:55: error: expected primary-expression before ‘>’ token
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                       ^
+swigrsearch_wrap.cpp:4033:63: error: expected ‘)’ before ‘;’ token
+   arg4 = reinterpret_cast< rsearch::gallery< int8 > * >(argp4);
+                                                               ^
+swigrsearch_wrap.cpp:4038:28: error: ‘idx_t’ does not name a type
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                            ^
+swigrsearch_wrap.cpp:4038:34: error: expected ‘>’ before ‘*’ token
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                                  ^
+swigrsearch_wrap.cpp:4038:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4038:36: error: expected primary-expression before ‘>’ token
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                                    ^
+swigrsearch_wrap.cpp:4038:44: error: expected ‘)’ before ‘;’ token
+   arg5 = reinterpret_cast< idx_t * >(argp5);
+                                            ^
+swigrsearch_wrap.cpp:4048:28: error: ‘Tout’ does not name a type
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                            ^
+swigrsearch_wrap.cpp:4048:33: error: expected ‘>’ before ‘*’ token
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                                 ^
+swigrsearch_wrap.cpp:4048:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4048:35: error: expected primary-expression before ‘>’ token
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                                   ^
+swigrsearch_wrap.cpp:4048:43: error: expected ‘)’ before ‘;’ token
+   arg7 = reinterpret_cast< Tout * >(argp7);
+                                           ^
+swigrsearch_wrap.cpp:4053:28: error: ‘idx_t’ does not name a type
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                            ^
+swigrsearch_wrap.cpp:4053:34: error: expected ‘>’ before ‘*’ token
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                                  ^
+swigrsearch_wrap.cpp:4053:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4053:36: error: expected primary-expression before ‘>’ token
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                                    ^
+swigrsearch_wrap.cpp:4053:44: error: expected ‘)’ before ‘;’ token
+   arg8 = reinterpret_cast< idx_t * >(argp8);
+                                            ^
+swigrsearch_wrap.cpp:4054:25: error: request for member ‘query_with_uids’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->query_with_uids((int8 const *)arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+                         ^
+swigrsearch_wrap.cpp:4054:47: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->query_with_uids((int8 const *)arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+                                               ^
+swigrsearch_wrap.cpp:4054:90: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->query_with_uids((int8 const *)arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+                                                                                          ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_float_add_with_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4156:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4156:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4156:10: error: ‘arg3’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4156:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4156:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4187:28: error: ‘idx_t’ does not name a type
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                            ^
+swigrsearch_wrap.cpp:4187:34: error: expected ‘>’ before ‘*’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                  ^
+swigrsearch_wrap.cpp:4187:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4187:36: error: expected primary-expression before ‘>’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                    ^
+swigrsearch_wrap.cpp:4187:44: error: expected ‘)’ before ‘;’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                            ^
+swigrsearch_wrap.cpp:4193:66: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->add_with_uids((float const *)arg2,(idx_t const *)arg3,arg4);
+                                                                  ^
+swigrsearch_wrap.cpp:4193:84: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->add_with_uids((float const *)arg2,(idx_t const *)arg3,arg4);
+                                                                                    ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_float_change_by_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4205:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4205:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4205:10: error: ‘arg3’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4205:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4205:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4236:28: error: ‘idx_t’ does not name a type
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                            ^
+swigrsearch_wrap.cpp:4236:34: error: expected ‘>’ before ‘*’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                  ^
+swigrsearch_wrap.cpp:4236:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4236:36: error: expected primary-expression before ‘>’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                    ^
+swigrsearch_wrap.cpp:4236:44: error: expected ‘)’ before ‘;’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                            ^
+swigrsearch_wrap.cpp:4242:67: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->change_by_uids((float const *)arg2,(idx_t const *)arg3,arg4);
+                                                                   ^
+swigrsearch_wrap.cpp:4242:85: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->change_by_uids((float const *)arg2,(idx_t const *)arg3,arg4);
+                                                                                     ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_float_remove_by_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4253:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4253:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4253:10: error: ‘arg2’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4253:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4253:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4276:28: error: ‘idx_t’ does not name a type
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4276:34: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                  ^
+swigrsearch_wrap.cpp:4276:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4276:36: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                    ^
+swigrsearch_wrap.cpp:4276:44: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                            ^
+swigrsearch_wrap.cpp:4282:47: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->remove_by_uids((idx_t const *)arg2,arg3);
+                                               ^
+swigrsearch_wrap.cpp:4282:65: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->remove_by_uids((idx_t const *)arg2,arg3);
+                                                                 ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_float_query_by_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4293:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4293:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4293:10: error: ‘arg2’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4293:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4293:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4320:28: error: ‘idx_t’ does not name a type
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4320:34: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                  ^
+swigrsearch_wrap.cpp:4320:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4320:36: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                    ^
+swigrsearch_wrap.cpp:4320:44: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                            ^
+swigrsearch_wrap.cpp:4331:46: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->query_by_uids((idx_t const *)arg2,arg3,arg4);
+                                              ^
+swigrsearch_wrap.cpp:4331:69: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->query_by_uids((idx_t const *)arg2,arg3,arg4);
+                                                                     ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_delete_gallery_int8(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4488:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4488:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4488:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4488:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4488:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4488:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4488:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4498:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4488:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4498:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4498:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4498:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4498:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4498:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4498:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_init(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4509:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4509:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4509:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4509:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4509:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4509:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4509:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4520:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4509:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4520:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4520:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4520:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4520:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4520:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4520:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4521:25: error: request for member ‘init’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->init();
+                         ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_add(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4531:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4531:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4531:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4531:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4531:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4531:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4531:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4532:9: error: ‘arg2’ was not declared in this scope
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+         ^
+swigrsearch_wrap.cpp:4532:23: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                       ^
+swigrsearch_wrap.cpp:4532:32: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                                ^
+swigrsearch_wrap.cpp:4550:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4531:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4550:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4550:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4550:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4550:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4550:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4550:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4555:28: error: ‘int8’ does not name a type
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4555:33: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                 ^
+swigrsearch_wrap.cpp:4555:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4555:35: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                   ^
+swigrsearch_wrap.cpp:4555:43: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                           ^
+swigrsearch_wrap.cpp:4561:25: error: request for member ‘add’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->add((int8 const *)arg2,arg3);
+                         ^
+swigrsearch_wrap.cpp:4561:35: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->add((int8 const *)arg2,arg3);
+                                   ^
+swigrsearch_wrap.cpp:4561:53: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->add((int8 const *)arg2,arg3);
+                                                     ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_add_with_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4571:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4571:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4571:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4571:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4571:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4571:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4571:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4572:9: error: ‘arg2’ was not declared in this scope
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+         ^
+swigrsearch_wrap.cpp:4572:23: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                       ^
+swigrsearch_wrap.cpp:4572:32: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                                ^
+swigrsearch_wrap.cpp:4573:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4573:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4573:10: error: ‘arg3’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4573:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4573:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4594:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4571:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4594:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4594:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4594:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4594:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4594:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4594:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4599:28: error: ‘int8’ does not name a type
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4599:33: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                 ^
+swigrsearch_wrap.cpp:4599:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4599:35: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                   ^
+swigrsearch_wrap.cpp:4599:43: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                           ^
+swigrsearch_wrap.cpp:4604:28: error: ‘idx_t’ does not name a type
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                            ^
+swigrsearch_wrap.cpp:4604:34: error: expected ‘>’ before ‘*’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                  ^
+swigrsearch_wrap.cpp:4604:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4604:36: error: expected primary-expression before ‘>’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                    ^
+swigrsearch_wrap.cpp:4604:44: error: expected ‘)’ before ‘;’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                            ^
+swigrsearch_wrap.cpp:4610:25: error: request for member ‘add_with_uids’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->add_with_uids((int8 const *)arg2,(idx_t const *)arg3,arg4);
+                         ^
+swigrsearch_wrap.cpp:4610:45: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->add_with_uids((int8 const *)arg2,(idx_t const *)arg3,arg4);
+                                             ^
+swigrsearch_wrap.cpp:4610:83: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->add_with_uids((int8 const *)arg2,(idx_t const *)arg3,arg4);
+                                                                                   ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_change_by_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4620:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4620:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4620:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4620:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4620:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4620:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4620:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4621:9: error: ‘arg2’ was not declared in this scope
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+         ^
+swigrsearch_wrap.cpp:4621:23: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                       ^
+swigrsearch_wrap.cpp:4621:32: error: expected primary-expression before ‘)’ token
+   int8 *arg2 = (int8 *) (int8 *)0 ;
+                                ^
+swigrsearch_wrap.cpp:4622:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4622:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4622:10: error: ‘arg3’ was not declared in this scope
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4622:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4622:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg3 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4643:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4620:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4643:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4643:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4643:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4643:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4643:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4643:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4648:28: error: ‘int8’ does not name a type
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4648:33: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                 ^
+swigrsearch_wrap.cpp:4648:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4648:35: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                   ^
+swigrsearch_wrap.cpp:4648:43: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< int8 * >(argp2);
+                                           ^
+swigrsearch_wrap.cpp:4653:28: error: ‘idx_t’ does not name a type
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                            ^
+swigrsearch_wrap.cpp:4653:34: error: expected ‘>’ before ‘*’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                  ^
+swigrsearch_wrap.cpp:4653:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4653:36: error: expected primary-expression before ‘>’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                    ^
+swigrsearch_wrap.cpp:4653:44: error: expected ‘)’ before ‘;’ token
+   arg3 = reinterpret_cast< idx_t * >(argp3);
+                                            ^
+swigrsearch_wrap.cpp:4659:25: error: request for member ‘change_by_uids’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->change_by_uids((int8 const *)arg2,(idx_t const *)arg3,arg4);
+                         ^
+swigrsearch_wrap.cpp:4659:46: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->change_by_uids((int8 const *)arg2,(idx_t const *)arg3,arg4);
+                                              ^
+swigrsearch_wrap.cpp:4659:84: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->change_by_uids((int8 const *)arg2,(idx_t const *)arg3,arg4);
+                                                                                    ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_remove_by_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4669:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4669:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4669:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4669:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4669:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4669:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4669:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4670:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4670:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4670:10: error: ‘arg2’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4670:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4670:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4688:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4669:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4688:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4688:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4688:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4688:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4688:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4688:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4693:28: error: ‘idx_t’ does not name a type
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4693:34: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                  ^
+swigrsearch_wrap.cpp:4693:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4693:36: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                    ^
+swigrsearch_wrap.cpp:4693:44: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                            ^
+swigrsearch_wrap.cpp:4699:25: error: request for member ‘remove_by_uids’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->remove_by_uids((idx_t const *)arg2,arg3);
+                         ^
+swigrsearch_wrap.cpp:4699:47: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->remove_by_uids((idx_t const *)arg2,arg3);
+                                               ^
+swigrsearch_wrap.cpp:4699:65: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->remove_by_uids((idx_t const *)arg2,arg3);
+                                                                 ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_query_by_uids(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4709:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4709:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4709:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4709:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4709:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4709:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4709:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4710:3: error: ‘idx_t’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+   ^
+swigrsearch_wrap.cpp:4710:3: note: suggested alternative:
+In file included from ../include/rsearch_def.h:2:0,
+                 from ../include/probe/rsearch_probe.h:2,
+                 from swigrsearch_wrap.cpp:3132:
+../include/rsearch_type.h:28:22: note:   ‘rsearch::idx_t’
+ using idx_t = int32_t;
+                      ^
+swigrsearch_wrap.cpp:4710:10: error: ‘arg2’ was not declared in this scope
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+          ^
+swigrsearch_wrap.cpp:4710:25: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                         ^
+swigrsearch_wrap.cpp:4710:35: error: expected primary-expression before ‘)’ token
+   idx_t *arg2 = (idx_t *) (idx_t *)0 ;
+                                   ^
+swigrsearch_wrap.cpp:4712:9: error: ‘arg4’ was not declared in this scope
+   int8 *arg4 = (int8 *) 0 ;
+         ^
+swigrsearch_wrap.cpp:4712:23: error: expected primary-expression before ‘)’ token
+   int8 *arg4 = (int8 *) 0 ;
+                       ^
+swigrsearch_wrap.cpp:4732:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4709:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4732:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4732:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4732:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4732:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4732:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4732:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4737:28: error: ‘idx_t’ does not name a type
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                            ^
+swigrsearch_wrap.cpp:4737:34: error: expected ‘>’ before ‘*’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                  ^
+swigrsearch_wrap.cpp:4737:34: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4737:36: error: expected primary-expression before ‘>’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                    ^
+swigrsearch_wrap.cpp:4737:44: error: expected ‘)’ before ‘;’ token
+   arg2 = reinterpret_cast< idx_t * >(argp2);
+                                            ^
+swigrsearch_wrap.cpp:4747:28: error: ‘int8’ does not name a type
+   arg4 = reinterpret_cast< int8 * >(argp4);
+                            ^
+swigrsearch_wrap.cpp:4747:33: error: expected ‘>’ before ‘*’ token
+   arg4 = reinterpret_cast< int8 * >(argp4);
+                                 ^
+swigrsearch_wrap.cpp:4747:33: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4747:35: error: expected primary-expression before ‘>’ token
+   arg4 = reinterpret_cast< int8 * >(argp4);
+                                   ^
+swigrsearch_wrap.cpp:4747:43: error: expected ‘)’ before ‘;’ token
+   arg4 = reinterpret_cast< int8 * >(argp4);
+                                           ^
+swigrsearch_wrap.cpp:4748:25: error: request for member ‘query_by_uids’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->query_by_uids((idx_t const *)arg2,arg3,arg4);
+                         ^
+swigrsearch_wrap.cpp:4748:46: error: expected ‘)’ before ‘const’
+   result = (int)(arg1)->query_by_uids((idx_t const *)arg2,arg3,arg4);
+                                              ^
+swigrsearch_wrap.cpp:4748:69: error: expected ‘)’ before ‘;’ token
+   result = (int)(arg1)->query_by_uids((idx_t const *)arg2,arg3,arg4);
+                                                                     ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_reset(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4758:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4758:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4758:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4758:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4758:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4758:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4758:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4769:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4758:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4769:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4769:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4769:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4769:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4769:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4769:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4770:25: error: request for member ‘reset’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->reset();
+                         ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_store_data(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4780:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4780:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4780:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4780:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4780:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4780:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4780:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4795:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4780:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4795:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4795:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4795:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4795:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4795:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4795:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4809:25: error: request for member ‘store_data’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->store_data(arg2);
+                         ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_load_data(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4819:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4819:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4819:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4819:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4819:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4819:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4819:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4834:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4819:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4834:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4834:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4834:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4834:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4834:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4834:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4848:25: error: request for member ‘load_data’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->load_data(arg2);
+                         ^
+swigrsearch_wrap.cpp: In function ‘PyObject* _wrap_gallery_int8_train(PyObject*, PyObject*)’:
+swigrsearch_wrap.cpp:4858:21: error: ‘int8’ was not declared in this scope
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4858:26: error: template argument 1 is invalid
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                          ^
+swigrsearch_wrap.cpp:4858:55: error: the value of ‘int8’ is not usable in a constant expression
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                       ^
+swigrsearch_wrap.cpp:4858:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4858:60: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                            ^
+swigrsearch_wrap.cpp:4858:60: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4858:63: error: expected primary-expression before ‘)’ token
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                                                               ^
+swigrsearch_wrap.cpp:4877:46: error: the value of ‘int8’ is not usable in a constant expression
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                              ^
+swigrsearch_wrap.cpp:4858:21: note: ‘int8’ was not declared ‘constexpr’
+   rsearch::gallery< int8 > *arg1 = (rsearch::gallery< int8 > *) 0 ;
+                     ^
+swigrsearch_wrap.cpp:4877:51: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class rsearch::gallery’
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                   ^
+swigrsearch_wrap.cpp:4877:51: note:   expected a type, got ‘int8’
+swigrsearch_wrap.cpp:4877:53: error: expected ‘>’ before ‘*’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                     ^
+swigrsearch_wrap.cpp:4877:53: error: expected ‘(’ before ‘*’ token
+swigrsearch_wrap.cpp:4877:55: error: expected primary-expression before ‘>’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                       ^
+swigrsearch_wrap.cpp:4877:63: error: expected ‘)’ before ‘;’ token
+   arg1 = reinterpret_cast< rsearch::gallery< int8 > * >(argp1);
+                                                               ^
+swigrsearch_wrap.cpp:4888:25: error: request for member ‘train’ in ‘* arg1’, which is of non-class type ‘int’
+   result = (int)(arg1)->train((float const *)arg2,arg3);
+                         ^
+make: *** [swigrsearch.o] Error 1

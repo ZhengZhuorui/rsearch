@@ -13,7 +13,8 @@ class probe{
 public:
     probe(){}
     virtual ~probe(){}
-    using Tout = typemap_t<T>;
+    //using Tout = typemap_t<T>;
+    typedef typename TMap<T>::type Tout;
     virtual int create_gallery(gallery<T> ** ga_ptr) = 0;
     virtual int query(const T * const x, const int n, gallery<T> * ga, Tout *sims, idx_t *idx) = 0;
     virtual int query_with_uids(const T* const x, const int n, gallery<T> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx) = 0;
@@ -26,7 +27,7 @@ class base_probe : public probe<T>{
 public:
     base_probe() : probe<T>(){}
     virtual ~base_probe(){}
-    using Tout = typemap_t<T>;
+    typedef typename TMap<T>::type Tout;
     virtual int create_gallery(gallery<T> ** ga_ptr) = 0;
     virtual int query(const T * const x, const int n, gallery<T> * ga, Tout *sims, idx_t *idx) = 0;
     virtual int query_with_uids(const T* const x, const int n, gallery<T> * ga, idx_t *uids, const int m, Tout *sims, idx_t *idx) = 0;

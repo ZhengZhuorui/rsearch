@@ -3,5 +3,5 @@ from django.db import models
 # Create your models here.
 class Dataset(models.Model):
     name = models.CharField(max_length=255)
-    data = models.BinaryField()
-
+    path1 = model.CharField(max_length=255)
+    path2 = model.CharField(max_length=255)

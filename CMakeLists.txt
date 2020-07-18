@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 project(rsearch)
 
 set(CMAKE_CXX_FLAGS "-Ofast -fPIC -funroll-loops -ffast-math -std=c++11 -fopenmp -Wall -mavx2 -masm=intel -march=native -m64")
@@ -8,9 +8,6 @@ execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/env.sh)
 set(RSEARCH_PYTHON ${CMAKE_SOURCE_DIR}/python)
 set(RSEARCH_DIR /home/$ENV{USER}/rsearch)
 set(RSEARCH_DATA_DIR ${RSEARCH_DIR}/data)
-
-execute_process(COMMAND swig -c++ -python ${RSEARCH_PYTHON}/swigrsearch.swg)
-
 
 configure_file(${CMAKE_SOURCE_DIR}/configure.h.in ${CMAKE_SOURCE_DIR}/include/configure.h @ONLY)
 
@@ -89,9 +86,13 @@ target_link_libraries(unit_test rsearch ${GTEST_LIBS} ${GTEST_MAIN_LIBS} )
 #cuda_add_executable(unit_test ${UNIT_TEST_SRC})
 
 
-#set(HEADERS include/rapid1vn.h include/rapid1vn_gallery.h include/rapid1vn_types.h)
+
 #set(UTILS_HEADER utils/feature_factory.h )
 #set(TEST_SRC test/test.cpp )
-
-#install(FILES ${HEADERS} DESTINATION "include")
+set(HEADERS include/rsearch.h include/rsearch_type.h)
+set(UTILS_HEADER include/utils/utils.h)
+install(FILES ${HEADERS} DESTINATION "include")
+install(FILES ${UTILS_HEADER} DESTINATION "utils")
+install(TARGETS rsearch DESTINATION "lib")
+install(TARGETS rsearchStatic DESTINATION "lib")
 

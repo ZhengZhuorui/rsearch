@@ -7,7 +7,7 @@ namespace rsearch{
 
 // ---------------ERROR NO. -------------
 
-enum Errorno{
+typedef enum Errorno{
     INDEX_EXISTS = -1,
     INDEX_NO_FIND = -2,
     TRAINDATA_ERROR = -3,
@@ -16,9 +16,7 @@ enum Errorno{
     NO_SUPPORT = -6,
     SIZE_TOO_BIG = -7,
     LOAD_DATA_ERROR = -8,
-};
-
-
+}Errorno;
 //using uint64_t = unsigned long long;
 //using uint32_t = unsigned int;
 //using int64_t = long long;
@@ -41,15 +39,23 @@ typedef enum MethodType{
     FAISS_LSH = 6,
     FAISS_HNSW = 7,
     FAISS_IVFPQ = 8,
-    FAISS_IVF = 9
+    FAISS_IVF = 9,
+    Con_index = 101,
 } MethodType;
 
 
 typedef enum GalleryType{
     CPU_BASE_GALLERY = 0,
     PQIVF_GALLERY = 1,
+    SIMPLE_GALLERY = 2,
 } GalleryType;
 
+typedef enum VarType{
+    FLOAT32 = 0,
+    INT8 = 1,
+    INT32 = 2,
+    INT64 = 3,
+}VarType;
 
 template<typename T>
 struct TMap{

@@ -18,107 +18,155 @@
     <body>
         <div class="content container" id="app">
             <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#dataset">数据集</a></li>
-                <li role="presentation"><a href="#data">添加/删除数据</a></li>
-                <li role="presentation"><a href="#query">查询</a></li>
+                <li role="presentation" class="active"><a href="#dataset" data-toggle="tab">数据集</a></li>
+                <li role="presentation"><a href="#data" data-toggle="tab">添加/删除数据</a></li>
+                <li role="presentation"><a href="#query" data-toggle="tab">查询</a></li>
             </ul>
-            <table class="table table-bordered table-hover">
-                <th>编号</th>
-                <th>数据集名称</th>
-                <th>删除</th>
-                <tr v-for='item in dataset' @click="bindDatasetID(item.id)">
-                    <td>{{item.id}}</td>
-                    <td>{{item.name}}</td>
-                </tr>
-            </table>
+            <div class="tab-content">
             
-            <div id="dataset">
-                <div class="form-horizontal">
-                    <legend>添加数据集</legend>
-                    <div class="control-group">
-                        <label for="time" class="control-label">数据集名称</label>
-                        <div class="controls">
-                            <input type="text" v-model='datasetName' placeholder="格式：数据集名称">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                            <label for="image" class="control-label">数据集文件</label>
+                <div class="tab-pane active" id="dataset">
+                    <table class="table table-bordered table-hover">
+                        <th>编号</th>
+                        <th>数据集名称</th>
+                        <th>删除</th>
+                        <tr v-for='item in dataset' @click="bindDatasetID(item.id)">
+                            <td>{{item.id}}</td>
+                            <td>{{item.name}}</td>
+                        </tr>
+                    </table>
+                    <div class="form-horizontal">
+                        <legend>添加数据集</legend>
+                        <div class="control-group">
+                            <label for="time" class="control-label">数据集名称</label>
                             <div class="controls">
-                                <input type="file" @change="getFile">
+                                <input type="text" v-model='datasetName' placeholder="格式：数据集名称">
                             </div>
                         </div>
-                    <div>
-                        <button class="btn btn-success" v-on:click="insertDataset">添加</button>
+                        <div class="control-group">
+                                <label for="image" class="control-label">数据集文件</label>
+                                <div class="controls">
+                                    <input type="file" @change="getFile">
+                                </div>
+                            </div>
+                        <div>
+                            <button class="btn btn-success" v-on:click="insertDataset">添加</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="data">
-                <div class="form-horizontal">
-                    <legend>添加数据</legend>
+                <div class="tab-pane" id="data">
+                    <div class="form-horizontal">
+                        <legend>添加数据</legend>
+                        <div class="control-group">
+                            <label for="datasetID" class="control-label">数据集ID</label>
+                            <div class="controls">
+                            <input type="text" v-model="datasetID" placeholder="格式:xx" >
+
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="time" class="control-label">时间</label>
+                            <div class="controls">
+                            <input type="text" v-model="insertTime" placeholder="格式：yyyy-mm-dd,没有则不填">
+                            
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="time" class="control-label">经度</label>
+                            <div class="controls">
+                                <input type="text" v-model="insertLongitude"  placeholder="格式:xx°xx'xx''E/W,没有则不填">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="area" class="control-label">纬度</label>
+                            <div class="controls">
+                                <input type="text" v-model="insertLatitude" placeholder="格式:xx°xx'xx''N/S,没有则不填">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="area" class="control-label">文本</label>
+                            <div class="controls">
+                                <textarea rows="10" v-model="insertText" placeholder="没有则不填"></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="image" class="control-label">图片</label>
+                            <div class="controls">
+                                <input type="file" @change="insertImage">
+                            </div>
+                        </div>
+                        <button class="btn btn-success" v-on:click="insertData">添加</button>
+                    </div>
+                    <div class="form-horizontal">
+                        <legend>删除数据</legend>
+                        <div class="control-group">
+                            <label for="datasetID" class="control-label">数据集ID</label>
+                            <div class="controls">
+                            <input type="text"  placeholder="格式:xx" v-model="datasetID">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="datasetID" class="control-label">编号</label>
+                            <div class="controls">
+                            <input type="text"  v-model='removeID' placeholder="格式:xx">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="query">
+                    <legend>查询</legend>
                     <div class="control-group">
                         <label for="datasetID" class="control-label">数据集ID</label>
                         <div class="controls">
                         <input type="text" v-model="datasetID" placeholder="格式:xx" >
-
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="time" class="control-label">时间</label>
                         <div class="controls">
-                        <input type="text" v-model="startTime" placeholder="格式：yyyy-mm-dd,没有则不填">至
-                        <input type="text" v-model="endTime" placeholder="格式：yyyy-mm-dd,没有则不填">
+                        <input type="text" v-model="queryStartTime" placeholder="格式：yyyy-mm-dd,没有则不填">至
+                        <input type="text" v-model="queryEndTime" placeholder="格式：yyyy-mm-dd,没有则不填">
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="time" class="control-label">经度</label>
                         <div class="controls">
-                            <input type="text" v-model="longitude"  placeholder="格式:xx°xx'E/W,没有则不填">
+                            <input type="text" v-model="queryLongitudeGte"  placeholder="格式:xx°xx'xx''E/W,没有则不填">至
+                            <input type="text" v-model="queryLongitudeLte"  placeholder="格式:xx°xx'xx''E/W,没有则不填">
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="area" class="control-label">纬度</label>
                         <div class="controls">
-                            <input type="text" v-model="latitude" placeholder="格式:xx°xx'N/S,没有则不填">
+                            <input type="text" v-model="queryLatitudeGte" placeholder="格式:xx°xx'xx''N/S,没有则不填">至
+                            <input type="text" v-model="queryLatitudeLte" placeholder="格式:xx°xx'xx''N/S,没有则不填">
+
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="area" class="control-label">文本</label>
                         <div class="controls">
-                            <textarea rows="10" v-model="text" placeholder="没有则不填"></textarea>
+                            <textarea rows="10" v-model="queryText" placeholder="没有则不填"></textarea>
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="image" class="control-label">图片</label>
                         <div class="controls">
-                            <input type="file" @change="getImage">
+                            <input type="file" @change="queryImage">
                         </div>
                     </div>
-                    <button class="btn btn-success" v-on:click="insertData">添加</button>
-                </div>
-                <div class="form-horizontal">
-                    <legend>删除数据</legend>
-                    <div class="control-group">
-                        <label for="datasetID" class="control-label">数据集ID</label>
-                        <div class="controls">
-                        <input type="text" name="startTime" placeholder="格式:xx">
-
+                    <button class="btn btn-success" v-on:click="query">查询</button>
+                    <hr>
+                    <h1>查询结果</h1>
+                    <div v-if="queryResult != []">
+                        <div v-for='item in queryResult'>
+                            <!--<img src='localhost:8000/image={{item.imageId}}'>-->
                         </div>
                     </div>
+                    <br>
                 </div>
-
-
-            </div>
-
-            <div id="query">
-                <legend>查询</legend>
-                <div class="control-group">
-                    <label for="datasetID" class="control-label">数据集ID</label>
-                    <div class="controls">
-                    <input type="text" v-model="datasetID" placeholder="格式:xx" >
-
-                    </div>
-                </div>
+            
             </div>
         </div>
     </body>
@@ -126,20 +174,31 @@
         var Rdata={
                 dataset:[],
                 data:[],
-                host:'127.0.0.1:8000',
+                host:'localhost:8000',
                 datasetName:'',
                 datasetID:0,
 
                 datasetFile:'',
                 file:{},
 
-                startTime:'',
-                endTime:'',
-                longitude:'',
-                latitude:'',
-                text:'',
-                image:{},
+                insertTime:'',
+                insertLongitude:'',
+                insertLatitude:'',
+                insertText:'',
+                insertImage:{},
+                
+                removeID:'',
 
+                queryStartTime:'',
+                queryEndTime:'',
+                queryLongitudeLte:'',
+                queryLongitudeGte:'',
+                queryLatitudeLte:'',
+                queryLatitudeGte:'',
+                queryText:'',
+                queryImage:{},
+
+                queryResult:[]
             };
         new Vue({
             el:'#app',
@@ -159,11 +218,17 @@
                     console.log(file[0]);
                     Rdata.file = file;
                 },
-                getImage:function(event){
+                insertImage:function(event){
                     var image = event.target.files;
-                    Rdata.image = image;
+                    Rdata.insertImage = image[0];
                     console.log(image[0]);
                 },
+                queryImage:function(event){
+                    var image = event.target.files;
+                    Rdata.queryImage = image[0];
+                    console.log(image[0]);
+                },
+
                 insertDataset:function(){
                     var url = data.host + '/addDatabase';
                     var query = {datasetName:Rdata.databaseName, data:Rdata.file};
@@ -178,27 +243,49 @@
                         this.refreshDatabaseSet();
                     });
                 },
+
                 insertData:function(){
                     var url = data.host + '/insertData';
-                    var query = {datasetId:datasetID,
-                                startTime:Rdata.startTime,
-                                endTime:Rdata.endTime,
-                                longitude:Rdata.longitude,
-                                latitude:Rdata.latitude,
-                                text:Rdata.text,
-                                image:Rdata.image
+                    var query = {datasetID:Rdata.datasetID,
+                                time:Rdata.insertTime,
+                                longitude:Rdata.insertLongitude,
+                                latitude:Rdata.insertLatitude,
+                                text:Rdata.insertText,
+                                image:Rdata.insertImage
                                 };
                     $.post(url, query, (data, status)=>{
+                        if (data['result'] == 0) alert("添加成功！ID:", data['resultID'])
                     });
                 },
                 removeData:function(){
                     var url = data.host + '/removeData';
-                    var query = {data}
+                    var query = {datasetID:Rdata.datasetID,
+                                uids:Rdata.removeID
+                                };
+                    $.post(url, query, (data, status)=>{
+                        if (data['result'] == 0) alert("添加成功！")
+                    });
                 },
+
                 query:function(){
-
+                    var url = data.host = '/query';
+                    var query = {datasetID:Rdata.datasetID,
+                                startTime:Rdata.queryStartTime,
+                                endTime:Rdata.queryStartTime,
+                                longitudeLte:Rdata.queryLongitudeLte,
+                                longitudeGte:Rdata.queryLongitudeGte,
+                                latitudeLte:Rdata.queryLatitudeLte,
+                                latitudeGte:Rdata.queryLatitudeGte,
+                                text:Rdata.queryText,
+                                image:Rdata.queryImage
+                    };
+                    $.post(url, query, (data, status)=>{
+                        if (data.result == 0){
+                            Rdata.queryResult = data.resultImage;
+                        }
+                    });
                 }
-
+                
             },
             /*created:function(){
                 var url = data.host + '/DatabaseSet';

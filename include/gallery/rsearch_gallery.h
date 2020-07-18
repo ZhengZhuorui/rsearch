@@ -2,6 +2,7 @@
 #include "rsearch_def.h"
 #include "utils/utils.h"
 namespace rsearch{
+
 template<typename T>
 class gallery{
 public:
@@ -30,7 +31,6 @@ public:
     virtual int load_data(std::string file_name) = 0;
 
     virtual int train(const float* const x, int n) = 0;
-    
 };
 
 }

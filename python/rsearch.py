@@ -90,6 +90,201 @@ except AttributeError:
     _newclass = 0
 
 
+class FloatVector(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FloatVector, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FloatVector, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _rsearch.new_FloatVector()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, arg2):
+        return _rsearch.FloatVector_push_back(self, arg2)
+
+    def clear(self):
+        return _rsearch.FloatVector_clear(self)
+
+    def data(self):
+        return _rsearch.FloatVector_data(self)
+
+    def size(self):
+        return _rsearch.FloatVector_size(self)
+
+    def at(self, n):
+        return _rsearch.FloatVector_at(self, n)
+
+    def resize(self, n):
+        return _rsearch.FloatVector_resize(self, n)
+
+    def swap(self, other):
+        return _rsearch.FloatVector_swap(self, other)
+    __swig_destroy__ = _rsearch.delete_FloatVector
+    __del__ = lambda self: None
+FloatVector_swigregister = _rsearch.FloatVector_swigregister
+FloatVector_swigregister(FloatVector)
+
+class IntVector(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IntVector, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, IntVector, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _rsearch.new_IntVector()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, arg2):
+        return _rsearch.IntVector_push_back(self, arg2)
+
+    def clear(self):
+        return _rsearch.IntVector_clear(self)
+
+    def data(self):
+        return _rsearch.IntVector_data(self)
+
+    def size(self):
+        return _rsearch.IntVector_size(self)
+
+    def at(self, n):
+        return _rsearch.IntVector_at(self, n)
+
+    def resize(self, n):
+        return _rsearch.IntVector_resize(self, n)
+
+    def swap(self, other):
+        return _rsearch.IntVector_swap(self, other)
+    __swig_destroy__ = _rsearch.delete_IntVector
+    __del__ = lambda self: None
+IntVector_swigregister = _rsearch.IntVector_swigregister
+IntVector_swigregister(IntVector)
+
+class Int8Vector(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Int8Vector, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Int8Vector, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _rsearch.new_Int8Vector()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, arg2):
+        return _rsearch.Int8Vector_push_back(self, arg2)
+
+    def clear(self):
+        return _rsearch.Int8Vector_clear(self)
+
+    def data(self):
+        return _rsearch.Int8Vector_data(self)
+
+    def size(self):
+        return _rsearch.Int8Vector_size(self)
+
+    def at(self, n):
+        return _rsearch.Int8Vector_at(self, n)
+
+    def resize(self, n):
+        return _rsearch.Int8Vector_resize(self, n)
+
+    def swap(self, other):
+        return _rsearch.Int8Vector_swap(self, other)
+    __swig_destroy__ = _rsearch.delete_Int8Vector
+    __del__ = lambda self: None
+Int8Vector_swigregister = _rsearch.Int8Vector_swigregister
+Int8Vector_swigregister(Int8Vector)
+
+class QueryFormVector(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, QueryFormVector, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, QueryFormVector, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _rsearch.new_QueryFormVector()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, arg2):
+        return _rsearch.QueryFormVector_push_back(self, arg2)
+
+    def clear(self):
+        return _rsearch.QueryFormVector_clear(self)
+
+    def data(self):
+        return _rsearch.QueryFormVector_data(self)
+
+    def size(self):
+        return _rsearch.QueryFormVector_size(self)
+
+    def at(self, n):
+        return _rsearch.QueryFormVector_at(self, n)
+
+    def resize(self, n):
+        return _rsearch.QueryFormVector_resize(self, n)
+
+    def swap(self, other):
+        return _rsearch.QueryFormVector_swap(self, other)
+    __swig_destroy__ = _rsearch.delete_QueryFormVector
+    __del__ = lambda self: None
+QueryFormVector_swigregister = _rsearch.QueryFormVector_swigregister
+QueryFormVector_swigregister(QueryFormVector)
+
+class AreaTimeVector(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AreaTimeVector, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AreaTimeVector, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _rsearch.new_AreaTimeVector()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, arg2):
+        return _rsearch.AreaTimeVector_push_back(self, arg2)
+
+    def clear(self):
+        return _rsearch.AreaTimeVector_clear(self)
+
+    def data(self):
+        return _rsearch.AreaTimeVector_data(self)
+
+    def size(self):
+        return _rsearch.AreaTimeVector_size(self)
+
+    def at(self, n):
+        return _rsearch.AreaTimeVector_at(self, n)
+
+    def resize(self, n):
+        return _rsearch.AreaTimeVector_resize(self, n)
+
+    def swap(self, other):
+        return _rsearch.AreaTimeVector_swap(self, other)
+    __swig_destroy__ = _rsearch.delete_AreaTimeVector
+    __del__ = lambda self: None
+AreaTimeVector_swigregister = _rsearch.AreaTimeVector_swigregister
+AreaTimeVector_swigregister(AreaTimeVector)
+
 
 _rsearch.CODEBOOK_LINE_SIZE_swigconstant(_rsearch)
 CODEBOOK_LINE_SIZE = _rsearch.CODEBOOK_LINE_SIZE
@@ -154,153 +349,306 @@ FAISS_IVFPQ = _rsearch.FAISS_IVFPQ
 _rsearch.FAISS_IVF_swigconstant(_rsearch)
 FAISS_IVF = _rsearch.FAISS_IVF
 
+_rsearch.Con_index_swigconstant(_rsearch)
+Con_index = _rsearch.Con_index
+
 _rsearch.CPU_BASE_GALLERY_swigconstant(_rsearch)
 CPU_BASE_GALLERY = _rsearch.CPU_BASE_GALLERY
 
 _rsearch.PQIVF_GALLERY_swigconstant(_rsearch)
 PQIVF_GALLERY = _rsearch.PQIVF_GALLERY
 
-def create_probe_float(dimension, topk, dist_type, method_type):
-    return _rsearch.create_probe_float(dimension, topk, dist_type, method_type)
-create_probe_float = _rsearch.create_probe_float
+_rsearch.SIMPLE_GALLERY_swigconstant(_rsearch)
+SIMPLE_GALLERY = _rsearch.SIMPLE_GALLERY
 
-def create_probe_int8(dimension, topk, dist_type, method_type):
-    return _rsearch.create_probe_int8(dimension, topk, dist_type, method_type)
-create_probe_int8 = _rsearch.create_probe_int8
-class probe_float(_object):
+_rsearch.FLOAT32_swigconstant(_rsearch)
+FLOAT32 = _rsearch.FLOAT32
+
+_rsearch.INT8_swigconstant(_rsearch)
+INT8 = _rsearch.INT8
+
+_rsearch.INT32_swigconstant(_rsearch)
+INT32 = _rsearch.INT32
+
+_rsearch.INT64_swigconstant(_rsearch)
+INT64 = _rsearch.INT64
+
+_rsearch.COMP_LT_swigconstant(_rsearch)
+COMP_LT = _rsearch.COMP_LT
+
+_rsearch.COMP_GT_swigconstant(_rsearch)
+COMP_GT = _rsearch.COMP_GT
+
+_rsearch.COMP_EQ_swigconstant(_rsearch)
+COMP_EQ = _rsearch.COMP_EQ
+
+_rsearch.COMP_LTE_swigconstant(_rsearch)
+COMP_LTE = _rsearch.COMP_LTE
+
+_rsearch.COMP_GTE_swigconstant(_rsearch)
+COMP_GTE = _rsearch.COMP_GTE
+
+_rsearch.LT_B_swigconstant(_rsearch)
+LT_B = _rsearch.LT_B
+
+_rsearch.EQ_B_swigconstant(_rsearch)
+EQ_B = _rsearch.EQ_B
+
+_rsearch.GT_B_swigconstant(_rsearch)
+GT_B = _rsearch.GT_B
+class query_form(_object):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, probe_float, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, query_form, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, probe_float, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined - class is abstract")
+    __getattr__ = lambda self, name: _swig_getattr(self, query_form, name)
     __repr__ = _swig_repr
-    __swig_destroy__ = _rsearch.delete_probe_float
+    __swig_setmethods__["offset"] = _rsearch.query_form_offset_set
+    __swig_getmethods__["offset"] = _rsearch.query_form_offset_get
+    if _newclass:
+        offset = _swig_property(_rsearch.query_form_offset_get, _rsearch.query_form_offset_set)
+    __swig_setmethods__["data"] = _rsearch.query_form_data_set
+    __swig_getmethods__["data"] = _rsearch.query_form_data_get
+    if _newclass:
+        data = _swig_property(_rsearch.query_form_data_get, _rsearch.query_form_data_set)
+    __swig_setmethods__["comp_type"] = _rsearch.query_form_comp_type_set
+    __swig_getmethods__["comp_type"] = _rsearch.query_form_comp_type_get
+    if _newclass:
+        comp_type = _swig_property(_rsearch.query_form_comp_type_get, _rsearch.query_form_comp_type_set)
+    __swig_setmethods__["var_type"] = _rsearch.query_form_var_type_set
+    __swig_getmethods__["var_type"] = _rsearch.query_form_var_type_get
+    if _newclass:
+        var_type = _swig_property(_rsearch.query_form_var_type_get, _rsearch.query_form_var_type_set)
+
+    def __init__(self):
+        this = _rsearch.new_query_form()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _rsearch.delete_query_form
     __del__ = lambda self: None
+query_form_swigregister = _rsearch.query_form_swigregister
+query_form_swigregister(query_form)
 
-    def create_gallery(self, ga_ptr):
-        return _rsearch.probe_float_create_gallery(self, ga_ptr)
-
-    def query(self, x, n, ga, sims, idx):
-        return _rsearch.probe_float_query(self, x, n, ga, sims, idx)
-
-    def query_with_uids(self, x, n, ga, uids, m, sims, idx):
-        return _rsearch.probe_float_query_with_uids(self, x, n, ga, uids, m, sims, idx)
-probe_float_swigregister = _rsearch.probe_float_swigregister
-probe_float_swigregister(probe_float)
-
-class probe_int8(_object):
+class area_time(_object):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, probe_int8, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, area_time, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, probe_int8, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined - class is abstract")
+    __getattr__ = lambda self, name: _swig_getattr(self, area_time, name)
     __repr__ = _swig_repr
-    __swig_destroy__ = _rsearch.delete_probe_int8
+    __swig_setmethods__["longtitude"] = _rsearch.area_time_longtitude_set
+    __swig_getmethods__["longtitude"] = _rsearch.area_time_longtitude_get
+    if _newclass:
+        longtitude = _swig_property(_rsearch.area_time_longtitude_get, _rsearch.area_time_longtitude_set)
+    __swig_setmethods__["latitude"] = _rsearch.area_time_latitude_set
+    __swig_getmethods__["latitude"] = _rsearch.area_time_latitude_get
+    if _newclass:
+        latitude = _swig_property(_rsearch.area_time_latitude_get, _rsearch.area_time_latitude_set)
+    __swig_setmethods__["timestamp"] = _rsearch.area_time_timestamp_set
+    __swig_getmethods__["timestamp"] = _rsearch.area_time_timestamp_get
+    if _newclass:
+        timestamp = _swig_property(_rsearch.area_time_timestamp_get, _rsearch.area_time_timestamp_set)
+
+    def __init__(self):
+        this = _rsearch.new_area_time()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _rsearch.delete_area_time
     __del__ = lambda self: None
+area_time_swigregister = _rsearch.area_time_swigregister
+area_time_swigregister(area_time)
 
-    def create_gallery(self, ga_ptr):
-        return _rsearch.probe_int8_create_gallery(self, ga_ptr)
 
-    def query(self, x, n, ga, sims, idx):
-        return _rsearch.probe_int8_query(self, x, n, ga, sims, idx)
+def construct_area_time(longtitude, latitude, timestamp):
+    return _rsearch.construct_area_time(longtitude, latitude, timestamp)
+construct_area_time = _rsearch.construct_area_time
 
-    def query_with_uids(self, x, n, ga, uids, m, sims, idx):
-        return _rsearch.probe_int8_query_with_uids(self, x, n, ga, uids, m, sims, idx)
-probe_int8_swigregister = _rsearch.probe_int8_swigregister
-probe_int8_swigregister(probe_int8)
+def query_area_time_longtitude_lte(v):
+    return _rsearch.query_area_time_longtitude_lte(v)
+query_area_time_longtitude_lte = _rsearch.query_area_time_longtitude_lte
 
-class gallery_float(_object):
+def query_area_time_longtitude_gte(v):
+    return _rsearch.query_area_time_longtitude_gte(v)
+query_area_time_longtitude_gte = _rsearch.query_area_time_longtitude_gte
+
+def query_area_time_latitude_lte(v):
+    return _rsearch.query_area_time_latitude_lte(v)
+query_area_time_latitude_lte = _rsearch.query_area_time_latitude_lte
+
+def query_area_time_latitude_gte(v):
+    return _rsearch.query_area_time_latitude_gte(v)
+query_area_time_latitude_gte = _rsearch.query_area_time_latitude_gte
+
+def query_area_time_timestamp_lte(v):
+    return _rsearch.query_area_time_timestamp_lte(v)
+query_area_time_timestamp_lte = _rsearch.query_area_time_timestamp_lte
+
+def query_area_time_timestamp_gte(v):
+    return _rsearch.query_area_time_timestamp_gte(v)
+query_area_time_timestamp_gte = _rsearch.query_area_time_timestamp_gte
+
+def get_int_pp():
+    return _rsearch.get_int_pp()
+get_int_pp = _rsearch.get_int_pp
+
+def get_int(a):
+    return _rsearch.get_int(a)
+get_int = _rsearch.get_int
+
+def get_int_p(*args):
+    return _rsearch.get_int_p(*args)
+get_int_p = _rsearch.get_int_p
+class result(_object):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, gallery_float, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, result, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, gallery_float, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined - class is abstract")
+    __getattr__ = lambda self, name: _swig_getattr(self, result, name)
     __repr__ = _swig_repr
-    __swig_destroy__ = _rsearch.delete_gallery_float
-    __del__ = lambda self: None
+    __swig_setmethods__["v"] = _rsearch.result_v_set
+    __swig_getmethods__["v"] = _rsearch.result_v_get
+    if _newclass:
+        v = _swig_property(_rsearch.result_v_get, _rsearch.result_v_set)
 
-    def init(self):
-        return _rsearch.gallery_float_init(self)
+    def __init__(self):
+        this = _rsearch.new_result()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _rsearch.delete_result
+    __del__ = lambda self: None
+result_swigregister = _rsearch.result_swigregister
+result_swigregister(result)
+
+class simple_index_areatime(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, simple_index_areatime, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, simple_index_areatime, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _rsearch.new_simple_index_areatime()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _rsearch.delete_simple_index_areatime
+    __del__ = lambda self: None
 
     def add(self, x, n):
-        return _rsearch.gallery_float_add(self, x, n)
+        return _rsearch.simple_index_areatime_add(self, x, n)
 
     def add_with_uids(self, x, uids, n):
-        return _rsearch.gallery_float_add_with_uids(self, x, uids, n)
+        return _rsearch.simple_index_areatime_add_with_uids(self, x, uids, n)
 
     def change_by_uids(self, x, uids, n):
-        return _rsearch.gallery_float_change_by_uids(self, x, uids, n)
+        return _rsearch.simple_index_areatime_change_by_uids(self, x, uids, n)
 
-    def remove_by_uids(self, uids, n):
-        return _rsearch.gallery_float_remove_by_uids(self, uids, n)
+    def remove_by_uids(self, uid, n):
+        return _rsearch.simple_index_areatime_remove_by_uids(self, uid, n)
 
     def query_by_uids(self, uid, n, x):
-        return _rsearch.gallery_float_query_by_uids(self, uid, n, x)
+        return _rsearch.simple_index_areatime_query_by_uids(self, uid, n, x)
 
     def reset(self):
-        return _rsearch.gallery_float_reset(self)
+        return _rsearch.simple_index_areatime_reset(self)
 
     def store_data(self, file_name):
-        return _rsearch.gallery_float_store_data(self, file_name)
+        return _rsearch.simple_index_areatime_store_data(self, file_name)
 
     def load_data(self, file_name):
-        return _rsearch.gallery_float_load_data(self, file_name)
+        return _rsearch.simple_index_areatime_load_data(self, file_name)
 
-    def train(self, x, n):
-        return _rsearch.gallery_float_train(self, x, n)
-gallery_float_swigregister = _rsearch.gallery_float_swigregister
-gallery_float_swigregister(gallery_float)
+    def query(self, x, n, idx, res):
+        return _rsearch.simple_index_areatime_query(self, x, n, idx, res)
 
-class gallery_int8(_object):
+    def query_with_uids(self, x, n, uids, m, idx, res):
+        return _rsearch.simple_index_areatime_query_with_uids(self, x, n, uids, m, idx, res)
+simple_index_areatime_swigregister = _rsearch.simple_index_areatime_swigregister
+simple_index_areatime_swigregister(simple_index_areatime)
+
+class rsearch(_object):
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, gallery_int8, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, rsearch, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, gallery_int8, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined - class is abstract")
+    __getattr__ = lambda self, name: _swig_getattr(self, rsearch, name)
     __repr__ = _swig_repr
-    __swig_destroy__ = _rsearch.delete_gallery_int8
+
+    def __init__(self, *args):
+        this = _rsearch.new_rsearch(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _rsearch.delete_rsearch
     __del__ = lambda self: None
 
-    def init(self):
-        return _rsearch.gallery_int8_init(self)
+    def query(self, *args):
+        return _rsearch.rsearch_query(self, *args)
 
-    def add(self, x, n):
-        return _rsearch.gallery_int8_add(self, x, n)
+    def query_with_uids(self, *args):
+        return _rsearch.rsearch_query_with_uids(self, *args)
 
-    def add_with_uids(self, x, uids, n):
-        return _rsearch.gallery_int8_add_with_uids(self, x, uids, n)
+    def add(self, *args):
+        return _rsearch.rsearch_add(self, *args)
 
-    def change_by_uids(self, x, uids, n):
-        return _rsearch.gallery_int8_change_by_uids(self, x, uids, n)
+    def add_with_uids(self, *args):
+        return _rsearch.rsearch_add_with_uids(self, *args)
+
+    def change_by_uids(self, *args):
+        return _rsearch.rsearch_change_by_uids(self, *args)
 
     def remove_by_uids(self, uids, n):
-        return _rsearch.gallery_int8_remove_by_uids(self, uids, n)
+        return _rsearch.rsearch_remove_by_uids(self, uids, n)
 
-    def query_by_uids(self, uid, n, x):
-        return _rsearch.gallery_int8_query_by_uids(self, uid, n, x)
+    def query_by_uids(self, *args):
+        return _rsearch.rsearch_query_by_uids(self, *args)
 
     def reset(self):
-        return _rsearch.gallery_int8_reset(self)
-
-    def store_data(self, file_name):
-        return _rsearch.gallery_int8_store_data(self, file_name)
-
-    def load_data(self, file_name):
-        return _rsearch.gallery_int8_load_data(self, file_name)
+        return _rsearch.rsearch_reset(self)
 
     def train(self, x, n):
-        return _rsearch.gallery_int8_train(self, x, n)
-gallery_int8_swigregister = _rsearch.gallery_int8_swigregister
-gallery_int8_swigregister(gallery_int8)
+        return _rsearch.rsearch_train(self, x, n)
 
+    def store_data(self, file_name):
+        return _rsearch.rsearch_store_data(self, file_name)
+
+    def load_data(self, file_name):
+        return _rsearch.rsearch_load_data(self, file_name)
+    __swig_setmethods__["dimension"] = _rsearch.rsearch_dimension_set
+    __swig_getmethods__["dimension"] = _rsearch.rsearch_dimension_get
+    if _newclass:
+        dimension = _swig_property(_rsearch.rsearch_dimension_get, _rsearch.rsearch_dimension_set)
+    __swig_setmethods__["topk"] = _rsearch.rsearch_topk_set
+    __swig_getmethods__["topk"] = _rsearch.rsearch_topk_get
+    if _newclass:
+        topk = _swig_property(_rsearch.rsearch_topk_get, _rsearch.rsearch_topk_set)
+    __swig_setmethods__["var_type"] = _rsearch.rsearch_var_type_set
+    __swig_getmethods__["var_type"] = _rsearch.rsearch_var_type_get
+    if _newclass:
+        var_type = _swig_property(_rsearch.rsearch_var_type_get, _rsearch.rsearch_var_type_set)
+    __swig_setmethods__["method_type"] = _rsearch.rsearch_method_type_set
+    __swig_getmethods__["method_type"] = _rsearch.rsearch_method_type_get
+    if _newclass:
+        method_type = _swig_property(_rsearch.rsearch_method_type_get, _rsearch.rsearch_method_type_set)
+rsearch_swigregister = _rsearch.rsearch_swigregister
+rsearch_swigregister(rsearch)
+
+
+def memcpy(dest, src, n):
+    return _rsearch.memcpy(dest, src, n)
+memcpy = _rsearch.memcpy
+
+def swig_ptr(a):
+    return _rsearch.swig_ptr(a)
+swig_ptr = _rsearch.swig_ptr
+
+def rev_swig_ptr(*args):
+    return _rsearch.rev_swig_ptr(*args)
+rev_swig_ptr = _rsearch.rev_swig_ptr
 # This file is compatible with both classic and new-style classes.
 
 

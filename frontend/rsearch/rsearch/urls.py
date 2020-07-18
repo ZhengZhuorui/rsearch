@@ -18,5 +18,5 @@ from django.urls import path
 from rsearch import backend
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', backend.),
+    path('', backend.query),
 ]

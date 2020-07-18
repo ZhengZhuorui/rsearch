@@ -10,7 +10,7 @@ probe.init()
 Or TODO:
 probe.add()
 '''
-simple_index = hrs.handle_simple_index()
+simple_index = hrs.handle_simple_index_areatime()
 
 glb_dataset_id = ""
 

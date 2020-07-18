@@ -43,8 +43,8 @@ static char compare_by_type(const char *x, const char *y, VarType v){
     case FLOAT32:
         //std::cout << (float)(*x) << " " << (float)(*y) << std::endl;
         //printf("%f %f\n", (float)(*(float*)x), (float)(*(float*)y));
-        if ((float)(*x) < (float)(*y)) return LT_B;
-        else if ((float)(*x) == (float)(*y)) return EQ_B;
+        if ((float)(*(float*)x) < (float)(*(float*)y)) return LT_B;
+        else if ((float)(*(float*)x) == (float)(*(float*)y)) return EQ_B;
         else return GT_B;
         break;
     case INT8:
@@ -53,8 +53,8 @@ static char compare_by_type(const char *x, const char *y, VarType v){
         else return GT_B;
         break;
     case INT32:
-        if ((int32_t)(*x) < (int32_t)(*y)) return LT_B;
-        else if ((int32_t)(*x) == (int32_t)(*y)) return EQ_B;
+        if ((int32_t)(*(int32_t*)x) < (int32_t)(*(int32_t*)x)) return LT_B;
+        else if ((int32_t)(*(int32_t*)x) == (int32_t)(*(int32_t*)x)) return EQ_B;
         else return GT_B;
         break;
     case INT64:

@@ -5,3 +5,5 @@
 *.sql
 /backend/dataset
 /backend/image
+*.gz
+*.tar

@@ -3,8 +3,8 @@ import numpy as np
 
 class handle_rsearch:
 
-    def __init__(self, a, b, c, d, e):
-        self.rsearch = rs.rsearch(a, b, c, d, e)
+    def __init__(self, dimension, topk, method_type, dist_type, var_type):
+        self.rsearch = rs.rsearch(dimension, topk, method_type, dist_type, var_type)
 
     def query(self, x):
         n, d = x.shape
@@ -26,30 +26,31 @@ class handle_rsearch:
 
     def add_with_uids(self, x, uids):
         n, d = x.shape
-        assert d == self.d
+        assert d == self.rsearch.dimension
         assert uids.shape == (n, ), 'not same nb of vectors as ids'
         return self.rsearch.add_with_uids(rs.swig_ptr(x), rs.swig_ptr(uids), n)
 
     def change_by_uids(self, x, uids):
         n, d = x.shape
-        assert d == self.d
+        assert d == self.rsearch.dimension
         assert uids.shape == (n, ), 'not same nb of vectors as ids'
         return self.rsearch.add_with_uids(rs.swig_ptr(x), rs.swig_ptr(uids), n)
 
     def remove_by_uids(self, uids):
-        n = x.shape
+        n = uids.shape
         return self.rsearch.remove_by_uids(self, uids, n)
-
-    def query_by_uids(self, *args):
-        n, d = x.shape
+    
+    def query_by_uids(self, uids):
+        n, d = uids.shape
         assert d == self.rsearch.dimension
         res = None
-        if self.rsearch.var_type == FLOAT32:
+        if self.rsearch.var_type == rs.FLOAT32:
             res = np.empty((n, d), dtype=np.float32)
-        elif self.rsearch.var_type == INT8:
+        elif self.rsearch.var_type == rs.INT8:
             res = np.empty((n, d), dtype=np.int8)
         self.rsearch.query(self, rs.swig_ptr(res), n)
         return res
+    
 
     def reset(self):
         return self.rsearch.reset()
@@ -131,7 +132,7 @@ class handle_simple_index_areatime:
         self.simple_index_areatime = rs.simple_index_areatime()
     
     def add(self, x):
-        n = x.shape
+        #n = x.shape
         #return self.simple_index_areatime.add(rs.swig_ptr(x), n)
         return self.simple_index_areatime.add(x.data(), x.size())
     
@@ -146,9 +147,13 @@ class handle_simple_index_areatime:
     def remove_by_uids(self, uids):
         return self.simple_index_areatime.remove_by_uids(uids.data(), uids.size())
 
-    def query_by_uids(self, uid, x):
-        assert uid.size() != x.size()
-        return self.simple_index_areatime.query_by_uids(uid.data(), uid.size(), x.data())
+    def query_by_uids(self, uids):
+        
+        n = uids.size()
+        x = AreaTimeVector()
+        x.resize(n)
+        self.simple_index_areatime.query_by_uids(uids.data(), uids.size(), x.data())
+        return x
 
     def reset(self):
         return self.simple_index_areatime.reset()
@@ -161,15 +166,10 @@ class handle_simple_index_areatime:
 
     def query(self, x):
         idx = rs.get_int_pp()
-        #print('t1', idx)
         res = rs.get_int_p()
-        #print('t2', res)
         self.simple_index_areatime.query(x.data(), x.size(), idx, res)
-        #print('t3')
         n = rs.get_int(res)
-        #print('t4', n)
         a = intpp2array(idx, n)
-        #print('t5')
         return a
 
     def query_with_uids(self, x, uids):

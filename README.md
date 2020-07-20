@@ -63,6 +63,33 @@ make
 
 样例见python文件夹下的demo.py
 
+### 前后端程序运行
+
+需要如下库：
+
+```
+django
+```
+
+首先进行**C++安装**和**Python**安装进入backend文件夹，运行
+
+```
+bash start.sh
+```
+
+进入rsearch_backend文件夹修改文件夹下backend.py下相应程序和参数。
+
+运行
+
+```
+python manage.py migrate
+python manage.py makemigrations model
+python manage.py migrate model
+python manage.py runserver 0.0.0.0:8000
+```
+
+前端直接打开frontend文件夹下的demo.html
+
 ## 文件结构
 
 ~~~
@@ -90,7 +117,8 @@ make
 |  |-rsearch
 |-src(代码实现)
 |-python(Python接口)
-|-frontend(前端+Django接收前端的数据进行处理)
+|-frontend(前端展示界面)
+|-backend(用Django框架做的后端)
 |-CMakeLists.txt(cmake配置文件)
 |-README.md(程序说明)
 |-makefile.inc(配置文件)
@@ -98,4 +126,5 @@ make
 |-env.sh(初始环境设置)
 ~~~
 
-test下包括unit_test和benchmark还有demo，不过现在还在调试尚未完成
+
+

@@ -19,7 +19,7 @@
         <div class="content container" id="app">
             <ul class="nav nav-tabs">
                 <li role="presentation" class="active"><a href="#dataset" data-toggle="tab">数据集</a></li>
-                <li role="presentation"><a href="#data" data-toggle="tab">添加/删除数据</a></li>
+                <li role="presentation"><a href="#adata" data-toggle="tab">添加/删除数据</a></li>
                 <li role="presentation"><a href="#query" data-toggle="tab">查询</a></li>
             </ul>
             <div class="tab-content">
@@ -28,10 +28,11 @@
                     <table class="table table-bordered table-hover">
                         <th>编号</th>
                         <th>数据集名称</th>
-                        <th>删除</th>
-                        <tr v-for='item in dataset' @click="bindDatasetID(item.id)">
+                        <th></th>
+                        <tr v-for='item in dataset'>
                             <td>{{item.id}}</td>
                             <td>{{item.name}}</td>
+                            <td><button v-on:click="selectDataset">选择</button></td>
                         </tr>
                     </table>
                     <div class="form-horizontal">
@@ -54,16 +55,9 @@
                     </div>
                 </div>
 
-                <div class="tab-pane" id="data">
+                <div class="tab-pane" id="adata">
                     <div class="form-horizontal">
                         <legend>添加数据</legend>
-                        <div class="control-group">
-                            <label for="datasetID" class="control-label">数据集ID</label>
-                            <div class="controls">
-                            <input type="text" v-model="datasetID" placeholder="格式:xx" >
-
-                            </div>
-                        </div>
                         <div class="control-group">
                             <label for="time" class="control-label">时间</label>
                             <div class="controls">
@@ -100,12 +94,6 @@
                     <div class="form-horizontal">
                         <legend>删除数据</legend>
                         <div class="control-group">
-                            <label for="datasetID" class="control-label">数据集ID</label>
-                            <div class="controls">
-                            <input type="text"  placeholder="格式:xx" v-model="datasetID">
-                            </div>
-                        </div>
-                        <div class="control-group">
                             <label for="datasetID" class="control-label">编号</label>
                             <div class="controls">
                             <input type="text"  v-model='removeID' placeholder="格式:xx">
@@ -117,12 +105,6 @@
                 <div class="tab-pane" id="query">
                     <legend>查询</legend>
                     <div class="control-group">
-                        <label for="datasetID" class="control-label">数据集ID</label>
-                        <div class="controls">
-                        <input type="text" v-model="datasetID" placeholder="格式:xx" >
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label for="time" class="control-label">时间</label>
                         <div class="controls">
                         <input type="text" v-model="queryStartTime" placeholder="格式：yyyy-mm-dd,没有则不填">至
@@ -132,15 +114,15 @@
                     <div class="control-group">
                         <label for="time" class="control-label">经度</label>
                         <div class="controls">
-                            <input type="text" v-model="queryLongitudeGte"  placeholder="格式:xx°xx'xx''E/W,没有则不填">至
-                            <input type="text" v-model="queryLongitudeLte"  placeholder="格式:xx°xx'xx''E/W,没有则不填">
+                            <input type="text" v-model="queryLongitudeGte"  placeholder="格式:xx.xxx E/W,没有则不填">至
+                            <input type="text" v-model="queryLongitudeLte"  placeholder="格式:xx.xxx E/W,没有则不填">
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="area" class="control-label">纬度</label>
                         <div class="controls">
-                            <input type="text" v-model="queryLatitudeGte" placeholder="格式:xx°xx'xx''N/S,没有则不填">至
-                            <input type="text" v-model="queryLatitudeLte" placeholder="格式:xx°xx'xx''N/S,没有则不填">
+                            <input type="text" v-model="queryLatitudeGte" placeholder="格式:xx.xxx N/S,没有则不填">至
+                            <input type="text" v-model="queryLatitudeLte" placeholder="格式:xx.xxx N/S,没有则不填">
 
                         </div>
                     </div>
@@ -159,10 +141,8 @@
                     <button class="btn btn-success" v-on:click="query">查询</button>
                     <hr>
                     <h1>查询结果</h1>
-                    <div v-if="queryResult != []">
-                        <div v-for='item in queryResult'>
-                            <!--<img src='localhost:8000/image={{item.imageId}}'>-->
-                        </div>
+                    <div v-for='item in query_result'>
+                        <!--<img :src='http://localhost:8000/get_image/?id={{item.id}}'>-->
                     </div>
                     <br>
                 </div>
@@ -174,7 +154,7 @@
         var Rdata={
                 dataset:[],
                 data:[],
-                host:'localhost:8000',
+                host:'http://localhost:8000',
                 datasetName:'',
                 datasetID:0,
 
@@ -198,16 +178,24 @@
                 queryText:'',
                 queryImage:{},
 
-                queryResult:[]
+                query_result:[],
             };
         new Vue({
             el:'#app',
             data:Rdata,
             methods:{
-                refreshDatabaseSet:function(){
-                    var url = data.host + '/DatabaseSet';
-                    $.post(url,(data, status)=>{
-                        Rdata.databaseSet=data.data;
+                refreshDataSet:function(){
+                    var url = Rdata.host + '/queryDataset/';
+                    $.get(url,(data, status)=>{
+                        Rdata.DatasetSet=data.data;
+                    });
+                },
+                selectDataset:function(){
+                    var url = Rdata.host + '/selectDataset/';
+                    var query = {datasetID:datasetID};
+                    $.post(url, query, (data, status)=>{
+                        this.refreshDatasetSet();
+                        alert('你已选择' + datasetName + '数据集');
                     });
                 },
                 bindDatasetID:function(id){
@@ -230,23 +218,28 @@
                 },
 
                 insertDataset:function(){
-                    var url = data.host + '/addDatabase';
-                    var query = {datasetName:Rdata.databaseName, data:Rdata.file};
+                    
+                    var url = Rdata.host + '/insertDataset/';
+                    console.log('url:', url);
+                    var query = {datasetName:Rdata.datasetName};
+                    console.log(query);
                     $.post(url, query, (data, status)=>{
-                        this.refreshDatabaseSet();
+                        if (data.result == 0)
+                            alert('添加成功')
+                        this.refreshDataset();
                     })
                 },
-                removeDatabase:function(databaseName){
-                    var url = data.host + '/removeDatabase';
+                removeDataset:function(DatasetName){
+                    var url = Rdata.host + '/removeDataset/';
                     var query = {datasetID:datasetID};
                     $.post(url, query, (data, status)=>{
-                        this.refreshDatabaseSet();
+                        this.refreshDataSet();
                     });
                 },
 
                 insertData:function(){
-                    var url = data.host + '/insertData';
-                    var query = {datasetID:Rdata.datasetID,
+                    var url = Rdata.host + '/insertData/';
+                    var query = {
                                 time:Rdata.insertTime,
                                 longitude:Rdata.insertLongitude,
                                 latitude:Rdata.insertLatitude,
@@ -258,9 +251,8 @@
                     });
                 },
                 removeData:function(){
-                    var url = data.host + '/removeData';
-                    var query = {datasetID:Rdata.datasetID,
-                                uids:Rdata.removeID
+                    var url = Rdata.host + '/removeData/';
+                    var query = {id:Rdata.removeID
                                 };
                     $.post(url, query, (data, status)=>{
                         if (data['result'] == 0) alert("添加成功！")
@@ -268,31 +260,36 @@
                 },
 
                 query:function(){
-                    var url = data.host = '/query';
-                    var query = {datasetID:Rdata.datasetID,
+                    var url = Rdata.host = '/query/';
+                    var query = {
                                 startTime:Rdata.queryStartTime,
                                 endTime:Rdata.queryStartTime,
-                                longitudeLte:Rdata.queryLongitudeLte,
-                                longitudeGte:Rdata.queryLongitudeGte,
-                                latitudeLte:Rdata.queryLatitudeLte,
-                                latitudeGte:Rdata.queryLatitudeGte,
+                                longitude_lte:Rdata.queryLongitudeLte,
+                                longitude_gte:Rdata.queryLongitudeGte,
+                                latitude_lte:Rdata.queryLatitudeLte,
+                                latitude_gte:Rdata.queryLatitudeGte,
                                 text:Rdata.queryText,
                                 image:Rdata.queryImage
                     };
                     $.post(url, query, (data, status)=>{
                         if (data.result == 0){
-                            Rdata.queryResult = data.resultImage;
+                            Rdata.query_result = Rdata.query_result;
                         }
                     });
                 }
                 
+
+                
             },
-            /*created:function(){
-                var url = data.host + '/DatabaseSet';
-                $.post(url,(data, status)=>{
-                    Rdata.databaseSet=data.data;
+            created:function(){
+                //var url = data.host + '/queryDataset';
+                var url = 'http:://localhost:8000/queryDataset/';
+                $.get(url,(data, status)=>{
+                    
+                    Rdata.dataset=data.data;
                 });
-            }*/
+                console.log(Rdata.dataset);
+            }
         })
     </script>
 

@@ -1,3 +1,7 @@
-/thirdparty
 /cmake-build-debug
 /build
+*.so
+*.a
+*.sql
+/backend/dataset
+/backend/image

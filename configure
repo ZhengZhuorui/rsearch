@@ -1,0 +1,4 @@
+#! /bin/sh
+config_file = "makefile.inc"
+
+NUMPY_INCLUDE=

@@ -4,5 +4,5 @@ PYTHONCFLAGS = -I/usr/include/python3.5
 SWIG         = swig
 SHAREDFLAGS  = -shared
 PYTHON       = python3
-NUMPY_INCLUDE = /usr/local/lib/python3.5/dist-packages/numpy/core/include
+NUMPY_INCLUDE = /home/mdm/.local/lib/python3.5/site-packages/numpy/core/include
 

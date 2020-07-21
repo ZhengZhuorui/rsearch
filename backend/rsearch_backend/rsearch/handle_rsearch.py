@@ -166,15 +166,10 @@ class handle_simple_index_areatime:
 
     def query(self, x):
         idx = rs.get_int_pp()
-        #print('t1', idx)
         res = rs.get_int_p()
-        #print('t2', res)
         self.simple_index_areatime.query(x.data(), x.size(), idx, res)
-        #print('t3')
         n = rs.get_int(res)
-        #print('t4', n)
         a = intpp2array(idx, n)
-        #print('t5')
         return a
 
     def query_with_uids(self, x, uids):

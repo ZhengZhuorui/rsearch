@@ -8,6 +8,8 @@ import random
 import numpy as np
 import os
 
+import rsearch_backend.Encoder as Encoder
+
 #the image directory
 image_dir = "./image/"
 
@@ -26,6 +28,7 @@ class utils:
     simple_index = hrs.handle_simple_index_areatime()
     def __init__(self):
         self.dataset = None
+        self.encoder = Encoder.Encoder()
         #self.probe.init()
 
     def textEncoding(self, text):
@@ -33,6 +36,7 @@ class utils:
         TODO: 从文本提取特征
 
         '''
+        return self.encoder.textEncoding(text)
         return np.empty((1, dimension), dtype=np.float32)
 
     def imageEncoding(self, imagepath):
@@ -40,12 +44,16 @@ class utils:
         TODO: 从图像提取特征
 
         '''
+        return self.encoder.imageEncoding(imagepath)
         return np.empty((1, dimension), dtype=np.float32)
     def imagetextEncoding(self, text, imagepath):
         '''
         TODO: 从图像和文本提取特征
 
         '''
+        txtvect = self.encoder.textEncoding(text)
+        imgvect = self.encoder.imageEncoding(image)
+        return (txtvect + imgvect) / 2
         return np.empty((1, dimension), dtype=np.float32)
 
     def save_image(self, image, image_type):

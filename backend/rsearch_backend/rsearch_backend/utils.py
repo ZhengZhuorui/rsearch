@@ -9,6 +9,7 @@ import numpy as np
 import os
 
 import rsearch_backend.Encoder as Encoder
+from rsearch_backend.database import DBConnector
 
 #the image directory
 image_dir = "./image/"
@@ -29,6 +30,7 @@ class utils:
     def __init__(self):
         self.dataset = None
         self.encoder = Encoder.Encoder()
+        self.sqliteDB = None
         #self.probe.init()
 
     def textEncoding(self, text):
@@ -55,6 +57,9 @@ class utils:
         imgvect = self.encoder.imageEncoding(image)
         return (txtvect + imgvect) / 2
         return np.empty((1, dimension), dtype=np.float32)
+    
+    def get_image(self, id):
+        return self.sqliteDB.select_id(id)
 
     def save_image(self, image, image_type):
         file_name = str(int(time.time())) + image_type
@@ -72,6 +77,7 @@ class utils:
 
     def insert_data(self, time, longtitude, latitude, feature, image, image_type):
         file_name = self.save_image(image, image_type)
+        self.sqliteDB.insert(NULL, time, latitude, longtitude, feature, file_name)
         '''
             TODO: 从sqlite中增加数据，ORM模式如下：
             feature_text = array2text(feature)
@@ -90,6 +96,7 @@ class utils:
             data = RemoteSensing.objects.get(id=id)
             data.remove()
         '''
+        self.sqliteDB.delete(id)
         ID_array = np.array([id])
         self.probe.remove_by_uids(ID_array)
         self.probe.remove_by_uids(ID_array)
@@ -98,6 +105,7 @@ class utils:
     def load_dataset(self, id):
         try:
             self.dataset = Dataset.objects.get(id=id)
+            self.sqliteDB = DBConnector(self.dataset.database_path)
             self.probe.load_data(self.dataset.path1)
             self.simple_index.load_data(self.dataset.path2)
         except Exception:
@@ -112,11 +120,13 @@ class utils:
         path1 = os.path.join(image_dir, path1)
         path2 = str(int(time.time())) + '.d1'
         path2 = os.path.join(image_dir, path2)
+        print(path1, path2)
         f = open(path1, 'wb')
         f.close()
         f = open(path2, 'wb')
         f.close()
         self.dataset = Dataset(name, dataset_path, path1, path2)
+        self.sqliteDB = DBConnector(dataset_path)
         self.dataset.save()
 
 

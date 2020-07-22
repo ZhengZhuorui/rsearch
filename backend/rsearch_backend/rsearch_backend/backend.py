@@ -159,7 +159,8 @@ def get_image(request):
 
         下面只返回一张样例图片
         '''
-        image_path = os.path.join(rs_util.image_dir, 'example.png')
+        image_path = glb.get_image(image_id)
+        #image_path = os.path.join(rs_util.image_dir, 'example.png')
         with open(image_path, 'rb') as f:
             image_data = f.read()
         return HttpResponse(image_data, content_type='image/png')

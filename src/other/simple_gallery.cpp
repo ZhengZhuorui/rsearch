@@ -121,9 +121,8 @@ template<typename T>
 int simple_gallery<T>::load_data(std::string file_name){
     this->mtx.lock();
     ifstream fin(file_name, ifstream::binary);
-    int type, d, n;
+    int type, n;
     r_read(fin, &type, 1);
-    r_read(fin, &d, 1);
     if (type != SIMPLE_GALLERY)
         return LOAD_DATA_ERROR;
     r_read(fin, &n, 1);
@@ -143,6 +142,7 @@ int simple_gallery<T>::load_data(std::string file_name){
     r_read(fin, this->data.data() + 1LL * this->num, 1LL * n);
     
     this->num += n;
+    //std::cout << this->num << std::endl;
     this->mtx.unlock();
     return 0;
 }

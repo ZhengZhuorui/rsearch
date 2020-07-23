@@ -7,3 +7,6 @@
 /backend/image
 *.gz
 *.tar
+*.d1
+*.d2
+*.sqlite3

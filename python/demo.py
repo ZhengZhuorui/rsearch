@@ -52,5 +52,6 @@ if __name__ == '__main__':
     index.store_data('example.d2')
     index.reset()
     index.load_data('example.d2')
-    index.query(qf_0)
-
+    print('???')
+    uids = index.query(qf_0)
+    print(uids)

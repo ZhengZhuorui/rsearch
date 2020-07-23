@@ -2708,19 +2708,18 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 #define SWIGTYPE_p_rsearch__simple_indexT_rsearch__area_time_t swig_types[16]
 #define SWIGTYPE_p_short swig_types[17]
 #define SWIGTYPE_p_signed_char swig_types[18]
-#define SWIGTYPE_p_std__string swig_types[19]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[20]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[21]
-#define SWIGTYPE_p_std__vectorT_rsearch__area_time_t swig_types[22]
-#define SWIGTYPE_p_std__vectorT_rsearch__query_form_t swig_types[23]
-#define SWIGTYPE_p_std__vectorT_signed_char_t swig_types[24]
-#define SWIGTYPE_p_unsigned_char swig_types[25]
-#define SWIGTYPE_p_unsigned_int swig_types[26]
-#define SWIGTYPE_p_unsigned_long_long swig_types[27]
-#define SWIGTYPE_p_unsigned_short swig_types[28]
-#define SWIGTYPE_p_void swig_types[29]
-static swig_type_info *swig_types[31];
-static swig_module_info swig_module = {swig_types, 30, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[19]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[20]
+#define SWIGTYPE_p_std__vectorT_rsearch__area_time_t swig_types[21]
+#define SWIGTYPE_p_std__vectorT_rsearch__query_form_t swig_types[22]
+#define SWIGTYPE_p_std__vectorT_signed_char_t swig_types[23]
+#define SWIGTYPE_p_unsigned_char swig_types[24]
+#define SWIGTYPE_p_unsigned_int swig_types[25]
+#define SWIGTYPE_p_unsigned_long_long swig_types[26]
+#define SWIGTYPE_p_unsigned_short swig_types[27]
+#define SWIGTYPE_p_void swig_types[28]
+static swig_type_info *swig_types[30];
+static swig_module_info swig_module = {swig_types, 29, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3478,6 +3477,9 @@ SWIG_From_long_SS_long  (long long value)
     PyLong_FromLongLong(value) : PyInt_FromLong(static_cast< long >(value));
 }
 #endif
+
+
+
 
 
 PyObject *swig_ptr (PyObject *a)
@@ -5852,11 +5854,12 @@ fail:
 SWIGINTERN PyObject *_wrap_simple_index_areatime_store_data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   rsearch::simple_index< rsearch::area_time > *arg1 = (rsearch::simple_index< rsearch::area_time > *) 0 ;
-  std::string arg2 ;
+  char *arg2 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject *swig_obj[2] ;
   int result;
   
@@ -5866,23 +5869,17 @@ SWIGINTERN PyObject *_wrap_simple_index_areatime_store_data(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "simple_index_areatime_store_data" "', argument " "1"" of type '" "rsearch::simple_index< rsearch::area_time > *""'"); 
   }
   arg1 = reinterpret_cast< rsearch::simple_index< rsearch::area_time > * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "simple_index_areatime_store_data" "', argument " "2"" of type '" "std::string""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "simple_index_areatime_store_data" "', argument " "2"" of type '" "std::string""'");
-    } else {
-      std::string * temp = reinterpret_cast< std::string * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "simple_index_areatime_store_data" "', argument " "2"" of type '" "char const *""'");
   }
-  result = (int)(arg1)->store_data(arg2);
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (int)(arg1)->store_data((char const *)arg2);
   resultobj = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return NULL;
 }
 
@@ -5890,11 +5887,12 @@ fail:
 SWIGINTERN PyObject *_wrap_simple_index_areatime_load_data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   rsearch::simple_index< rsearch::area_time > *arg1 = (rsearch::simple_index< rsearch::area_time > *) 0 ;
-  std::string arg2 ;
+  char *arg2 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject *swig_obj[2] ;
   int result;
   
@@ -5904,23 +5902,17 @@ SWIGINTERN PyObject *_wrap_simple_index_areatime_load_data(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "simple_index_areatime_load_data" "', argument " "1"" of type '" "rsearch::simple_index< rsearch::area_time > *""'"); 
   }
   arg1 = reinterpret_cast< rsearch::simple_index< rsearch::area_time > * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "simple_index_areatime_load_data" "', argument " "2"" of type '" "std::string""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "simple_index_areatime_load_data" "', argument " "2"" of type '" "std::string""'");
-    } else {
-      std::string * temp = reinterpret_cast< std::string * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "simple_index_areatime_load_data" "', argument " "2"" of type '" "char const *""'");
   }
-  result = (int)(arg1)->load_data(arg2);
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (int)(arg1)->load_data((char const *)arg2);
   resultobj = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return NULL;
 }
 
@@ -7333,11 +7325,12 @@ fail:
 SWIGINTERN PyObject *_wrap_rsearch_store_data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   rsearch::rsearch *arg1 = (rsearch::rsearch *) 0 ;
-  std::string arg2 ;
+  char *arg2 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject *swig_obj[2] ;
   int result;
   
@@ -7347,23 +7340,17 @@ SWIGINTERN PyObject *_wrap_rsearch_store_data(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "rsearch_store_data" "', argument " "1"" of type '" "rsearch::rsearch *""'"); 
   }
   arg1 = reinterpret_cast< rsearch::rsearch * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rsearch_store_data" "', argument " "2"" of type '" "std::string""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "rsearch_store_data" "', argument " "2"" of type '" "std::string""'");
-    } else {
-      std::string * temp = reinterpret_cast< std::string * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rsearch_store_data" "', argument " "2"" of type '" "char const *""'");
   }
-  result = (int)(arg1)->store_data(arg2);
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (int)(arg1)->store_data((char const *)arg2);
   resultobj = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return NULL;
 }
 
@@ -7371,11 +7358,12 @@ fail:
 SWIGINTERN PyObject *_wrap_rsearch_load_data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   rsearch::rsearch *arg1 = (rsearch::rsearch *) 0 ;
-  std::string arg2 ;
+  char *arg2 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject *swig_obj[2] ;
   int result;
   
@@ -7385,23 +7373,17 @@ SWIGINTERN PyObject *_wrap_rsearch_load_data(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "rsearch_load_data" "', argument " "1"" of type '" "rsearch::rsearch *""'"); 
   }
   arg1 = reinterpret_cast< rsearch::rsearch * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rsearch_load_data" "', argument " "2"" of type '" "std::string""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "rsearch_load_data" "', argument " "2"" of type '" "std::string""'");
-    } else {
-      std::string * temp = reinterpret_cast< std::string * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rsearch_load_data" "', argument " "2"" of type '" "char const *""'");
   }
-  result = (int)(arg1)->load_data(arg2);
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (int)(arg1)->load_data((char const *)arg2);
   resultobj = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return NULL;
 }
 
@@ -8081,7 +8063,6 @@ static swig_type_info _swigt__p_rsearch__rsearch = {"_p_rsearch__rsearch", "rsea
 static swig_type_info _swigt__p_rsearch__simple_indexT_rsearch__area_time_t = {"_p_rsearch__simple_indexT_rsearch__area_time_t", "rsearch::simple_index< rsearch::area_time > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_float_t = {"_p_std__vectorT_float_t", "std::vector< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_int_t = {"_p_std__vectorT_int_t", "std::vector< rsearch::idx_t > *|std::vector< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_rsearch__area_time_t = {"_p_std__vectorT_rsearch__area_time_t", "std::vector< rsearch::area_time > *", 0, 0, (void*)0, 0};
@@ -8113,7 +8094,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_rsearch__simple_indexT_rsearch__area_time_t,
   &_swigt__p_short,
   &_swigt__p_signed_char,
-  &_swigt__p_std__string,
   &_swigt__p_std__vectorT_float_t,
   &_swigt__p_std__vectorT_int_t,
   &_swigt__p_std__vectorT_rsearch__area_time_t,
@@ -8145,7 +8125,6 @@ static swig_cast_info _swigc__p_rsearch__rsearch[] = {  {&_swigt__p_rsearch__rse
 static swig_cast_info _swigc__p_rsearch__simple_indexT_rsearch__area_time_t[] = {  {&_swigt__p_rsearch__simple_indexT_rsearch__area_time_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_float_t[] = {  {&_swigt__p_std__vectorT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_int_t[] = {  {&_swigt__p_std__vectorT_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_rsearch__area_time_t[] = {  {&_swigt__p_std__vectorT_rsearch__area_time_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -8177,7 +8156,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_rsearch__simple_indexT_rsearch__area_time_t,
   _swigc__p_short,
   _swigc__p_signed_char,
-  _swigc__p_std__string,
   _swigc__p_std__vectorT_float_t,
   _swigc__p_std__vectorT_int_t,
   _swigc__p_std__vectorT_rsearch__area_time_t,

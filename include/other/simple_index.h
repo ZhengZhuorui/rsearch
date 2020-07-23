@@ -29,9 +29,9 @@ public:
 
     int reset();
 
-    int store_data(std::string file_name);
+    int store_data(const char* file_name);
 
-    int load_data(std::string file_name);
+    int load_data(const char* file_name);
 
     int query(const query_form *  x, const int n, idx_t** idx, int* res);
     int query_with_uids(const query_form*  x, const int n, idx_t *uids, const int m, idx_t** idx, int* res);

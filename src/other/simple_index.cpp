@@ -29,12 +29,12 @@ int simple_index<T>::reset(){
     return ga->reset();
 }
 template <typename T>
-int simple_index<T>::store_data(std::string file_name){
-    return ga->store_data(file_name);
+int simple_index<T>::store_data(const char* file_name){
+    return ga->store_data(std::string(file_name));
 }
 template <typename T>
-int simple_index<T>::load_data(std::string file_name){
-    return ga->load_data(file_name);
+int simple_index<T>::load_data(const char* file_name){
+    return ga->load_data(std::string(file_name));
 }
 
 static char compare_by_type(const char *x, const char *y, VarType v){
@@ -168,8 +168,8 @@ template int simple_index<area_time>::change_by_uids(const area_time * x, const 
 template int simple_index<area_time>::remove_by_uids(const idx_t * uid, const int n);
 template int simple_index<area_time>::query_by_uids(const idx_t * uid, int n, area_time * x);
 template int simple_index<area_time>::reset();
-template int simple_index<area_time>::store_data(std::string file_name);
-template int simple_index<area_time>::load_data(std::string file_name);
+template int simple_index<area_time>::store_data(const char* file_name);
+template int simple_index<area_time>::load_data(const char* file_name);
 template int simple_index<area_time>::query(const query_form * x, const int n, idx_t** idx, int* res);
 template int simple_index<area_time>::query_with_uids(const query_form* x, const int n, idx_t *uids, const int m, idx_t** idx, int* res);
 }

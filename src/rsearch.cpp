@@ -115,7 +115,7 @@ int rsearch::train(const float* x, int n){
     return 0;
 }
 
-int rsearch::store_data(std::string file_name){
+int rsearch::store_data(const char* file_name){
     switch (var_type)
     {
     case FLOAT32:
@@ -130,7 +130,7 @@ int rsearch::store_data(std::string file_name){
     return 0;
 }
 
-int rsearch::load_data(std::string file_name){
+int rsearch::load_data(const char* file_name){
     switch (var_type)
     {
         case FLOAT32:

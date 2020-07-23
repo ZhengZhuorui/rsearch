@@ -41,9 +41,9 @@ public:
 
     int train(const float* x, int n);
 
-    int store_data(std::string file_name);
+    int store_data(const char* file_name);
 
-    int load_data(std::string file_name);
+    int load_data(const char* file_name);
 
     int dimension, topk;
 

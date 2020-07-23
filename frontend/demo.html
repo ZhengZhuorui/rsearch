@@ -32,7 +32,7 @@
                         <tr v-for='item in dataset'>
                             <td>{{item.id}}</td>
                             <td>{{item.name}}</td>
-                            <td><button v-on:click="selectDataset">选择</button></td>
+                            <td><button v-on:click="selectDataset(item)">选择</button></td>
                         </tr>
                     </table>
                     <div class="form-horizontal">
@@ -61,20 +61,20 @@
                         <div class="control-group">
                             <label for="time" class="control-label">时间</label>
                             <div class="controls">
-                            <input type="text" v-model="insertTime" placeholder="格式：yyyy-mm-dd,没有则不填">
+                            <input type="text" v-model="insertTime" placeholder="格式：yyyy-mm-dd HH:MM:SS,没有则不填">
                             
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="time" class="control-label">经度</label>
                             <div class="controls">
-                                <input type="text" v-model="insertLongitude"  placeholder="格式:xx°xx'xx''E/W,没有则不填">
+                                <input type="text" v-model="insertLongitude"  placeholder="格式:xx.xxx E/W,没有则不填">
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="area" class="control-label">纬度</label>
                             <div class="controls">
-                                <input type="text" v-model="insertLatitude" placeholder="格式:xx°xx'xx''N/S,没有则不填">
+                                <input type="text" v-model="insertLatitude" placeholder="格式:xx.xxx N/S,没有则不填">
                             </div>
                         </div>
                         <div class="control-group">
@@ -86,7 +86,7 @@
                         <div class="control-group">
                             <label for="image" class="control-label">图片</label>
                             <div class="controls">
-                                <input type="file" @change="insertImage">
+                                <input type="file" @change="insertImageFunc">
                             </div>
                         </div>
                         <button class="btn btn-success" v-on:click="insertData">添加</button>
@@ -107,8 +107,8 @@
                     <div class="control-group">
                         <label for="time" class="control-label">时间</label>
                         <div class="controls">
-                        <input type="text" v-model="queryStartTime" placeholder="格式：yyyy-mm-dd,没有则不填">至
-                        <input type="text" v-model="queryEndTime" placeholder="格式：yyyy-mm-dd,没有则不填">
+                        <input type="text" v-model="queryStartTime" placeholder="格式：yyyy-mm-dd HH:MM:SS,没有则不填">至
+                        <input type="text" v-model="queryEndTime" placeholder="格式：yyyy-mm-dd HH:MM:SS,没有则不填">
                         </div>
                     </div>
                     <div class="control-group">
@@ -135,14 +135,15 @@
                     <div class="control-group">
                         <label for="image" class="control-label">图片</label>
                         <div class="controls">
-                            <input type="file" @change="queryImage">
+                            <input type="file" @change="queryImageFunc">
                         </div>
                     </div>
                     <button class="btn btn-success" v-on:click="query">查询</button>
                     <hr>
                     <h1>查询结果</h1>
                     <div v-for='item in query_result'>
-                        <!--<img :src='http://localhost:8000/get_image/?id={{item.id}}'>-->
+                        <img :src="item.src">
+                        <p>经度：{{item.lng}}, 纬度：{{item.la}}, 时间戳：{{item.t}}</p>
                     </div>
                     <br>
                 </div>
@@ -151,10 +152,12 @@
         </div>
     </body>
     <script>
-        var Rdata={
+        new Vue({
+            el:'#app',
+            data:{
                 dataset:[],
                 data:[],
-                host:'http://localhost:8000',
+                host:'http://10.141.223.70:8000',
                 datasetName:'',
                 datasetID:0,
 
@@ -166,7 +169,7 @@
                 insertLatitude:'',
                 insertText:'',
                 insertImage:{},
-                
+
                 removeID:'',
 
                 queryStartTime:'',
@@ -179,58 +182,59 @@
                 queryImage:{},
 
                 query_result:[],
-            };
-        new Vue({
-            el:'#app',
-            data:Rdata,
+            },
             methods:{
-                refreshDataSet:function(){
-                    var url = Rdata.host + '/queryDataset/';
-                    $.get(url,(data, status)=>{
-                        Rdata.DatasetSet=data.data;
+                refreshDataSet:function() {
+                    var url = this.host + '/queryDataset/';
+                    $.post(url,(data, status)=>{
+                        this.dataset=data.dataset;
                     });
+                    return 0;
                 },
-                selectDataset:function(){
-                    var url = Rdata.host + '/selectDataset/';
-                    var query = {datasetID:datasetID};
+                selectDataset:function(item){
+                    var url = this.host + '/selectDataset/';
+                    var query = {datasetID: item.id};
                     $.post(url, query, (data, status)=>{
-                        this.refreshDatasetSet();
-                        alert('你已选择' + datasetName + '数据集');
+                        this.refreshDataSet();
+                        alert('你已选择' + item.name + '数据集');
                     });
                 },
                 bindDatasetID:function(id){
-                    Rdata.datasetID = id;
+                    this.datasetID = id;
                 },
                 getFile:function(event){
                     var file = event.target.files;
                     console.log(file[0]);
-                    Rdata.file = file;
+                    this.file = file;
                 },
-                insertImage:function(event){
+                insertImageFunc:function(event){
                     var image = event.target.files;
-                    Rdata.insertImage = image[0];
+                    this.insertImage = image[0];
                     console.log(image[0]);
                 },
-                queryImage:function(event){
+                queryImageFunc:function(event){
                     var image = event.target.files;
-                    Rdata.queryImage = image[0];
+                    this.queryImage = image[0];
                     console.log(image[0]);
                 },
 
                 insertDataset:function(){
                     
-                    var url = Rdata.host + '/insertDataset/';
+                    var url = this.host + '/insertDataset/';
                     console.log('url:', url);
-                    var query = {datasetName:Rdata.datasetName};
+                    var query = {datasetName:this.datasetName};
                     console.log(query);
+
                     $.post(url, query, (data, status)=>{
                         if (data.result == 0)
-                            alert('添加成功')
-                        this.refreshDataset();
+                            alert('添加成功');
+
+                        //this.refreshDataset();
+                        this.refreshDataSet();
                     })
                 },
                 removeDataset:function(DatasetName){
-                    var url = Rdata.host + '/removeDataset/';
+                    var url = this.host + '/removeDataset/';
                     var query = {datasetID:datasetID};
                     $.post(url, query, (data, status)=>{
                         this.refreshDataSet();
@@ -238,21 +242,42 @@
                 },
 
                 insertData:function(){
-                    var url = Rdata.host + '/insertData/';
+                    var url = this.host + '/insertData/';
                     var query = {
-                                time:Rdata.insertTime,
-                                longitude:Rdata.insertLongitude,
-                                latitude:Rdata.insertLatitude,
-                                text:Rdata.insertText,
-                                image:Rdata.insertImage
+                                time:this.insertTime,
+                                longitude:this.insertLongitude,
+                                latitude:this.insertLatitude,
+                                text:this.insertText,
+                                image:this.insertImage
                                 };
-                    $.post(url, query, (data, status)=>{
+                    console.log(query);
+                    
+                    /*$.post(url, query, (data, status)=>{
                         if (data['result'] == 0) alert("添加成功！ID:", data['resultID'])
                     });
+                    */
+                   var formdata = new FormData();
+                   formdata.append("time", this.insertTime);
+                   formdata.append("longtitude", this.insertLongitude);
+                   formdata.append("latitude", this.insertLatitude);
+                   formdata.append("text", this.insertText);
+                   formdata.append("image", this.insertImage);
+                   $.ajax({
+                       type:'post',
+                       url:url,
+                       data:formdata,
+                       processData:false,
+                       contentType: false,
+                       success:function(data){
+                        if (data['result'] == 0) 
+                            //alert("添加成功！ID:", data['resultID'])
+                            alert('添加成功！')
+                       }
+                   })
                 },
                 removeData:function(){
-                    var url = Rdata.host + '/removeData/';
-                    var query = {id:Rdata.removeID
+                    var url = this.host + '/removeData/';
+                    var query = {id:this.removeID
                                 };
                     $.post(url, query, (data, status)=>{
                         if (data['result'] == 0) alert("添加成功！")
@@ -260,35 +285,71 @@
                 },
 
                 query:function(){
-                    var url = Rdata.host = '/query/';
-                    var query = {
-                                startTime:Rdata.queryStartTime,
-                                endTime:Rdata.queryStartTime,
-                                longitude_lte:Rdata.queryLongitudeLte,
-                                longitude_gte:Rdata.queryLongitudeGte,
-                                latitude_lte:Rdata.queryLatitudeLte,
-                                latitude_gte:Rdata.queryLatitudeGte,
-                                text:Rdata.queryText,
-                                image:Rdata.queryImage
+                    var url = this.host + '/query/';
+                    /*var query = {
+                                startTime:this.queryStartTime,
+                                endTime:this.queryStartTime,
+                                longitude_lte:this.queryLongitudeLte,
+                                longitude_gte:this.queryLongitudeGte,
+                                latitude_lte:this.queryLatitudeLte,
+                                latitude_gte:this.queryLatitudeGte,
+                                text:this.queryText,
+                                image:this.queryImage
                     };
+
+
                     $.post(url, query, (data, status)=>{
                         if (data.result == 0){
-                            Rdata.query_result = Rdata.query_result;
+                            this.query_result = this.query_result;
                         }
-                    });
-                }
-                
+                    });*/
+                    this.query_result = [];
+                    var formdata = new FormData();
+                    formdata.append("startTime", this.queryStartTime);
+                    formdata.append("endTime", this.queryEndTime);
+                    formdata.append("longtitude_lte", this.queryLongitudeLte);
+                    formdata.append("longtitude_gte", this.queryLongitudeGte);
+                    formdata.append("latitude_lte", this.queryLatitudeLte);
+                    formdata.append("latitude_gte", this.queryLatitudeGte);
+                    formdata.append("text", this.queryText);
+                    formdata.append("image", this.queryImage);
+                    var that = this;
+                    $.ajax({
+                        type:'post',
+                        url:url,
+                        data:formdata,
+                        processData:false,
+                        contentType: false,
+                        success:function(data){
+                            if (data['result'] == 0) 
+                                //alert("添加成功！ID:", data['resultID'])
+                                alert('查询完成！');
+                            var qtmp = data['query_result'];
+                            console.log(that.query_result);
+                            //for (var i = 0; i < len; ++i) that.query_result.pop();
+                            for (var i in qtmp){
+                                qtmp[i]['src'] = "http://10.141.223.70:8000/get_image/?id=" + (qtmp[i]['id']+1).toString();
+                                //that.query_result.push(qtmp[i]);
+                                //this.$set(this.query_result, i, query_result[i]);
+                            }
+                            that.query_result = qtmp;
+                            console.log(that.query_result);
 
-                
+                        }
+                    })
+                }
+
             },
             created:function(){
                 //var url = data.host + '/queryDataset';
-                var url = 'http:://localhost:8000/queryDataset/';
-                $.get(url,(data, status)=>{
-                    
-                    Rdata.dataset=data.data;
+                console.log('???');
+                var url = this.host + '/queryDataset/';
+                $.post(url,(data, status)=>{
+                    console.log(data);
+                    this.dataset=data.dataset;
                 });
-                console.log(Rdata.dataset);
+                console.log(this.dataset);
+                this.refreshDataSet();
             }
         })
     </script>

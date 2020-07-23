@@ -16,17 +16,20 @@ print('target2')
 # def select_dataset(request):
 
 def select_dataset(request):
+    print(request.POST)
     id = request.POST['datasetID']
     glb.load_dataset(id)
     '''
     TODO: 切换sqlite数据库
     '''
-    return HttpResponse({'result':0})
+    return JsonResponse({'result':0})
 
 def query_dataset(request):
+    print('[query dataset]')
     res = Dataset.objects.all()
-    print(res)
-    return HttpResponse(res)
+    res_lt = list(map(lambda x: {'name':x.name,'id':x.id}, res))
+    print(res_lt)
+    return JsonResponse({'result':0, 'dataset':res_lt})
 
 
 def insert_dataset(request):
@@ -37,35 +40,40 @@ def insert_dataset(request):
         file_name = request.FILES['data'].name
     dataset_path = os.path.join(rs_util.dataset_dir, file_name)
     glb.insert_dataset(name, dataset_path)
-    return HttpResponse({'result':0})
+    return JsonResponse({'result':0})
     
 def insert_data(request):
-    
-    time = request.POST['time']
-    longtitude = request.POST['longtitude']
-    latitude = request.POST['latitude']
-    text = request.POST['text']
+    print(request.POST)
+    #time = request.POST.get('time')
     image = request.FILES['image']
     image_name = request.FILES['image'].name
     image_type = os.path.splitext(image_name)[1].lower()
+    _time = request.POST['time']
+    print(_time)
+    longtitude = request.POST['longtitude']
+    latitude = request.POST['latitude']
+    text = request.POST['text']
+    print(time.time())
+    timestamp = int(time.time())
 
-    if text != None and image == None:
-        feature = glb.textEncoding(text)
-    if text == None and image != None:
-        feature = glb.imageEncoding(image)
-    if text != None and image != None:
-        feature = glb.imagetextEncoding(image)
+    if _time != '':
+        timeArray = time.strptime(_time, "%Y-%m-%d %H:%M:%S")
+        timestamp=int(time.mktime(timeArray))
+   
+    glb.insert_data(timestamp, longtitude, latitude, text, image, image_type)
 
-    glb.insert_data(time, longtitude, latitude, feature, image, image_type)
+    # result_id = glb.insert_data(timeStamp, longtitude_v, latitude_v, feature, image, image_type)
+    # return JsonReponse({'result':0, 'resultID':result_id})
+    return JsonResponse({'result':0})
     
 
 def remove_data(request):
     ID = int(request.POST['ID'])
     try:
         glb.remove_data(ID)        
-        return HttpResponse({'result':0})
+        return JsonResponse({'result':0})
     except Exception:
-        return HttpResponse({'result':1})
+        return JsonResponse({'result':1})
 
 def query(request):
     startTime = request.POST['startTime']
@@ -146,7 +154,7 @@ def query(request):
     res_lt = [{'lng':0, 'la':0, 't':0, 'id':0}]
 
     result = {'result':0, 'query_result':res_lt}
-    return HttpResponse(result)
+    return JsonResponse(result)
 
 def get_image(request):
     image_id =  request.GET['id']

@@ -49,5 +49,8 @@ if __name__ == '__main__':
     uids = index.query(qf_1)
     print(uids)
 
-
+    index.store_data('example.d2')
+    index.reset()
+    index.load_data('example.d2')
+    index.query(qf_0)
 

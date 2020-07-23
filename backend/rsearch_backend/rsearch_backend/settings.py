@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+
     'model',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #'rsearch_backend.SolveCrossDomain.SolveCrossDomainMiddleware',
 ]
 
 ROOT_URLCONF = 'rsearch_backend.urls'
@@ -122,6 +128,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 APPEND_SLASH=False
+
+'''
+CORS_ORIGIN_WHITELIST = (
+    http
+'''
 
 CORS_ALLOW_CREDENTIALS = True
 

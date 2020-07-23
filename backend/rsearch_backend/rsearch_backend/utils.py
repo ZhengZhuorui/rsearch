@@ -89,7 +89,7 @@ class utils:
         print('insert data t1')
         print(feature)
         print(feature.shape)
-        feature_s = str(list(feature.tolist))
+        feature_s = str(list(feature.tolist()))
         self.sqliteDB.insert(None, time, latitude, longtitude, feature_s, image_path)
         print('insert data t2')
         vec = rs.AreaTimeVector()

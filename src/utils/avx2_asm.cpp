@@ -769,6 +769,18 @@ void r_dot_prod(const T *A, const T *B, const typemap_t<T> *offset, const int M,
         for (; iB < N; ++iB)
         for (iA = 0; iA < M; ++iA) dot_1x1<4096>(B + iB * K, A + iA * K, offset + iB, dst + iA * ldc + iB);
         break;
+    case 128:
+        for (; iB + 3 < N; iB += 4){
+            iA = 0;
+            for (; iA + 1 < M; iA += 2){
+                dot_4x2<128>(B + iB * K, A + iA * K, offset + iB, dst + iA * ldc + iB, ldc);
+            }
+            for (; iA < M; ++iA) dot_4x1<128>(B + iB * K, A + iA * K, offset + iB, dst + iA * ldc + iB);
+        }
+        for (; iB < N; ++iB)
+        for (iA = 0; iA < M; ++iA) dot_1x1<128>(B + iB * K, A + iA * K, offset + iB, dst + iA * ldc + iB);
+        break;
+        break;
     default:
         int iA=0, iB=0;
         for (; iB + 3 < N; iB += 4){

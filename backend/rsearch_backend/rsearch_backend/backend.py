@@ -49,11 +49,9 @@ def insert_data(request):
     image_name = request.FILES['image'].name
     image_type = os.path.splitext(image_name)[1].lower()
     _time = request.POST['time']
-    print(_time)
     longtitude = request.POST['longtitude']
     latitude = request.POST['latitude']
     text = request.POST['text']
-    print(time.time())
     timestamp = int(time.time())
 
     if _time != '':
@@ -61,7 +59,7 @@ def insert_data(request):
         timestamp=int(time.mktime(timeArray))
    
     glb.insert_data(timestamp, longtitude, latitude, text, image, image_type)
-
+    print('insert_data end.')
     # result_id = glb.insert_data(timeStamp, longtitude_v, latitude_v, feature, image, image_type)
     # return JsonReponse({'result':0, 'resultID':result_id})
     return JsonResponse({'result':0})
@@ -83,15 +81,17 @@ def query(request):
     latitude_lte = request.POST['latitude_lte']
     latitude_gte = request.POST['latitude_gte']
     text = None
-    if 'text' in request.POST:
+    if request.POST['text'] != '':
         text = request.POST['text']
     image = None
+    image_name = ''
+    image_type = ''
     if 'image' in request.FILES:
         image = request.FILES['image']
-    image_name = request.FILES['image'].name
-    image_type = os.path.splitext(image_name)[1].lower()
+        image_name = request.FILES['image'].name
+        image_type = os.path.splitext(image_name)[1].lower()
     
-    file_name = glb.save_image(image, image_type)
+    image_path = glb.save_image(image, image_type)
     lt = rs.QueryFormVector()
     
     if startTime != '':
@@ -130,25 +130,27 @@ def query(request):
     if text != None and image == None:
         feature = glb.textEncoding(text)
     if text == None and image != None:
-        feature = glb.imageEncoding(file_name)
+        feature = glb.imageEncoding(image_path)
     if text != None and image != None:
-        feature = glb.imagetextEncoding(image)
+        feature = glb.imagetextEncoding(text, image_path)
     
-
+    feature = feature[np.newaxis, :]
     sims = np.zeros((1, 128), dtype=np.float32)
-    uids = np.zeros((1, 128), dtype=np.int32)
+    res = np.zeros((1, 128), dtype=np.int32)
 
     if text != None or image != None:
-        sims, uids = glb.probe.query(lt)
+        sims, res = glb.probe.query(feature)
     
-    res = None
     res_lt = []
     if lt.size() != 0:
-        res = glb.simple_index.query_with_uids(lt, uids)
-        id_lt = res.tolist()
-        vec = glb.simple_index.query_by_uids(res)
-        for i in range(vec.size()):
-            res_lt.append({'lng':vec.at(i).longtitude, 'la':vec.at(i).latitude, 't':vec.at(i).timestamp, 'id':id_lt[i]})
+        if text != None or image != None:
+            res = glb.simple_index.query_with_uids(lt, res)
+        else:
+            res = glb.simple_index.query(lt)
+    id_lt = res.tolist()
+    vec = glb.simple_index.query_by_uids(res)
+    for i in range(vec.size()):
+        res_lt.append({'lng':vec.at(i).longtitude, 'la':vec.at(i).latitude, 't':vec.at(i).timestamp, 'id':id_lt[i]})
 
     # result example: 
     res_lt = [{'lng':0, 'la':0, 't':0, 'id':0}]

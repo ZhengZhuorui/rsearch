@@ -3,12 +3,15 @@ import rsearch.rsearch as rs
 import numpy as np
 
 if __name__ == '__main__':
-    probe = h_rs.handle_rsearch(512, 128, rs.X86_RAPID, rs.EUCLIDEAN, rs.FLOAT32)
+    probe = h_rs.handle_rsearch(128, 128, rs.X86_RAPID, rs.EUCLIDEAN, rs.FLOAT32)
     print('target 1')
-    data = np.random.rand(1000, 512)
+    data = np.random.rand(1000, 128)
     data = data.astype(np.float32)
     print(data.dtype)
     test_data = data[10:20,:]
+    probe.add(data)
+    data = np.random.rand(1, 128)
+    data = data.astype(np.float32)
     probe.add(data)
     print('target2')
     uids, sims = probe.query(test_data)

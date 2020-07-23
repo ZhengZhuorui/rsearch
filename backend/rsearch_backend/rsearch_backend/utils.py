@@ -65,7 +65,7 @@ class utils:
         return
 
     def insert_data(self, time, longtitude_s, latitude_s, text, image, image_type):
-        print(time, longtitude_s, latitude_s, text, image)
+        print(time, longtitude_s, latitude_s, text)
         longtitude = 0.0
         latitude = 0.0
         image_path = self.save_image(image, image_type)
@@ -80,11 +80,23 @@ class utils:
             feature = self.imageEncoding(image_path)
         if text != None and image != None:
             feature = self.imagetextEncoding(text, image_path)
-        self.sqliteDB.insert(None, time, latitude, longtitude, feature, image_path)
+        feature = feature[np.newaxis, :]
+        print('insert data t1')
+        print(feature)
+        print(feature.shape)
+        feature_s = str(feature.tolist)
+        self.sqliteDB.insert(None, time, latitude, longtitude, feature_s, image_path)
+        print('insert data t2')
+        vec = rs.AreaTimeVector()
+        vec.push_back(rs.construct_area_time(longtitude, latitude, time))
+        print('insert data t2.1')
         self.probe.add(feature)
-        self.simple_index.add(rs.construct_area_time(longtitude, latitude, time))
+        print('insert data t2.2')
+        self.simple_index.add(vec)
+        print('insert data t3')
         self.probe.store_data(self.dataset.path1)
         self.simple_index.store_data(self.dataset.path2)
+        print('insert data t4')
 
     def remove_data(self, id):
 
@@ -102,6 +114,7 @@ class utils:
             self.dataset = Dataset.objects.get(id=_id)
             print(self.dataset.database_path)
             self.sqliteDB = DBConnector(self.dataset.database_path)
+            print(self.dataset.path1)
             self.probe.load_data(self.dataset.path1)
             self.simple_index.load_data(self.dataset.path2)
         except Exception as e:
@@ -119,10 +132,8 @@ class utils:
         path2 = str(int(time.time())) + '.d2'
         path2 = os.path.join(dataset_dir, path2)
         print(path1, path2)
-        f = open(path1, 'wb')
-        f.close()
-        f = open(path2, 'wb')
-        f.close()
+        self.probe.store_data(path1)
+        self.simple_index.store_data(path2)
         self.dataset = Dataset(name=name, database_path=dataset_path, path1=path1, path2=path2)
         self.sqliteDB = DBConnector(dataset_path)
         self.dataset.save()

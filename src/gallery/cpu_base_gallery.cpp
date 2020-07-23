@@ -43,7 +43,9 @@ template int cpu_base_gallery<float, EUCLIDEAN>::init();
 template<typename T,
         DistanceType dist_type>
 int cpu_base_gallery<T, dist_type>::add(const T* const x, const int n){
+    //std::cout << "t1" << std::endl;
     this->mtx.lock();
+    //std::cout <<"C++:" << n << std::endl;
     this->data.resize(1LL * (this->num + n) * this->dimension);
     memcpy(this->data.data() + 1LL * this->num * this->dimension, x, 1LL * sizeof(T) * n * this->dimension);
     this->offset.resize(this->num + n);
@@ -52,6 +54,7 @@ int cpu_base_gallery<T, dist_type>::add(const T* const x, const int n){
         this->ids.push_back(this->max_id);
         this->max_id++;
     }
+    //std::cout << "C++ t2" << std::endl;
     for (int i = 0 ; i < n ; ++i){
         this->offset[this->num + i] = get_offset<T, dist_type>(this->data.data() + 1LL * (this->num + i) * this->dimension,  this->dimension);
     }    
@@ -71,6 +74,7 @@ int cpu_base_gallery<T, dist_type>::add_with_uids(const T* const x, const idx_t 
     this->mtx.lock();
     for (int i = 0; i < n; ++i){
         if (this->index.find(uids[i]) != this->index.end()){
+            this->mtx.unlock();
             return INDEX_EXISTS;
         }
     }
@@ -100,8 +104,10 @@ template <typename T,
 int cpu_base_gallery<T, dist_type>::change_by_uids(const T* const x, const idx_t * const uids, const int n){
     this->mtx.lock();
     for (int i = 0; i < n; ++i){
-        if (this->index.find(uids[i]) == this->index.end())
+        if (this->index.find(uids[i]) == this->index.end()){
+            this->mtx.unlock();
             return INDEX_NO_FIND;
+        }
     }
     for (int i = 0; i < n; ++i){
         memcpy(this->data.data() + 1LL * this->index[uids[i]] * this->dimension, x + 1LL * i * dimension, sizeof(T) * this->dimension);
@@ -120,8 +126,10 @@ template<typename T,
 int cpu_base_gallery<T, dist_type>::remove_by_uids(const idx_t* const uids, const int n){
     this->mtx.lock();
     for (int i = 0; i < n; ++i){
-        if (this->index.find(uids[i]) == this->index.end())
+        if (this->index.find(uids[i]) == this->index.end()){
+            this->mtx.unlock();
             return INDEX_NO_FIND;
+        }
     }
     for (int i = 0; i < n ; ++i){
         int p = this->index[uids[i]];
@@ -183,15 +191,21 @@ int cpu_base_gallery<T, dist_type>::load_data(std::string file_name){
     int type, d, n;
     r_read(fin, &type, 1);
     r_read(fin, &d, 1);
-    if (type != CPU_BASE_GALLERY || d != this->dimension)
+    if (type != CPU_BASE_GALLERY || d != this->dimension){
+        std::cerr << "Load data error!" <<std::endl;
+        this->mtx.unlock();
         return LOAD_DATA_ERROR;
+    }
     r_read(fin, &n, 1);
     //std::cout << "[load data]" << n << std::endl; 
     vector<idx_t> ids_tmp(n);
     r_read(fin, ids_tmp.data(), n);
     for (int i = 0; i < n; ++i){
-        if (this->index.find(ids_tmp[i]) != this->index.end())
+        if (this->index.find(ids_tmp[i]) != this->index.end()){
+            std::cerr<< "Load data error!(have repeat uids) " << std::endl;
+            this->mtx.unlock();
             return INDEX_EXISTS;
+        }
     }
     this->ids.resize(this->num + n);
     memcpy(this->ids.data() + this->num, ids_tmp.data(), n * sizeof(idx_t));

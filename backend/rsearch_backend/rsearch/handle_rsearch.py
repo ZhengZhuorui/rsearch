@@ -61,10 +61,10 @@ class handle_rsearch:
         return self.rsearch.train(self, x, n)
 
     def store_data(self, file_name):
-        return self.rsearch.store_data(self, file_name)
+        return self.rsearch.store_data(file_name)
 
     def load_data(self, file_name):
-        return self.rsearch.load_data(self, file_name)
+        return self.rsearch.load_data(file_name)
 
 '''
 
@@ -113,10 +113,10 @@ class handle_simple_index_areatime:
         return self.rsearch.reset()
 
     def store_data(self, file_name):
-        return self.rsearch.store_data(self, file_name)
+        return self.rsearch.store_data(file_name)
 
     def load_data(self, file_name):
-        return self.rsearch.load_data(self, file_name)
+        return self.rsearch.load_data(file_name)
 
 '''
 def intpp2array(pp, n):

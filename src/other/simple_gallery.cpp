@@ -44,6 +44,7 @@ int simple_gallery<T>::add_with_uids(const T* const x, const idx_t * const uids,
     this->mtx.lock();
     for (int i = 0; i < n; ++i){
         if (this->index.find(uids[i]) != this->index.end()){
+            this->mtx.unlock();
             return INDEX_EXISTS;
         }
     }
@@ -64,8 +65,10 @@ template <typename T>
 int simple_gallery<T>::change_by_uids(const T* const x, const idx_t * const uids, const int n){
     this->mtx.lock();
     for (int i = 0; i < n; ++i){
-        if (this->index.find(uids[i]) == this->index.end())
+        if (this->index.find(uids[i]) == this->index.end()){
+            this->mtx.unlock();
             return INDEX_NO_FIND;
+        }
     }
     for (int i = 0; i < n; ++i){
         this->data[this->index[uids[i]]] = *x;
@@ -78,8 +81,10 @@ template<typename T>
 int simple_gallery<T>::remove_by_uids(const idx_t* const uids, const int n){
     this->mtx.lock();
     for (int i = 0; i < n; ++i){
-        if (this->index.find(uids[i]) == this->index.end())
+        if (this->index.find(uids[i]) == this->index.end()){
+            this->mtx.unlock();
             return INDEX_NO_FIND;
+        }
     }
     for (int i = 0; i < n ; ++i){
         int p = this->index[uids[i]];
@@ -123,15 +128,19 @@ int simple_gallery<T>::load_data(std::string file_name){
     ifstream fin(file_name, ifstream::binary);
     int type, n;
     r_read(fin, &type, 1);
-    if (type != SIMPLE_GALLERY)
+    if (type != SIMPLE_GALLERY){
+        this->mtx.unlock();
         return LOAD_DATA_ERROR;
+    }
     r_read(fin, &n, 1);
     //std::cout << "[load data]" << n << std::endl; 
     vector<idx_t> ids_tmp(n);
     r_read(fin, ids_tmp.data(), n);
     for (int i = 0; i < n; ++i){
-        if (this->index.find(ids_tmp[i]) != this->index.end())
+        if (this->index.find(ids_tmp[i]) != this->index.end()){
+            this->mtx.unlock();
             return INDEX_EXISTS;
+        }
     }
     this->ids.resize(this->num + n);
     memcpy(this->ids.data() + this->num, ids_tmp.data(), n * sizeof(idx_t));

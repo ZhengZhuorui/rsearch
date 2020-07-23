@@ -98,32 +98,32 @@ def query(request):
         timeArray = time.strptime(startTime, "%Y-%m-%d %H:%M:%S")
         timeStamp = int(time.mktime(timeArray))
         queryForm = rs.query_area_time_timestamp_gte(timeStamp)
-        lt.append(queryForm)
+        lt.push_back(queryForm)
     if endTime != '':
         timeArray = time.strptime(endTime, "%Y-%m-%d %H:%M:%S")
         timeStamp = int(time.mktime(timeArray))
         queryForm = rs.query_area_time_timestamp_lte(timeStamp)
-        lt.append(queryForm)
+        lt.push_back(queryForm)
 
     if longtitude_lte != '':
         s = glb.degree_translate(longtitude_lte)
         queryForm = rs.query_area_time_longtitude_lte(s)
-        lt.append(queryForm)
+        lt.push_back(queryForm)
 
     if longtitude_gte != '':
-        glb.degree_translate(longtitude_gte)
+        s = glb.degree_translate(longtitude_gte)
         queryForm = rs.query_area_time_longtitude_gte(s)
-        lt.append(queryForm)
+        lt.push_back(queryForm)
 
     if latitude_lte != '':
-        glb.degree_translate(latitude_lte)
+        s = glb.degree_translate(latitude_lte)
         queryForm = rs.query_area_time_latitude_lte(s)
-        lt.append(queryForm)
+        lt.push_back(queryForm)
 
     if latitude_gte != '':
-        glb.degree_translate(latitude_gte)
+        s = glb.degree_translate(latitude_gte)
         queryForm = rs.query_area_time_latitude_gte(s)
-        lt.append(queryForm)
+        lt.push_back(queryForm)
     
     feature = np.empty((1, dimension), dtype=np.float32)
 
@@ -139,27 +139,33 @@ def query(request):
     res = np.zeros((1, 128), dtype=np.int32)
 
     if text != None or image != None:
+        print('t1')
         sims, res = glb.probe.query(feature)
-    
+    print(res) 
+    res = np.squeeze(res)
     res_lt = []
     if lt.size() != 0:
         if text != None or image != None:
+            print('t2')
             res = glb.simple_index.query_with_uids(lt, res)
         else:
+            print('t3')
             res = glb.simple_index.query(lt)
     id_lt = res.tolist()
     vec = glb.simple_index.query_by_uids(res)
     for i in range(vec.size()):
-        res_lt.append({'lng':vec.at(i).longtitude, 'la':vec.at(i).latitude, 't':vec.at(i).timestamp, 'id':id_lt[i]})
+        if id_lt[i] != -1:
+            res_lt.append({'lng':vec.at(i).longtitude, 'la':vec.at(i).latitude, 't':vec.at(i).timestamp, 'id':id_lt[i]})
 
     # result example: 
-    res_lt = [{'lng':0, 'la':0, 't':0, 'id':0}]
+    # res_lt = [{'lng':0, 'la':0, 't':0, 'id':0}]
 
     result = {'result':0, 'query_result':res_lt}
+    print(result)
     return JsonResponse(result)
 
 def get_image(request):
-    image_id =  request.GET['id']
+    image_id = int(request.GET['id'])
     try:
         '''
         TODO: 操作sqlite读写文件，ORM模式如下：
@@ -169,7 +175,10 @@ def get_image(request):
 
         下面只返回一张样例图片
         '''
+        print('get_image', image_id)
         image_path = glb.get_image(image_id)
+        print('get_image', image_path)
+        image_data = None
         #image_path = os.path.join(rs_util.image_dir, 'example.png')
         with open(image_path, 'rb') as f:
             image_data = f.read()

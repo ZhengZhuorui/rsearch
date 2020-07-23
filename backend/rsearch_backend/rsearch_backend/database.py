@@ -9,7 +9,7 @@ import json
 
 class DBConnector():
 	def __init__(self, path = './Image1000.db'):
-		self.conn = sqlite3.connect(path)
+		self.conn = sqlite3.connect(path, check_same_thread = False)
 		self.createTable()
 		print("Open success in path:", path)
 
@@ -45,9 +45,9 @@ class DBConnector():
 			results.append(row)
 		return results
 	
-	def select_id(self, id):
+	def select_id(self, idx):
 		c = self.conn.cursor()
-		cursor = c.execute('''select id, time, lat, lng, feature, filename from RemoteSensing;''')
+		cursor = c.execute('''select id, time, lat, lng, feature, filename from RemoteSensing where ID=%d;'''%idx)
 		results = []
 		for row in cursor:
 			results.append(row[-1])

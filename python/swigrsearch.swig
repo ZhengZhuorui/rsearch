@@ -3,8 +3,6 @@
 %include <stdint.i>
 
 %{
-#include <stdint.h>
-#include <omp.h>
 #include <bits/stdc++.h>
 #include "rsearch_type.h"
 #include "probe/rsearch_probe.h"
@@ -16,8 +14,9 @@
 #define SWIG_FILE_WITH_INIT
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
-
 %}
+%include<stdint.i>
+
 namespace std {
     template<class T>
     class vector {

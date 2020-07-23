@@ -103,12 +103,12 @@ int simple_gallery<T>::remove_by_uids(const idx_t* const uids, const int n){
 template<typename T>
 int simple_gallery<T>::query_by_uids(const idx_t* const uids, const int n, T * x){
     for (int i = 0; i < n; ++i){
-        if (this->index.find(uids[i]) == this->index.end())
+        if (uids[i] != -1 && this->index.find(uids[i]) == this->index.end())
             return INDEX_NO_FIND;
     }
     for (int i = 0; i < n ; ++i){
         //memcpy(x, &this->data[this->index[uids[i]]], sizeof(T));
-        x[i] = this->data[this->index[uids[i]]];
+        if (uids[i] != -1) x[i] = this->data[this->index[uids[i]]];
     }
     return 0;
 }
@@ -133,6 +133,7 @@ int simple_gallery<T>::load_data(std::string file_name){
         return LOAD_DATA_ERROR;
     }
     r_read(fin, &n, 1);
+    r_read(fin, &this->num, 1);
     //std::cout << "[load data]" << n << std::endl; 
     vector<idx_t> ids_tmp(n);
     r_read(fin, ids_tmp.data(), n);
@@ -164,6 +165,7 @@ int simple_gallery<T>::store_data(std::string file_name){
     int type = SIMPLE_GALLERY;
     r_write(fout, &type, 1);
     r_write(fout, &this->num, 1);
+    r_write(fout, &this->max_id, 1);
     r_write(fout, this->ids.data(), this->num);
     r_write(fout, this->data.data(), 1LL * this->num);
     //std::cout << "[store data] " << this->num << " " << this->data[0] << " " << this->offset[0] << std::endl;

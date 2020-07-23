@@ -387,6 +387,7 @@ int pqivf_gallery<T, dist_type>::load_data(std::string file_name){
     if (traits.cq_num != this->cq_num || traits.select_cq != this->select_cq || traits.pq_dimension != this->pq_dimension ||
         traits.pq_num != this->pq_num)
         return LOAD_DATA_ERROR;
+    r_read(fin, &this->max_id, 1);
     vector<int> block_num_tmp(this->cq_num);
     vector<vector<idx_t> > ids_tmp;
     ids_tmp.resize(this->cq_num);
@@ -428,6 +429,7 @@ int pqivf_gallery<T, dist_type>::store_data(std::string file_name){
     r_write(fout, &this->dimension, 1);
     struct pqivf_traits traits = {this->cq_num, this->select_cq, this->pq_dimension, this->pq_num};
     r_write(fout, &traits, 1);
+    r_write(fout, &this->max_id, 1);
     r_write(fout, this->block_num.data(), this->cq_num);
     for (int i = 0; i < this->cq_num; ++i)
         r_write(fout, this->ids[i].data(), this->block_num[i]);

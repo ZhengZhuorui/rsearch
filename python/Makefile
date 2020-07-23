@@ -14,7 +14,7 @@ build: _swigrsearch.so
 	$(PYTHON) setup.py build
 
 clean:
-	rm -f swigrsearch_wrap.cpp swigrsearch_wrap.o _swigrsearch.so libfaiss.so librsearch.so
+	rm -f swigrsearch_wrap.cpp swigrsearch_wrap.o _swigrsearch.so libfaiss.so librsearch.so rsearch.py
 	rm -rf build
 
 .PHONY: all build clean

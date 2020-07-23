@@ -123,6 +123,12 @@ int simple_index<T>::query_with_uids(const query_form* x, const int n, idx_t *ui
     //idx_t* ids = ga_ptr->ids.data();
     std::unordered_map<idx_t, idx_t>& index= ga_ptr->index;
     for (int i = 0; i < m; ++i){
+        if (uids[i] == -1){
+             continue;
+        }
+        if (index.find(uids[i]) == index.end()){
+            return INDEX_NO_FIND;
+        }
         T* select_data = data + index[uids[i]];
         bool flag = true;
         for (int j = 0; j < n; ++j){

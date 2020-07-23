@@ -102,4 +102,8 @@ inline int* get_int_p(int** a){
     return *a;
 }
 
+inline size_t int2size_t(int a){
+    return (size_t)a;
+}
+
 }

@@ -48,7 +48,12 @@ class utils:
         return np.empty((1, dimension), dtype=np.float32)
     
     def get_image(self, id):
-        return self.sqliteDB.select_id(id)
+        print('[get_image]', id)
+        result = self.sqliteDB.select()
+        print(result)
+        image_path = self.sqliteDB.select_id(id)
+        print(image_path)
+        return image_path
 
     def save_image(self, image, image_type):
         file_name = str(int(time.time())) + image_type
@@ -84,7 +89,7 @@ class utils:
         print('insert data t1')
         print(feature)
         print(feature.shape)
-        feature_s = str(feature.tolist)
+        feature_s = str(list(feature.tolist))
         self.sqliteDB.insert(None, time, latitude, longtitude, feature_s, image_path)
         print('insert data t2')
         vec = rs.AreaTimeVector()

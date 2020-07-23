@@ -31,7 +31,7 @@ if __name__ == '__main__':
     data_vec.push_back(rs.construct_area_time(0.6, -2.0, 14))
     data_vec.push_back(rs.construct_area_time(0.0, 2.1, 15))
     data_vec.push_back(rs.construct_area_time(-0.1, 0.9, 16))
-    
+    print(data_vec.size())
     index.add(data_vec)
 
     qf_0 = rs.QueryFormVector()
@@ -58,3 +58,5 @@ if __name__ == '__main__':
     print('???')
     uids = index.query(qf_0)
     print(uids)
+    a = index.query_by_uids(uids)
+    print(a.at(0).longtitude)

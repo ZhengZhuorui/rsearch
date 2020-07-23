@@ -148,11 +148,11 @@ class handle_simple_index_areatime:
         return self.simple_index_areatime.remove_by_uids(uids.data(), uids.size())
 
     def query_by_uids(self, uids):
-        
-        n = uids.size()
-        x = AreaTimeVector()
+        n = uids.shape[0]
+        x = rs.AreaTimeVector()
+        nn = rs.int2size_t(n)
         x.resize(n)
-        self.simple_index_areatime.query_by_uids(uids.data(), uids.size(), x.data())
+        self.simple_index_areatime.query_by_uids(rs.swig_ptr(uids), n, x.data())
         return x
 
     def reset(self):
@@ -173,9 +173,10 @@ class handle_simple_index_areatime:
         return a
 
     def query_with_uids(self, x, uids):
+        s = uids.shape[0]
         idx = rs.get_int_pp()
         res = rs.get_int_p()
-        self.simple_index_areatime.query_with_uids(x.data(), x.size(), uids.data(), uids.size(), idx, res)
+        self.simple_index_areatime.query_with_uids(x.data(), x.size(), rs.swig_ptr(uids), s, idx, res)
         n = rs.get_int(res)
         a = intpp2array(idx, n)
         return a

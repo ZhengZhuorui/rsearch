@@ -155,10 +155,11 @@ template<typename T,
         DistanceType dist_type>
 int cpu_base_gallery<T, dist_type>::query_by_uids(const idx_t* const uids, const int n, T * x){
     for (int i = 0; i < n; ++i){
-        if (this->index.find(uids[i]) == this->index.end())
+        if (uids[i] != -1 && this->index.find(uids[i]) == this->index.end())
             return INDEX_NO_FIND;
     }
     for (int i = 0; i < n ; ++i){
+        if (uids[i] == -1) continue;
         memcpy(x, &this->data[this->index[uids[i]]], sizeof(T) * this->dimension);
     }
     return 0;
@@ -197,6 +198,7 @@ int cpu_base_gallery<T, dist_type>::load_data(std::string file_name){
         return LOAD_DATA_ERROR;
     }
     r_read(fin, &n, 1);
+    r_read(fin, &this->max_id, 1);
     //std::cout << "[load data]" << n << std::endl; 
     vector<idx_t> ids_tmp(n);
     r_read(fin, ids_tmp.data(), n);
@@ -234,6 +236,7 @@ int cpu_base_gallery<T, dist_type>::store_data(std::string file_name){
     r_write(fout, &type, 1);
     r_write(fout, &this->dimension, 1);
     r_write(fout, &this->num, 1);
+    r_write(fout, &this->max_id, 1);
     r_write(fout, this->ids.data(), this->num);
     r_write(fout, this->data.data(), 1LL * this->num * this->dimension);
     r_write(fout, this->offset.data(), this->num);

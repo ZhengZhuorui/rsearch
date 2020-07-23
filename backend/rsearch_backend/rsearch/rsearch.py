@@ -317,6 +317,9 @@ def get_int(a):
 
 def get_int_p(*args):
     return _rsearch.get_int_p(*args)
+
+def int2size_t(a):
+    return _rsearch.int2size_t(a)
 class result(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr

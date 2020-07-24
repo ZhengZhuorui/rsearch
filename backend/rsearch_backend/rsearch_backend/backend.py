@@ -8,6 +8,7 @@ import random
 import rsearch_backend.utils as rs_util
 import numpy as np
 import os
+import traceback
 
 dimension = 128
 print('target1')
@@ -67,10 +68,13 @@ def insert_data(request):
 
 def remove_data(request):
     ID = int(request.POST['ID'])
+    print('remove_data', ID)
     try:
-        glb.remove_data(ID)        
+        glb.remove_data(ID)       
         return JsonResponse({'result':0})
-    except Exception:
+    except Exception as e:
+        print(e)
+        print(traceback.format_exc())
         return JsonResponse({'result':1})
 
 def query(request):

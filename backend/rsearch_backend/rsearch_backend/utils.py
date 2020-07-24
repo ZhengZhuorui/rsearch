@@ -101,13 +101,20 @@ class utils:
         print('insert data t4')
 
     def remove_data(self, id):
+        print('t1')
+        self.sqliteDB.delete(id+1)
+        print('t2')
+        ID_array = np.array([id], dtype=np.int32)
+        print('t3', ID_array)
+        self.probe.remove_by_uids(ID_array)
+        print('t4')
+        self.simple_index.remove_by_uids(ID_array)
+        print('t5')
+        self.probe.store_data(self.dataset.path1)
+        print('t6')
+        self.simple_index.store_data(self.dataset.path2)
+        print('t7')
 
-       
-        self.sqliteDB.delete(id)
-        ID_array = np.array([id])
-        self.probe.remove_by_uids(ID_array)
-        self.probe.remove_by_uids(ID_array)
-    
 
     def load_dataset(self, _id):
         print('[load_dataset]')

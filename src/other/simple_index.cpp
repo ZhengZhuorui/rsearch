@@ -58,8 +58,9 @@ static char compare_by_type(const char *x, const char *y, VarType v){
         else return GT_B;
         break;
     case INT64:
-        if ((int64_t)(*x) < (int64_t)(*y)) return LT_B;
-        else if ((int64_t)(*x) == (int64_t)(*y)) return EQ_B;
+
+        if ((int64_t)(*(int64_t*)x) < (int64_t)(*(int64_t*)y)) return LT_B;
+        else if ((int64_t)(*(int64_t*)x) == (int64_t)(*(int64_t*)y)) return EQ_B;
         else return GT_B;
         break;
     default:

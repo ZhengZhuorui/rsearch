@@ -37,8 +37,8 @@ class handle_rsearch:
         return self.rsearch.add_with_uids(rs.swig_ptr(x), rs.swig_ptr(uids), n)
 
     def remove_by_uids(self, uids):
-        n = uids.shape
-        return self.rsearch.remove_by_uids(self, uids, n)
+        n = uids.shape[0]
+        return self.rsearch.remove_by_uids(rs.swig_ptr(uids), n)
     
     def query_by_uids(self, uids):
         n, d = uids.shape
@@ -137,15 +137,18 @@ class handle_simple_index_areatime:
         return self.simple_index_areatime.add(x.data(), x.size())
     
     def add_with_uids(self, x, uids):
-        assert x.size() == uids.size()
-        return self.simple_index_areatime.add_with_uids(x, uids.data(), x.size())
+        n = uids.shape[0]
+        assert x.size() == n
+        return self.simple_index_areatime.add_with_uids(x.data(), rs.swig_ptr(uids), n)
     
     def change_by_uids(self, x, uids):
-        assert x.size() == uids.size()
-        return self.simple_index_areatime.change_by_uids(x, uids.data(), x.size())
+        n = uids.shape[0]
+        assert x.size() == n
+        return self.simple_index_areatime.change_by_uids(x.data(), rs.swig_ptr(uids), n)
 
     def remove_by_uids(self, uids):
-        return self.simple_index_areatime.remove_by_uids(uids.data(), uids.size())
+        n = uids.shape[0]
+        return self.simple_index_areatime.remove_by_uids(rs.swig_ptr(uids), n)
 
     def query_by_uids(self, uids):
         n = uids.shape[0]

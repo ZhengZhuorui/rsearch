@@ -102,6 +102,16 @@ inline int* get_int_p(int** a){
     return *a;
 }
 
+inline int* get_int_v(){
+    int** pp = (int**)(malloc(sizeof(int*)));
+    *pp = (int*)(malloc(sizeof(int)));
+    return *pp;
+}
+inline int** get_int_p_v(){
+    int*** pp = (int***)(malloc(sizeof(int**)));
+    *pp = (int **)(malloc(sizeof(int*)));
+    return *pp;
+}
 inline size_t int2size_t(int a){
     return (size_t)a;
 }

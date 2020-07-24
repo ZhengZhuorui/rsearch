@@ -48,9 +48,6 @@ class utils:
         return np.empty((1, dimension), dtype=np.float32)
     
     def get_image(self, id):
-        print('[get_image]', id)
-        result = self.sqliteDB.select()
-        print(result)
         image_path = self.sqliteDB.select_id(id)
         print(image_path)
         return image_path

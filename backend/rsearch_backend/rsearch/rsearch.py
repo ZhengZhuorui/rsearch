@@ -318,6 +318,12 @@ def get_int(a):
 def get_int_p(*args):
     return _rsearch.get_int_p(*args)
 
+def get_int_v():
+    return _rsearch.get_int_v()
+
+def get_int_p_v():
+    return _rsearch.get_int_p_v()
+
 def int2size_t(a):
     return _rsearch.int2size_t(a)
 class result(object):

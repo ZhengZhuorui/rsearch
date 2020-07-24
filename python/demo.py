@@ -40,11 +40,7 @@ if __name__ == '__main__':
     qf_0.push_back(rs.query_area_time_latitude_gte(0.7))
     qf_0.push_back(rs.query_area_time_timestamp_gte(12))
     qf_1.push_back(rs.query_area_time_timestamp_gte(12))
-    quids = rs.IntVector()
-    quids.push_back(0)
-    quids.push_back(2)
-    quids.push_back(4)
-    quids.push_back(6)    
+    quids = np.array([0, 2, 4, 6], dtype= np.int32)
     uids = index.query(qf_0)
     print(uids)
     uids = index.query_with_uids(qf_0, quids);

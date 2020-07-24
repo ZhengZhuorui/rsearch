@@ -133,7 +133,7 @@ int simple_gallery<T>::load_data(std::string file_name){
         return LOAD_DATA_ERROR;
     }
     r_read(fin, &n, 1);
-    r_read(fin, &this->num, 1);
+    r_read(fin, &this->max_id, 1);
     //std::cout << "[load data]" << n << std::endl; 
     vector<idx_t> ids_tmp(n);
     r_read(fin, ids_tmp.data(), n);

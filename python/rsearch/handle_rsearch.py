@@ -165,8 +165,8 @@ class handle_simple_index_areatime:
         return self.simple_index_areatime.load_data(file_name)
 
     def query(self, x):
-        idx = rs.get_int_pp()
-        res = rs.get_int_p()
+        idx = rs.get_int_p_v()
+        res = rs.get_int_v()
         self.simple_index_areatime.query(x.data(), x.size(), idx, res)
         n = rs.get_int(res)
         a = intpp2array(idx, n)
@@ -174,8 +174,8 @@ class handle_simple_index_areatime:
 
     def query_with_uids(self, x, uids):
         s = uids.shape[0]
-        idx = rs.get_int_pp()
-        res = rs.get_int_p()
+        idx = rs.get_int_p_v()
+        res = rs.get_int_v()
         self.simple_index_areatime.query_with_uids(x.data(), x.size(), rs.swig_ptr(uids), s, idx, res)
         n = rs.get_int(res)
         a = intpp2array(idx, n)

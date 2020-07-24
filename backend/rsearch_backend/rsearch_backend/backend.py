@@ -86,12 +86,12 @@ def query(request):
     image = None
     image_name = ''
     image_type = ''
+    image_path = ''
     if 'image' in request.FILES:
         image = request.FILES['image']
         image_name = request.FILES['image'].name
         image_type = os.path.splitext(image_name)[1].lower()
-    
-    image_path = glb.save_image(image, image_type)
+        image_path = glb.save_image(image, image_type)
     lt = rs.QueryFormVector()
     
     if startTime != '':
@@ -151,6 +151,7 @@ def query(request):
         else:
             print('t3')
             res = glb.simple_index.query(lt)
+    print(res)
     id_lt = res.tolist()
     vec = glb.simple_index.query_by_uids(res)
     for i in range(vec.size()):

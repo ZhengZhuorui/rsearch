@@ -93,15 +93,20 @@ def query(request):
         image_type = os.path.splitext(image_name)[1].lower()
         image_path = glb.save_image(image, image_type)
     lt = rs.QueryFormVector()
-    
+    print('[query] time:')
+    print(time.time())
+    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(time.time()))))
     if startTime != '':
+        print(startTime)
         timeArray = time.strptime(startTime, "%Y-%m-%d %H:%M:%S")
         timeStamp = int(time.mktime(timeArray))
+        print(timeStamp)
         queryForm = rs.query_area_time_timestamp_gte(timeStamp)
         lt.push_back(queryForm)
     if endTime != '':
         timeArray = time.strptime(endTime, "%Y-%m-%d %H:%M:%S")
         timeStamp = int(time.mktime(timeArray))
+        print(timeStamp)
         queryForm = rs.query_area_time_timestamp_lte(timeStamp)
         lt.push_back(queryForm)
 
@@ -144,13 +149,13 @@ def query(request):
     print(res) 
     res = np.squeeze(res)
     res_lt = []
-    if lt.size() != 0:
-        if text != None or image != None:
-            print('t2')
-            res = glb.simple_index.query_with_uids(lt, res)
-        else:
-            print('t3')
-            res = glb.simple_index.query(lt)
+    if text != None or image != None:
+        print('t2')
+        res = glb.simple_index.query_with_uids(lt, res)
+    else:
+        print('t3')
+        res = glb.simple_index.query(lt)
+    
     print(res)
     id_lt = res.tolist()
     vec = glb.simple_index.query_by_uids(res)

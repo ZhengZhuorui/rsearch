@@ -56,3 +56,6 @@ if __name__ == '__main__':
     print(uids)
     a = index.query_by_uids(uids)
     print(a.at(0).longtitude)
+    qf_2 = rs.QueryFormVector()
+    uids = index.query(qf_2)
+    print(uids)

@@ -152,6 +152,22 @@
         </div>
     </body>
     <script>
+<<<<<<< HEAD
+        function add0(m){return m<10?'0'+m:m }
+        function format(shijianchuo)
+        {
+//shijianchuo是整数，否则要parseInt转换
+            var time = new Date(shijianchuo);
+            var y = time.getFullYear();
+            var m = time.getMonth()+1;
+            var d = time.getDate();
+            var h = time.getHours();
+            var mm = time.getMinutes();
+            var s = time.getSeconds();
+            return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
+        }
+=======
+>>>>>>> 4e637dc80eb7209ee5aab1e8ed43d4fa39997a12
         new Vue({
             el:'#app',
             data:{
@@ -224,14 +240,39 @@
                     console.log('url:', url);
                     var query = {datasetName:this.datasetName};
                     console.log(query);
+<<<<<<< HEAD
+                    var formdata = new FormData();
+                    formdata.append('datasetName', this.datasetName);
+                    if (this.file != {})
+                        formdata.append('file', this.file);
+
+                    $.ajax({
+                        type:'post',
+                        url:url,
+                        data:formdata,
+                        processData:false,
+                        contentType: false,
+                        success:function(data){
+                            if (data['result'] == 0)
+                            //alert("添加成功！ID:", data['resultID'])
+                                alert('添加成功！')
+                        }
+                    });
+                    /*$.post(url, query, (data, status)=>{
+=======
 
                     $.post(url, query, (data, status)=>{
+>>>>>>> 4e637dc80eb7209ee5aab1e8ed43d4fa39997a12
                         if (data.result == 0)
                             alert('添加成功');
 
                         //this.refreshDataset();
                         this.refreshDataSet();
+<<<<<<< HEAD
+                    })*/
+=======
                     })
+>>>>>>> 4e637dc80eb7209ee5aab1e8ed43d4fa39997a12
                 },
                 removeDataset:function(DatasetName){
                     var url = this.host + '/removeDataset/';
@@ -329,6 +370,20 @@
                             //for (var i = 0; i < len; ++i) that.query_result.pop();
                             for (var i in qtmp){
                                 qtmp[i]['src'] = "http://10.141.223.70:8000/get_image/?id=" + (qtmp[i]['id']+1).toString();
+<<<<<<< HEAD
+
+                                if (qtmp[i]['lng'] < 0)
+                                    qtmp[i]['lng'] = qtmp[i]['lng'].toString() + ' W';
+                                else
+                                    qtmp[i]['lng'] = qtmp[i]['lng'].toString() + ' E';
+                                if (qtmp[i]['la'] < 0)
+                                    qtmp[i]['la'] = qtmp[i]['la'].toString() + ' S';
+                                else
+                                    qtmp[i]['la'] = qtmp[i]['la'].toString() + ' N';
+                                console.log(qtmp[i]['t']);
+                                qtmp[i]['t'] = format(qtmp[i]['t'] * 1000);
+=======
+>>>>>>> 4e637dc80eb7209ee5aab1e8ed43d4fa39997a12
                                 //that.query_result.push(qtmp[i]);
                                 //this.$set(this.query_result, i, query_result[i]);
                             }

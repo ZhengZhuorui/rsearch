@@ -3,8 +3,8 @@
 *.so
 *.a
 *.sql
-/backend/dataset
-/backend/image
+/backend/rsearch_backend/dataset
+/backend/rsearch_backend/image
 *.gz
 *.tar
 *.d1

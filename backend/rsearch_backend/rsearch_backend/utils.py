@@ -120,6 +120,8 @@ class utils:
 
     def load_dataset(self, _id):
         print('[load_dataset]')
+        if self.dataset!= None and _id == self.dataset.id:
+            return
         try:
             print(_id)
             self.dataset = Dataset.objects.get(id=_id)

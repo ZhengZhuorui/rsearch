@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rsearch_backend import backend
+from rsearch_backend import init_db
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('query/', backend.query),
@@ -25,6 +26,7 @@ urlpatterns = [
     #path('removeDataset/', backend.remove_dataset),
     path('get_image/', backend.get_image),
     path('queryDataset/', backend.query_dataset),
-    path('selectDataset/', backend.select_dataset)
+    path('selectDataset/', backend.select_dataset),
+    path('init_db/', init_db.init_db),
 
 ]

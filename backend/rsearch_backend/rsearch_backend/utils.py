@@ -53,18 +53,20 @@ class utils:
         return image_path
 
     def save_image(self, image, image_type):
-        file_name = str(int(time.time())) + image_type
+        file_name = str(time.time()) + image_type
         file_name = os.path.join(image_dir, file_name)
         with open(file_name, 'wb') as f:
             for content in image.chunks():
                 f.write(content)
         return file_name
 
-    def save_image_with_filename(self, image, file_name):
-        with open(file_name, 'wb') as f:
+    def save_image_with_name(self, image, file_name):
+        path = os.path.join(image_dir, file_name)
+        print('[save_image_with_path]',path)
+        with open(path, 'wb') as f:
             for content in image.chunks():
                 f.write(content)
-        return
+        return path
 
     def insert_data(self, time, longtitude_s, latitude_s, text, image, image_type):
         print(time, longtitude_s, latitude_s, text)
@@ -123,7 +125,8 @@ class utils:
             self.dataset = Dataset.objects.get(id=_id)
             print(self.dataset.database_path)
             self.sqliteDB = DBConnector(self.dataset.database_path)
-            print(self.dataset.path1)
+            self.probe.reset()
+            self.simple_index.reset()
             self.probe.load_data(self.dataset.path1)
             self.simple_index.load_data(self.dataset.path2)
         except Exception as e:

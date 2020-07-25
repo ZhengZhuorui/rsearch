@@ -95,7 +95,7 @@ def query(request):
         image = request.FILES['image']
         image_name = request.FILES['image'].name
         image_type = os.path.splitext(image_name)[1].lower()
-        image_path = glb.save_image(image, image_type)
+        image_path = glb.save_image_with_name(image, 'tmp')
     lt = rs.QueryFormVector()
     print('[query] time:')
     print(time.time())
@@ -194,6 +194,10 @@ def get_image(request):
             image_data = f.read()
         return HttpResponse(image_data, content_type='image/png')
     except Exception:
+        image_data = None
+        with open('./none.png','rb') as f:
+            image_data = f.read()
+        return HttpResponse(image_data, content_type='image/png')
         pass
 
 

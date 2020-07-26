@@ -382,7 +382,7 @@
                             //for (var i = 0; i < len; ++i) that.query_result.pop();
                             for (var i in qtmp){
                                 console.log(that.selectDatasetName);
-                                qtmp[i]['src'] = "http://10.141.223.70:8000/get_image/?dataset=" + that.selectDatasetName+ "&id=" + (qtmp[i]['id']+1).toString();
+                                qtmp[i]['src'] = this.host + "/get_image/?dataset=" + that.selectDatasetName+ "&id=" + (qtmp[i]['id']+1).toString();
 
                                 if (qtmp[i]['lng'] < 0)
                                     qtmp[i]['lng'] = (-qtmp[i]['lng']).toString() + ' W';

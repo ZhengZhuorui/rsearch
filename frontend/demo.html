@@ -170,7 +170,7 @@
             data:{
                 dataset:[],
                 data:[],
-                host:'http://10.141.223.70:8000',
+                host:'http://10.141.223.71:8000',
                 datasetName:'',
                 datasetID:0,
 
@@ -200,6 +200,7 @@
             },
             methods:{
                 refreshDataSet:function() {
+                    console.log('refresh');
                     var url = this.host + '/queryDataset/';
                     $.post(url,(data, status)=>{
                         this.dataset=data.dataset;
@@ -246,7 +247,7 @@
                     formdata.append('datasetName', this.datasetName);
                     if (this.file != {})
                         formdata.append('file', this.file);
-
+                    var that = this;
                     $.ajax({
                         type:'post',
                         url:url,
@@ -257,7 +258,7 @@
                             if (data['result'] == 0)
                             //alert("添加成功！ID:", data['resultID'])
                                 alert('添加成功！');
-                            this.refreshDataSet();
+                            that.refreshDataSet();
                         }
                     });
                     this.selectDatasetName = this.datasetName;
@@ -382,7 +383,7 @@
                             //for (var i = 0; i < len; ++i) that.query_result.pop();
                             for (var i in qtmp){
                                 console.log(that.selectDatasetName);
-                                qtmp[i]['src'] = this.host + "/get_image/?dataset=" + that.selectDatasetName+ "&id=" + (qtmp[i]['id']+1).toString();
+                                qtmp[i]['src'] = that.host +"/get_image/?dataset=" + that.selectDatasetName+ "&id=" + (qtmp[i]['id']+1).toString();
 
                                 if (qtmp[i]['lng'] < 0)
                                     qtmp[i]['lng'] = (-qtmp[i]['lng']).toString() + ' W';
